@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class UserIdTest {
     @Test
@@ -13,7 +12,7 @@ class UserIdTest {
     void userIdCreationTest() {
         String userid = "newUserId";
         UserId userId = new UserId(userid);
-        assertNotNull(userId);
+        assertThat(userId).isNotNull();
         assertThat(userId.value()).isEqualTo(userid);
     }
 

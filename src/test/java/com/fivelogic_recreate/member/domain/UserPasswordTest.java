@@ -3,8 +3,8 @@ package com.fivelogic_recreate.member.domain;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class UserPasswordTest {
     @Test
@@ -12,7 +12,7 @@ class UserPasswordTest {
     void userPasswordCreationTest() {
         String password = "password";
         UserPassword userPassword = new UserPassword(password);
-        assertNotNull(password);
+        assertThat(password).isNotNull();
         assertThat(userPassword.value()).isEqualTo(password);
     }
 
