@@ -12,12 +12,16 @@ public final class Name {
         validate();
     }
 
+    public String value(){
+        return firstName + " " + lastName;
+    }
+
     private void validate() {
         if (firstName == null || firstName.isBlank()) {
-            throw new IllegalStateException("Invalid first name");
+            throw new IllegalArgumentException("Invalid first name");
         }
         if (lastName == null || lastName.isBlank()) {
-            throw new IllegalStateException("Invalid last name");
+            throw new IllegalArgumentException("Invalid last name");
         }
     }
 

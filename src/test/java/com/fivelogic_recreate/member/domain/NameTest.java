@@ -24,11 +24,11 @@ class NameTest {
     void nameCreationTestWithInvalidFirstName() {
         String lastName = "last";
         assertThatThrownBy(() -> new Name(null, lastName))
-                .isInstanceOf(IllegalStateException.class);
+                .isInstanceOf(IllegalArgumentException.class);
         assertThatThrownBy(() -> new Name("", lastName))
-                .isInstanceOf(IllegalStateException.class);
+                .isInstanceOf(IllegalArgumentException.class);
         assertThatThrownBy(() -> new Name(" ", lastName))
-                .isInstanceOf(IllegalStateException.class);
+                .isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
@@ -36,10 +36,10 @@ class NameTest {
     void nameCreationTestWithInvalidLastName() {
         String firstName = "first";
         assertThatThrownBy(() -> new Name(firstName, null))
-                .isInstanceOf(IllegalStateException.class);
+                .isInstanceOf(IllegalArgumentException.class);
         assertThatThrownBy(() -> new Name(firstName, ""))
-                .isInstanceOf(IllegalStateException.class);
+                .isInstanceOf(IllegalArgumentException.class);
         assertThatThrownBy(() -> new Name(firstName, " "))
-                .isInstanceOf(IllegalStateException.class);
+                .isInstanceOf(IllegalArgumentException.class);
     }
 }
