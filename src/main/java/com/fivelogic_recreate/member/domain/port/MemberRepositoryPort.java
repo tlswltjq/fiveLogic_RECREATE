@@ -1,0 +1,21 @@
+package com.fivelogic_recreate.member.domain.port;
+
+
+import com.fivelogic_recreate.member.domain.Member;
+import com.fivelogic_recreate.member.domain.Nickname;
+import com.fivelogic_recreate.member.domain.UserId;
+
+import java.util.Optional;
+
+public interface MemberRepositoryPort {
+
+    Optional<Member> findById(UserId userId);
+
+    Optional<Member> findByNickname(Nickname nickname);
+
+    Member save(Member member);
+
+    boolean existsByUserId(UserId userId);
+
+    void delete(UserId id);
+}
