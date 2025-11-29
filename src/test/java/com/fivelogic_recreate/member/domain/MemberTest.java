@@ -10,22 +10,27 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class MemberTest {
+    String validId = "userId";
+    String validPassword = "userPassword";
+    String validEmail = "test@test.com";
+    String validFirstName = "user";
+    String validLastName = "Name";
+    String validNickname = "nickname";
+    String validBio = "this is bio";
+
+
     @Test
     @DisplayName("Member 객체가 정상적으로 생성된다")
     void shouldCreateMember_whenRequiredFieldsProvided() {
-        String userId = "userId";
-        String userPassword = "userPassword";
-        String firstName = "firstName";
-        String lastName = "lastName";
-        String nickname = "nickname";
-
-        Member member = Member.create(userId, userPassword, firstName, lastName, nickname);
+        Member member = Member.create(validId, validPassword, validEmail, validFirstName, validLastName, validNickname, validBio);
 
         assertThat(member).isNotNull();
-        assertThat(member.getUserId().userId()).isEqualTo(userId);
-        assertThat(member.getPassword().password()).isEqualTo(userPassword);
-        assertThat(member.getName().firstName() + " " + member.getName().lastName()).isEqualTo(firstName + " " + lastName);
-        assertThat(member.getNickname().nickname()).isEqualTo(nickname);
+        assertThat(member.getUserId().userId()).isEqualTo(validId);
+        assertThat(member.getPassword().password()).isEqualTo(validPassword);
+        assertThat(member.getEmail().value()).isEqualTo(validEmail);
+        assertThat(member.getName().firstName() + " " + member.getName().lastName()).isEqualTo(validFirstName + " " + validLastName);
+        assertThat(member.getNickname().nickname()).isEqualTo(validNickname);
+        assertThat(member.getBio().value()).isEqualTo(validBio);
         assertThat(member.getMemberType()).isEqualTo(MemberType.MENTEE);
         assertThat(member.getIsActivated()).isTrue();
     }
@@ -33,16 +38,10 @@ class MemberTest {
     @Test
     @DisplayName("MemberType을 Member 객체 생성시 다르게 할 수 있다.")
     void shouldCreateMemberType_whenRequiredFieldsProvided() {
-        String userId = "userId";
-        String userPassword = "userPassword";
-        String firstName = "firstName";
-        String lastName = "lastName";
 
-        String nickname = "nickname";
-
-        Member adminMember = Member.create(userId, userPassword, firstName, lastName, nickname, MemberType.ADMIN);
-        Member mentorMember = Member.create(userId, userPassword, firstName, lastName, nickname, MemberType.MENTOR);
-        Member menteeMember = Member.create(userId, userPassword, firstName, lastName, nickname, MemberType.MENTEE);
+        Member adminMember = Member.create(validId, validPassword, validEmail, validFirstName, validLastName, validNickname, MemberType.ADMIN, validBio);
+        Member mentorMember = Member.create(validId, validPassword, validEmail, validFirstName, validLastName, validNickname, MemberType.MENTOR, validBio);
+        Member menteeMember = Member.create(validId, validPassword, validEmail, validFirstName, validLastName, validNickname, MemberType.MENTEE, validBio);
 
         assertThat(adminMember).isNotNull();
         assertThat(adminMember.getMemberType()).isEqualTo(MemberType.ADMIN);
@@ -57,24 +56,12 @@ class MemberTest {
     @Test
     @DisplayName("Member를 삭제하면 isActivated필드가 false가 된다.")
     void shouldChangeStatus() {
-        String userId = "userId";
-        String userPassword = "userPassword";
-        String firstName = "firstName";
-        String lastName = "lastName";
-        String nickname = "nickname";
-
-        Member member = Member.create(userId, userPassword, firstName, lastName, nickname);
+        Member member = Member.create(validId, validPassword, validEmail, validFirstName, validLastName, validNickname, validBio);
 
         member.delete();
         assertThat(member).isNotNull();
         assertThat(member.getIsActivated()).isFalse();
     }
-
-    String validId = "userId";
-    String validPassword = "userPassword";
-    String validFirstName = "user";
-    String validLastName = "Name";
-    String validNickname = "nickname";
 
     @Test
     @DisplayName("잘못된 userId 로는 Member 객체를 생성할 수 없다")
@@ -87,7 +74,7 @@ class MemberTest {
         );
 
         for (String id : wrongIds) {
-            assertThatThrownBy(() -> Member.create(id, validPassword, validFirstName, validLastName, validNickname))
+            assertThatThrownBy(() -> Member.create(id, validPassword, validEmail, validFirstName, validLastName, validNickname, validBio))
                     .isInstanceOf(IllegalArgumentException.class);
         }
     }
@@ -103,7 +90,40 @@ class MemberTest {
         );
 
         for (String pw : wrongPasswords) {
-            assertThatThrownBy(() -> Member.create(validId, pw, validFirstName, validLastName, validNickname))
+            assertThatThrownBy(() -> Member.create(validId, pw, validEmail, validFirstName, validLastName, validNickname, validBio))
+                    .isInstanceOf(IllegalArgumentException.class);
+        }
+    }
+
+    @Test
+    @DisplayName("잘못된 email 로는 Member 객체를 생성할 수 없다")
+    void shouldNotCreateMember_whenEmailIsInvalid() {
+        List<String> wrongEmails = Arrays.asList(
+                "plainaddress",
+                "#@%^%#$@#$@#.com",
+                "@example.com",
+                "Joe Smith <email@example.com>",
+                "email.example.com",
+                "email@example@example.com",
+                ".email@example.com",
+                "email.@example.com",
+                "email..email@example.com",
+                "あいうえお@example.com",
+                "email@example.com (Joe Smith)",
+                "email@example",
+                "email@-example.com",
+                "email@111.222.333.44444",
+                "email@example..com",
+                "Abc..123@example.com",
+                "”(),:;<>[\\]@example.com",
+                "just”not”right@example.com",
+                "this\\ is\"really\\\"not\\allowed@example.com",
+                "",
+                null
+        );
+
+        for (String email : wrongEmails) {
+            assertThatThrownBy(() -> Member.create(validId, validPassword, email, validFirstName, validLastName, validNickname, validBio))
                     .isInstanceOf(IllegalArgumentException.class);
         }
     }
@@ -117,7 +137,7 @@ class MemberTest {
         );
 
         for (String first : wrongFirstNames) {
-            assertThatThrownBy(() -> Member.create(validId, validPassword, first, validLastName, validNickname))
+            assertThatThrownBy(() -> Member.create(validId, validPassword, validEmail, first, validLastName, validNickname, validBio))
                     .isInstanceOf(IllegalArgumentException.class);
         }
 
@@ -127,7 +147,7 @@ class MemberTest {
         );
 
         for (String last : wrongLastNames) {
-            assertThatThrownBy(() -> Member.create(validId, validPassword, validFirstName, last, validNickname))
+            assertThatThrownBy(() -> Member.create(validId, validPassword, validEmail, validFirstName, last, validNickname, validBio))
                     .isInstanceOf(IllegalArgumentException.class);
         }
     }
@@ -141,7 +161,7 @@ class MemberTest {
         );
 
         for (String nick : wrongNicknames) {
-            assertThatThrownBy(() -> Member.create(validId, validPassword, validFirstName, validLastName, nick))
+            assertThatThrownBy(() -> Member.create(validId, validPassword, validEmail, validFirstName, validLastName, nick, validBio))
                     .isInstanceOf(IllegalArgumentException.class);
         }
     }
@@ -150,13 +170,8 @@ class MemberTest {
     @Test
     @DisplayName("Member의 닉네임을 변경할 수 있다.")
     void shouldUpdateNickname_whenRequiredFieldsProvided() {
-        String userId = "userId";
-        String userPassword = "userPassword";
-        String firstName = "firstName";
-        String lastName = "lastName";
-        String nickname = "nickname";
         String newNickname = "changed";
-        Member member = Member.create(userId, userPassword, firstName, lastName, nickname);
+        Member member = Member.create(validId, validPassword, validEmail, validFirstName, validLastName, validNickname, validBio);
 
         member.updateNickname(newNickname);
 
@@ -166,13 +181,8 @@ class MemberTest {
     @Test
     @DisplayName("Member의 비밀번호를 변경할 수 있다.")
     void shouldUpdatePassword_whenRequiredFieldsProvided() {
-        String userId = "userId";
-        String userPassword = "userPassword";
-        String firstName = "firstName";
-        String lastName = "lastName";
-        String nickname = "nickname";
         String newPassword = "changed";
-        Member member = Member.create(userId, userPassword, firstName, lastName, nickname);
+        Member member = Member.create(validId, validPassword, validEmail, validFirstName, validLastName, validNickname, validBio);
 
         member.updatePassword(newPassword);
 
@@ -180,14 +190,31 @@ class MemberTest {
     }
 
     @Test
+    @DisplayName("Member의 이메일을 변경할 수 있다.")
+    void shouldUpdateEmail_whenRequiredFieldsProvided() {
+        String newEmail = "changed@test.com";
+        Member member = Member.create(validId, validPassword, validEmail, validFirstName, validLastName, validNickname, validBio);
+
+        member.updateEmail(newEmail);
+
+        assertThat(member.getEmail().value()).isEqualTo(newEmail);
+    }
+
+    @Test
+    @DisplayName("Member의 자기소개를 변경할 수 있다.")
+    void shouldUpdateBio_whenRequiredFieldsProvided() {
+        String newBio = "this is new bio";
+        Member member = Member.create(validId, validPassword, validEmail, validFirstName, validLastName, validNickname, validBio);
+
+        member.updateBio(newBio);
+
+        assertThat(member.getBio().value()).isEqualTo(newBio);
+    }
+
+    @Test
     @DisplayName("Member의 MemberType을 변경할 수 있다.")
     void shouldUpdateMemberType_whenRequiredFieldsProvided() {
-        String userId = "userId";
-        String userPassword = "userPassword";
-        String firstName = "firstName";
-        String lastName = "lastName";
-        String nickname = "nickname";
-        Member member = Member.create(userId, userPassword, firstName, lastName, nickname);
+        Member member = Member.create(validId, validPassword, validEmail, validFirstName, validLastName, validNickname, validBio);
 
         member.updateMemberType(MemberType.ADMIN);
         assertThat(member.getMemberType()).isEqualTo(MemberType.ADMIN);

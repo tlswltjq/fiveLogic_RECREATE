@@ -18,7 +18,7 @@ public class MemberCreateService {
         if(repository.existsByUserId(userId)){
             throw new RuntimeException("Member already exists");
         }
-        Member member = Member.create(command.userId(), command.password(), command.firstname(), command.lastname(), command.nickname(), MemberType.MENTEE);
+        Member member = Member.create(command.userId(), command.password(), command.email(), command.firstname(), command.lastname(), command.nickname(), MemberType.MENTEE, command.bio());
         return repository.save(member);
     }
 }
