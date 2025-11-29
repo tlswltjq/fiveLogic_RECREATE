@@ -14,7 +14,7 @@ class NicknameTest {
         String nicknameValue = "nickname";
         Nickname nickname = new Nickname(nicknameValue);
         assertThat(nickname).isNotNull();
-        assertThat(nickname.value()).isEqualTo(nicknameValue);
+        assertThat(nickname.nickname()).isEqualTo(nicknameValue);
     }
 
     @Test

@@ -1,49 +1,12 @@
 package com.fivelogic_recreate.member.domain;
 
-import java.util.Objects;
-
-public final class Name {
-    private final String firstName;
-    private final String lastName;
-
-    public Name(String firstName, String lastName) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        validate();
-    }
-
-    public String value(){
-        return firstName + " " + lastName;
-    }
-
-    private void validate() {
+public record Name(String firstName, String lastName) {
+    public Name {
         if (firstName == null || firstName.isBlank()) {
             throw new IllegalArgumentException("Invalid first name");
         }
         if (lastName == null || lastName.isBlank()) {
             throw new IllegalArgumentException("Invalid last name");
         }
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Name name = (Name) o;
-        return Objects.equals(firstName, name.firstName)
-                && Objects.equals(lastName, name.lastName);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(firstName, lastName);
     }
 }

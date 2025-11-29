@@ -4,7 +4,6 @@ import lombok.Getter;
 
 @Getter
 public class Member {
-    //todo VO -> 레코드로 변경
     private final MemberId id;
     private final UserId userId;
     private UserPassword password;
@@ -39,16 +38,15 @@ public class Member {
         this.isActivated = false;
     }
 
-    //todo change -> update로 수정하자!
-    public void changePassword(String newPassword) {
+    public void updatePassword(String newPassword) {
         this.password = new UserPassword(newPassword);
     }
 
-    public void changeNickname(String newNickname) {
+    public void updateNickname(String newNickname) {
         this.nickname = new Nickname(newNickname);
     }
 
-    public void changeMemberType(MemberType newMemberType) {
+    public void updateMemberType(MemberType newMemberType) {
         this.memberType = newMemberType;
     }
 }

@@ -12,8 +12,8 @@ class UserPasswordTest {
     void userPasswordCreationTest() {
         String password = "password";
         UserPassword userPassword = new UserPassword(password);
-        assertThat(password).isNotNull();
-        assertThat(userPassword.value()).isEqualTo(password);
+        assertThat(userPassword).isNotNull();
+        assertThat(userPassword.password()).isEqualTo(password);
     }
 
     @Test

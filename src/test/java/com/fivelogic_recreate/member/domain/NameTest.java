@@ -15,8 +15,8 @@ class NameTest {
         String lastName = "last";
         Name name = new Name(firstName, lastName);
         assertThat(name).isNotNull();
-        assertThat(name.getFirstName()).isEqualTo(firstName);
-        assertThat(name.getLastName()).isEqualTo(lastName);
+        assertThat(name.firstName()).isEqualTo(firstName);
+        assertThat(name.lastName()).isEqualTo(lastName);
     }
 
     @Test

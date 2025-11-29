@@ -22,10 +22,10 @@ class MemberTest {
         Member member = Member.create(userId, userPassword, firstName, lastName, nickname);
 
         assertThat(member).isNotNull();
-        assertThat(member.getUserId().value()).isEqualTo(userId);
-        assertThat(member.getPassword().value()).isEqualTo(userPassword);
-        assertThat(member.getName().value()).isEqualTo(firstName + " " + lastName);
-        assertThat(member.getNickname().value()).isEqualTo(nickname);
+        assertThat(member.getUserId().userId()).isEqualTo(userId);
+        assertThat(member.getPassword().password()).isEqualTo(userPassword);
+        assertThat(member.getName().firstName() + " " + member.getName().lastName()).isEqualTo(firstName + " " + lastName);
+        assertThat(member.getNickname().nickname()).isEqualTo(nickname);
         assertThat(member.getMemberType()).isEqualTo(MemberType.MENTEE);
         assertThat(member.getIsActivated()).isTrue();
     }
@@ -149,7 +149,7 @@ class MemberTest {
 
     @Test
     @DisplayName("Member의 닉네임을 변경할 수 있다.")
-    void shouldChangeNickname_whenRequiredFieldsProvided() {
+    void shouldUpdateNickname_whenRequiredFieldsProvided() {
         String userId = "userId";
         String userPassword = "userPassword";
         String firstName = "firstName";
@@ -158,14 +158,14 @@ class MemberTest {
         String newNickname = "changed";
         Member member = Member.create(userId, userPassword, firstName, lastName, nickname);
 
-        member.changeNickname(newNickname);
+        member.updateNickname(newNickname);
 
-        assertThat(member.getNickname().value()).isEqualTo(newNickname);
+        assertThat(member.getNickname().nickname()).isEqualTo(newNickname);
     }
 
     @Test
     @DisplayName("Member의 비밀번호를 변경할 수 있다.")
-    void shouldChangePassword_whenRequiredFieldsProvided() {
+    void shouldUpdatePassword_whenRequiredFieldsProvided() {
         String userId = "userId";
         String userPassword = "userPassword";
         String firstName = "firstName";
@@ -174,14 +174,14 @@ class MemberTest {
         String newPassword = "changed";
         Member member = Member.create(userId, userPassword, firstName, lastName, nickname);
 
-        member.changePassword(newPassword);
+        member.updatePassword(newPassword);
 
-        assertThat(member.getPassword().value()).isEqualTo(newPassword);
+        assertThat(member.getPassword().password()).isEqualTo(newPassword);
     }
 
     @Test
     @DisplayName("Member의 MemberType을 변경할 수 있다.")
-    void shouldChangeMemberType_whenRequiredFieldsProvided() {
+    void shouldUpdateMemberType_whenRequiredFieldsProvided() {
         String userId = "userId";
         String userPassword = "userPassword";
         String firstName = "firstName";
@@ -189,7 +189,7 @@ class MemberTest {
         String nickname = "nickname";
         Member member = Member.create(userId, userPassword, firstName, lastName, nickname);
 
-        member.changeMemberType(MemberType.ADMIN);
+        member.updateMemberType(MemberType.ADMIN);
         assertThat(member.getMemberType()).isEqualTo(MemberType.ADMIN);
     }
 }

@@ -13,7 +13,7 @@ class UserIdTest {
         String userid = "newUserId";
         UserId userId = new UserId(userid);
         assertThat(userId).isNotNull();
-        assertThat(userId.value()).isEqualTo(userid);
+        assertThat(userId.userId()).isEqualTo(userid);
     }
 
     @Test

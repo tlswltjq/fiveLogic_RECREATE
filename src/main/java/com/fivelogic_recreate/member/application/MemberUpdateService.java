@@ -19,12 +19,12 @@ public class MemberUpdateService {
 
         String nickname = command.nickname();
         if (nickname != null && !nickname.isBlank()) {
-            member.changeNickname(nickname);
+            member.updateNickname(nickname);
         }
 
         String memberType = command.memberType();
         if (memberType != null && !memberType.isBlank()) {
-            member.changeMemberType(MemberType.from(memberType));
+            member.updateMemberType(MemberType.from(memberType));
         }
 
         return member;
