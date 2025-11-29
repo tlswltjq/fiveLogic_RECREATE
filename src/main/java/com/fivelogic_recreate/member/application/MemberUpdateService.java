@@ -27,6 +27,23 @@ public class MemberUpdateService {
             member.updateMemberType(MemberType.from(memberType));
         }
 
+        String firstname = command.firstname();
+        String lastname = command.lastname();
+        if (firstname != null && !firstname.isBlank()) {
+            if (lastname != null && !lastname.isBlank()) {
+                member.updateName(firstname, lastname);
+            }
+        }
+
+        String email = command.email();
+        if (email != null && !email.isBlank()) {
+            member.updateEmail(email);
+        }
+
+        String bio = command.bio();
+        if (bio != null && !bio.isBlank()) {
+            member.updateBio(bio);
+        }
         return member;
     }
 }
