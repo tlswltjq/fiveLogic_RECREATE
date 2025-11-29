@@ -4,6 +4,7 @@ import lombok.Getter;
 
 @Getter
 public class Member {
+    //todo VO -> 레코드로 변경
     private final MemberId id;
     private final UserId userId;
     private UserPassword password;
@@ -30,7 +31,7 @@ public class Member {
         return new Member(null, createdUserId, createdUserPassword, createdName, createdNickname, memberType, true);
     }
 
-    public static Member create(String userId, String password,  String firstName, String lastName, String nickname) {
+    public static Member create(String userId, String password, String firstName, String lastName, String nickname) {
         return create(userId, password, firstName, lastName, nickname, MemberType.MENTEE);
     }
 
@@ -38,6 +39,7 @@ public class Member {
         this.isActivated = false;
     }
 
+    //todo change -> update로 수정하자!
     public void changePassword(String newPassword) {
         this.password = new UserPassword(newPassword);
     }
