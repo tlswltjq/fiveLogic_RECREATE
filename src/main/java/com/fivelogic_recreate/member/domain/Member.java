@@ -64,4 +64,8 @@ public class Member {
     public void updateEmail(String newEmail) {
         this.email = new Email(newEmail);
     }
+
+    public void updateName( String firstName, String lastName) {
+        this.name = new Name(firstName, lastName);
+    }
 }
