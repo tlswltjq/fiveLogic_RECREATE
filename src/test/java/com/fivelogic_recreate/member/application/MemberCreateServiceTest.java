@@ -1,0 +1,86 @@
+package com.fivelogic_recreate.member.application;
+
+import com.fivelogic_recreate.member.application.command.MemberCreateCommand;
+import com.fivelogic_recreate.member.domain.Member;
+import com.fivelogic_recreate.member.domain.MemberType;
+import com.fivelogic_recreate.member.domain.UserId;
+import com.fivelogic_recreate.member.domain.port.MemberRepositoryPort;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+
+@ExtendWith(MockitoExtension.class)
+class MemberCreateServiceTest {
+    @Mock
+    MemberRepositoryPort memberRepositoryPort;
+
+    @InjectMocks
+    MemberCreateService memberCreateService;
+
+    @Test
+    @DisplayName("사용자 정보가 주어지면 성공적으로 Member객체를 저장하고 반환한다.")
+    void shouldSaveAndReturnMemberWhenValidUserInfoProvided() {
+        MemberCreateCommand command = new MemberCreateCommand(
+                "user1",
+                "password",
+                "email@test.com",
+                "John",
+                "Doe",
+                "johnd",
+                "Hello bio"
+        );
+
+        Member mockedMember = Member.create(
+                command.userId(),
+                command.password(),
+                command.email(),
+                command.firstname(),
+                command.lastname(),
+                command.nickname(),
+                MemberType.MENTEE,
+                command.bio()
+        );
+
+        when(memberRepositoryPort.save(any(Member.class))).thenReturn(mockedMember);
+
+        Member createdMember = memberCreateService.create(command);
+
+        assertThat(createdMember).isEqualTo(mockedMember);
+        verify(memberRepositoryPort).existsByUserId(new UserId("user1"));
+        verify(memberRepositoryPort).save(any(Member.class));
+
+    }
+
+    @Test
+    @DisplayName("동일한 UserId로는 객체를 생성할 수 없다.")
+    void shouldThrowException_whenUserIdAlreadyExists() {
+        String userId = "user1d";
+        MemberCreateCommand command = new MemberCreateCommand(
+                userId,
+                "password",
+                "email@test.com",
+                "John",
+                "Doe",
+                "johnd",
+                "Hello bio"
+        );
+
+        when(memberRepositoryPort.existsByUserId(any(UserId.class)))
+                .thenReturn(true);
+
+        assertThatThrownBy(() -> memberCreateService.create(command))
+                .isInstanceOf(RuntimeException.class)
+                .hasMessage("Member already exists");
+
+        verify(memberRepositoryPort).existsByUserId(any(UserId.class));
+        verify(memberRepositoryPort, never()).save(any());
+    }
+}
