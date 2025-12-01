@@ -2,6 +2,8 @@ package com.fivelogic_recreate.member.domain;
 
 import lombok.Getter;
 
+import java.util.Objects;
+
 @Getter
 public class Member {
     private final MemberId id;
@@ -65,7 +67,19 @@ public class Member {
         this.email = new Email(newEmail);
     }
 
-    public void updateName( String firstName, String lastName) {
+    public void updateName(String firstName, String lastName) {
         this.name = new Name(firstName, lastName);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Member member = (Member) o;
+        return Objects.equals(id, member.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return 31;
     }
 }
