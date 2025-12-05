@@ -44,6 +44,6 @@ public class MemberUpdateService {
         if (bio != null && !bio.isBlank()) {
             member.updateBio(bio);
         }
-        return member;
+        return repository.save(member);
     }
 }

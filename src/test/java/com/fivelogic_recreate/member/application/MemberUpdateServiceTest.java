@@ -18,6 +18,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -46,8 +47,11 @@ class MemberUpdateServiceTest {
         );
         when(memberRepositoryPort.findById(any(UserId.class)))
                 .thenReturn(Optional.of(member));
+        when(memberRepositoryPort.save(any(Member.class)))
+                .thenReturn(member);
         Member updated = memberUpdateService.update(updateCommand);
 
+        verify(memberRepositoryPort).save(member);
         assertThat(member).isEqualTo(updated);
         assertThat(member.getEmail().value()).isEqualTo("updatedMail@email.com");
         assertThat(member.getName()).isEqualTo(new Name("updated", "name"));
@@ -97,6 +101,7 @@ class MemberUpdateServiceTest {
                 .thenReturn(Optional.of(member));
         memberUpdateService.update(updateCommand);
 
+        verify(memberRepositoryPort).save(member);
         assertThat(member.getNickname().nickname()).isEqualTo("updatedNickname");
         assertThat(member.getEmail().value()).isEqualTo(originalEmail);
         assertThat(member.getName()).isEqualTo(originalName);
@@ -115,6 +120,7 @@ class MemberUpdateServiceTest {
 
         memberUpdateService.update(updateCommand);
 
+        verify(memberRepositoryPort).save(member);
         assertThat(member.getMemberType()).isEqualTo(MemberType.MENTOR);
     }
 
@@ -129,6 +135,7 @@ class MemberUpdateServiceTest {
 
         memberUpdateService.update(updateCommand);
 
+        verify(memberRepositoryPort).save(member);
         assertThat(member.getName()).isEqualTo(new Name("updatedFirst", "updatedLast"));
     }
 
@@ -158,6 +165,7 @@ class MemberUpdateServiceTest {
 
         memberUpdateService.update(updateCommand);
 
+        verify(memberRepositoryPort).save(member);
         assertThat(member.getEmail().value()).isEqualTo("updated@email.com");
     }
 
@@ -172,6 +180,7 @@ class MemberUpdateServiceTest {
 
         memberUpdateService.update(updateCommand);
 
+        verify(memberRepositoryPort).save(member);
         assertThat(member.getBio().value()).isEqualTo("updated bio");
     }
 }
