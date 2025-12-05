@@ -15,6 +15,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -43,5 +44,15 @@ class MemberDeleteServiceTest {
 
         verify(memberRepositoryPort).save(any(Member.class));
         assertThat(result.getIsActivated()).isFalse();
+    }
+
+    @Test
+    @DisplayName("존재하지 않는 UserId를 이용해 삭제하려하면 에러를 반환한다.")
+    void shouldThrowExceptionWhenDeleteNonExistingMember() {
+        MemberDeleteCommand deleteCommand = new MemberDeleteCommand("nonExistingUserId");
+
+        when(memberRepositoryPort.findById(any(UserId.class))).thenReturn(Optional.empty());
+
+        assertThrows(IllegalArgumentException.class, () -> memberDeleteService.delete(deleteCommand));
     }
 }
