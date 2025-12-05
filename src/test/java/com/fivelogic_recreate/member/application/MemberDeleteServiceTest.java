@@ -51,8 +51,6 @@ class MemberDeleteServiceTest {
     void shouldThrowExceptionWhenDeleteNonExistingMember() {
         MemberDeleteCommand deleteCommand = new MemberDeleteCommand("nonExistingUserId");
 
-        when(memberRepositoryPort.findById(any(UserId.class))).thenReturn(Optional.empty());
-
         assertThrows(IllegalArgumentException.class, () -> memberDeleteService.delete(deleteCommand));
     }
 }
