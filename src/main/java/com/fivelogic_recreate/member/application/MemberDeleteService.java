@@ -14,7 +14,7 @@ public class MemberDeleteService {
 
     public Member delete(MemberDeleteCommand command) {
         UserId userId = new UserId(command.userId());
-        Member member = repository.findById(userId).orElseThrow(() -> new RuntimeException("User " + userId + " does not exist"));
+        Member member = repository.findByUserId(userId).orElseThrow(() -> new RuntimeException("User " + userId + " does not exist"));
 
         member.delete();
         return repository.save(member);

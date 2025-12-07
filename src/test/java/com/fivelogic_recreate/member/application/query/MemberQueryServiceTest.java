@@ -36,10 +36,10 @@ class MemberQueryServiceTest {
     void shouldReturnMemberResponse() {
         Member member = memberFixture.withUserId("userId").build();
 
-        when(memberQueryRepositoryPort.findById(any(UserId.class)))
+        when(memberQueryRepositoryPort.findByUserId(any(UserId.class)))
                 .thenReturn(Optional.of(member));
 
-        MemberResponse response = memberQueryService.getById("userId");
+        MemberResponse response = memberQueryService.getByUserId("userId");
 
         assertThat(response).isNotNull();
         assertThat(response.userId()).isEqualTo(member.getUserId().value());
@@ -52,7 +52,7 @@ class MemberQueryServiceTest {
     void shouldThrowExceptionWhenUserIdDoesNotExist() {
         String nonExistUserId = "XXXXXXXX";
 
-        Assertions.assertThatThrownBy(() -> memberQueryService.getById(nonExistUserId))
+        Assertions.assertThatThrownBy(() -> memberQueryService.getByUserId(nonExistUserId))
                 .isInstanceOf(RuntimeException.class);
     }
 

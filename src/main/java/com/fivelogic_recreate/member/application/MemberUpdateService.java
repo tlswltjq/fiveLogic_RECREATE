@@ -15,7 +15,7 @@ public class MemberUpdateService {
 
     public Member update(MemberUpdateCommand command) {
         UserId userId = new UserId(command.userId());
-        Member member = repository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        Member member = repository.findByUserId(userId).orElseThrow(() -> new RuntimeException("User not found"));
 
         String nickname = command.nickname();
         if (nickname != null && !nickname.isBlank()) {

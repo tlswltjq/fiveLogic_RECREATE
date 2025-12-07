@@ -37,7 +37,7 @@ class MemberPasswordUpdateServiceTest {
         String newPassword = "newpassword";
         MemberPasswordUpdateCommand command = new MemberPasswordUpdateCommand(member.getUserId().value(), newPassword);
 
-        when(memberRepositoryPort.findById(any(UserId.class)))
+        when(memberRepositoryPort.findByUserId(any(UserId.class)))
                 .thenReturn(Optional.of(member));
         when(memberRepositoryPort.save(any(Member.class)))
                 .thenAnswer(invocation -> invocation.getArgument(0));

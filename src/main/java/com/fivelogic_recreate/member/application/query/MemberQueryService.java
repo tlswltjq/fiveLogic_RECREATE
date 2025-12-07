@@ -16,8 +16,8 @@ import java.util.stream.Collectors;
 public class MemberQueryService {
     private final MemberQueryRepositoryPort repository;
 
-    public MemberResponse getById(String userId) {
-        return repository.findById(new UserId(userId))
+    public MemberResponse getByUserId(String userId) {
+        return repository.findByUserId(new UserId(userId))
                 .map(MemberResponse::new)
                 .orElseThrow(() -> new RuntimeException("User not found"));
     }

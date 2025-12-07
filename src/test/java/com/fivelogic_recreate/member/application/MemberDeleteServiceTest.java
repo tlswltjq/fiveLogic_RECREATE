@@ -37,7 +37,7 @@ class MemberDeleteServiceTest {
         MemberDeleteCommand deleteCommand = new MemberDeleteCommand("userId");
         Member member = memberFixture.withUserId("userId").build();
 
-        when(memberRepositoryPort.findById(any(UserId.class))).thenReturn(Optional.of(member));
+        when(memberRepositoryPort.findByUserId(any(UserId.class))).thenReturn(Optional.of(member));
         when(memberRepositoryPort.save(any(Member.class))).thenAnswer(i -> i.getArgument(0));
 
         Member result = memberDeleteService.delete(deleteCommand);

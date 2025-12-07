@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface MemberRepositoryPort {
 
-    Optional<Member> findById(UserId userId);
+    Optional<Member> findByUserId(UserId userId);
 
     Optional<Member> findByNickname(Nickname nickname);
 

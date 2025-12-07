@@ -7,6 +7,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface MemberQueryRepositoryPort {
-    Optional<Member> findById(UserId userId);
+    Optional<Member> findByUserId(UserId userId);
     List<Member> findAll();
 }

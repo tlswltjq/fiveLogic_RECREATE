@@ -45,7 +45,7 @@ class MemberUpdateServiceTest {
                 "updated bio",
                 "mentor"
         );
-        when(memberRepositoryPort.findById(any(UserId.class)))
+        when(memberRepositoryPort.findByUserId(any(UserId.class)))
                 .thenReturn(Optional.of(member));
         when(memberRepositoryPort.save(any(Member.class)))
                 .thenReturn(member);
@@ -72,7 +72,7 @@ class MemberUpdateServiceTest {
                 "bio",
                 "mentor"
         );
-        when(memberRepositoryPort.findById(any(UserId.class)))
+        when(memberRepositoryPort.findByUserId(any(UserId.class)))
                 .thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> memberUpdateService.update(updateCommand))
@@ -97,7 +97,7 @@ class MemberUpdateServiceTest {
                 null,
                 null
         );
-        when(memberRepositoryPort.findById(any(UserId.class)))
+        when(memberRepositoryPort.findByUserId(any(UserId.class)))
                 .thenReturn(Optional.of(member));
         memberUpdateService.update(updateCommand);
 
@@ -116,7 +116,7 @@ class MemberUpdateServiceTest {
         MemberUpdateCommand updateCommand = new MemberUpdateCommand(
                 "userId", null, null, null, null, null, "MENTOR"
         );
-        when(memberRepositoryPort.findById(any(UserId.class))).thenReturn(Optional.of(member));
+        when(memberRepositoryPort.findByUserId(any(UserId.class))).thenReturn(Optional.of(member));
 
         memberUpdateService.update(updateCommand);
 
@@ -131,7 +131,7 @@ class MemberUpdateServiceTest {
         MemberUpdateCommand updateCommand = new MemberUpdateCommand(
                 "userId", null, "updatedFirst", "updatedLast", null, null, null
         );
-        when(memberRepositoryPort.findById(any(UserId.class))).thenReturn(Optional.of(member));
+        when(memberRepositoryPort.findByUserId(any(UserId.class))).thenReturn(Optional.of(member));
 
         memberUpdateService.update(updateCommand);
 
@@ -147,7 +147,7 @@ class MemberUpdateServiceTest {
         MemberUpdateCommand updateCommand = new MemberUpdateCommand(
                 "userId", null, "updatedFirst", null, null, null, null
         );
-        when(memberRepositoryPort.findById(any(UserId.class))).thenReturn(Optional.of(member));
+        when(memberRepositoryPort.findByUserId(any(UserId.class))).thenReturn(Optional.of(member));
 
         memberUpdateService.update(updateCommand);
 
@@ -161,7 +161,7 @@ class MemberUpdateServiceTest {
         MemberUpdateCommand updateCommand = new MemberUpdateCommand(
                 "userId", "updated@email.com", null, null, null, null, null
         );
-        when(memberRepositoryPort.findById(any(UserId.class))).thenReturn(Optional.of(member));
+        when(memberRepositoryPort.findByUserId(any(UserId.class))).thenReturn(Optional.of(member));
 
         memberUpdateService.update(updateCommand);
 
@@ -176,7 +176,7 @@ class MemberUpdateServiceTest {
         MemberUpdateCommand updateCommand = new MemberUpdateCommand(
                 "userId", null, null, null, null, "updated bio", null
         );
-        when(memberRepositoryPort.findById(any(UserId.class))).thenReturn(Optional.of(member));
+        when(memberRepositoryPort.findByUserId(any(UserId.class))).thenReturn(Optional.of(member));
 
         memberUpdateService.update(updateCommand);
 

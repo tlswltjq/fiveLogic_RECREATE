@@ -14,7 +14,7 @@ public class MemberPasswordUpdateService {
 
     public Member updatePassword(MemberPasswordUpdateCommand command) {
         UserId userId = new UserId(command.userId());
-        Member member = repository.findById(userId).orElseThrow(RuntimeException::new);
+        Member member = repository.findByUserId(userId).orElseThrow(RuntimeException::new);
         member.updatePassword(command.password());
         return repository.save(member);
     }
