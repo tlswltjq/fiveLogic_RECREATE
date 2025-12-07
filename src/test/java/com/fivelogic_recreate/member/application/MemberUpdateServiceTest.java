@@ -55,7 +55,7 @@ class MemberUpdateServiceTest {
         assertThat(member).isEqualTo(updated);
         assertThat(member.getEmail().value()).isEqualTo("updatedMail@email.com");
         assertThat(member.getName()).isEqualTo(new Name("updated", "name"));
-        assertThat(member.getNickname().nickname()).isEqualTo("updatednickname");
+        assertThat(member.getNickname().value()).isEqualTo("updatednickname");
         assertThat(member.getBio().value()).isEqualTo("updated bio");
         assertThat(member.getMemberType()).isEqualTo(MemberType.MENTOR);
     }
@@ -102,7 +102,7 @@ class MemberUpdateServiceTest {
         memberUpdateService.update(updateCommand);
 
         verify(memberRepositoryPort).save(member);
-        assertThat(member.getNickname().nickname()).isEqualTo("updatedNickname");
+        assertThat(member.getNickname().value()).isEqualTo("updatedNickname");
         assertThat(member.getEmail().value()).isEqualTo(originalEmail);
         assertThat(member.getName()).isEqualTo(originalName);
         assertThat(member.getBio().value()).isEqualTo(originalBio);

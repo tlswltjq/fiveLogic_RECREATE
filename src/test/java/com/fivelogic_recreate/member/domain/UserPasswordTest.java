@@ -13,7 +13,7 @@ class UserPasswordTest {
         String password = "password";
         UserPassword userPassword = new UserPassword(password);
         assertThat(userPassword).isNotNull();
-        assertThat(userPassword.password()).isEqualTo(password);
+        assertThat(userPassword.value()).isEqualTo(password);
     }
 
     @Test

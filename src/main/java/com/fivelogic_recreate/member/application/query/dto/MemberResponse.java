@@ -10,7 +10,7 @@ public record MemberResponse(
 ) {
     public MemberResponse(Member member) {
         this(
-                member.getUserId().userId(),
+                member.getUserId().value(),
                 member.getEmail().value(),
                 member.getName().firstName() + " " + member.getName().lastName()
         );

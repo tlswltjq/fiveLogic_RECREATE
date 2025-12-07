@@ -13,7 +13,7 @@ class MemberIdTest {
         Long id = 1L;
         MemberId memberId = new MemberId(id);
         assertThat(memberId).isNotNull();
-        assertThat(memberId.id()).isEqualTo(id);
+        assertThat(memberId.value()).isEqualTo(id);
     }
 
     @Test

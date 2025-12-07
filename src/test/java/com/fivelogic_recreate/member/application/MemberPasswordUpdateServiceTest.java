@@ -35,7 +35,7 @@ class MemberPasswordUpdateServiceTest {
     void shouldUpdateMemberPasswordSuccessfully() {
         Member member = memberFixture.build();
         String newPassword = "newpassword";
-        MemberPasswordUpdateCommand command = new MemberPasswordUpdateCommand(member.getUserId().userId(), newPassword);
+        MemberPasswordUpdateCommand command = new MemberPasswordUpdateCommand(member.getUserId().value(), newPassword);
 
         when(memberRepositoryPort.findById(any(UserId.class)))
                 .thenReturn(Optional.of(member));
@@ -45,7 +45,7 @@ class MemberPasswordUpdateServiceTest {
         Member result = memberPasswordUpdateService.updatePassword(command);
 
         verify(memberRepositoryPort).save(any(Member.class));
-        assertThat(result.getPassword().password()).isEqualTo(newPassword);
+        assertThat(result.getPassword().value()).isEqualTo(newPassword);
     }
 
     @Test

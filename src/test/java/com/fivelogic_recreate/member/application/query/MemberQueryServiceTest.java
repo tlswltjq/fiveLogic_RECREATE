@@ -42,7 +42,7 @@ class MemberQueryServiceTest {
         MemberResponse response = memberQueryService.getById("userId");
 
         assertThat(response).isNotNull();
-        assertThat(response.userId()).isEqualTo(member.getUserId().userId());
+        assertThat(response.userId()).isEqualTo(member.getUserId().value());
         assertThat(response.email()).isEqualTo(member.getEmail().value());
         assertThat(response.name()).isEqualTo(member.getName().firstName() + " " + member.getName().lastName());
     }

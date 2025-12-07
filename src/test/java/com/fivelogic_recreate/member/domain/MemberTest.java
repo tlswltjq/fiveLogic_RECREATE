@@ -25,11 +25,11 @@ class MemberTest {
         Member member = Member.create(validId, validPassword, validEmail, validFirstName, validLastName, validNickname, validBio);
 
         assertThat(member).isNotNull();
-        assertThat(member.getUserId().userId()).isEqualTo(validId);
-        assertThat(member.getPassword().password()).isEqualTo(validPassword);
+        assertThat(member.getUserId().value()).isEqualTo(validId);
+        assertThat(member.getPassword().value()).isEqualTo(validPassword);
         assertThat(member.getEmail().value()).isEqualTo(validEmail);
         assertThat(member.getName().firstName() + " " + member.getName().lastName()).isEqualTo(validFirstName + " " + validLastName);
-        assertThat(member.getNickname().nickname()).isEqualTo(validNickname);
+        assertThat(member.getNickname().value()).isEqualTo(validNickname);
         assertThat(member.getBio().value()).isEqualTo(validBio);
         assertThat(member.getMemberType()).isEqualTo(MemberType.MENTEE);
         assertThat(member.getIsActivated()).isTrue();
@@ -175,7 +175,7 @@ class MemberTest {
 
         member.updateNickname(newNickname);
 
-        assertThat(member.getNickname().nickname()).isEqualTo(newNickname);
+        assertThat(member.getNickname().value()).isEqualTo(newNickname);
     }
 
     @Test
@@ -186,7 +186,7 @@ class MemberTest {
 
         member.updatePassword(newPassword);
 
-        assertThat(member.getPassword().password()).isEqualTo(newPassword);
+        assertThat(member.getPassword().value()).isEqualTo(newPassword);
     }
 
     @Test

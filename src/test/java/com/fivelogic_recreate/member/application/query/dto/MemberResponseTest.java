@@ -18,7 +18,7 @@ class MemberResponseTest {
         MemberResponse dto = new MemberResponse(member);
 
         assertThat(dto).isNotNull();
-        assertThat(dto.userId()).isEqualTo(member.getUserId().userId());
+        assertThat(dto.userId()).isEqualTo(member.getUserId().value());
         assertThat(dto.email()).isEqualTo(member.getEmail().value());
         assertThat(dto.name()).isEqualTo(member.getName().firstName() + " " + member.getName().lastName());
     }
