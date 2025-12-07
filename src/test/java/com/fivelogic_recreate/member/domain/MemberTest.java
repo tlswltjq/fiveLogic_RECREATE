@@ -21,8 +21,8 @@ class MemberTest {
 
     @Test
     @DisplayName("Member 객체가 정상적으로 생성된다")
-    void shouldCreateMember_whenRequiredFieldsProvided() {
-        Member member = Member.create(validId, validPassword, validEmail, validFirstName, validLastName, validNickname, validBio);
+    void shouldJoinMember_whenRequiredFieldsProvided() {
+        Member member = Member.join(validId, validPassword, validEmail, validFirstName, validLastName, validNickname, validBio);
 
         assertThat(member).isNotNull();
         assertThat(member.getUserId().value()).isEqualTo(validId);
@@ -37,11 +37,11 @@ class MemberTest {
 
     @Test
     @DisplayName("MemberType을 Member 객체 생성시 다르게 할 수 있다.")
-    void shouldCreateMemberType_whenRequiredFieldsProvided() {
+    void shouldJoinMemberType_whenRequiredFieldsProvided() {
 
-        Member adminMember = Member.create(validId, validPassword, validEmail, validFirstName, validLastName, validNickname, MemberType.ADMIN, validBio);
-        Member mentorMember = Member.create(validId, validPassword, validEmail, validFirstName, validLastName, validNickname, MemberType.MENTOR, validBio);
-        Member menteeMember = Member.create(validId, validPassword, validEmail, validFirstName, validLastName, validNickname, MemberType.MENTEE, validBio);
+        Member adminMember = Member.join(validId, validPassword, validEmail, validFirstName, validLastName, validNickname, MemberType.ADMIN, validBio);
+        Member mentorMember = Member.join(validId, validPassword, validEmail, validFirstName, validLastName, validNickname, MemberType.MENTOR, validBio);
+        Member menteeMember = Member.join(validId, validPassword, validEmail, validFirstName, validLastName, validNickname, MemberType.MENTEE, validBio);
 
         assertThat(adminMember).isNotNull();
         assertThat(adminMember.getMemberType()).isEqualTo(MemberType.ADMIN);
@@ -56,7 +56,7 @@ class MemberTest {
     @Test
     @DisplayName("Member를 삭제하면 isActivated필드가 false가 된다.")
     void shouldChangeStatus() {
-        Member member = Member.create(validId, validPassword, validEmail, validFirstName, validLastName, validNickname, validBio);
+        Member member = Member.join(validId, validPassword, validEmail, validFirstName, validLastName, validNickname, validBio);
 
         member.delete();
         assertThat(member).isNotNull();
@@ -65,7 +65,7 @@ class MemberTest {
 
     @Test
     @DisplayName("잘못된 userId 로는 Member 객체를 생성할 수 없다")
-    void shouldNotCreateMember_whenUserIdIsInvalid() {
+    void shouldNotJoinMember_whenUserIdIsInvalid() {
         List<String> wrongIds = Arrays.asList(
                 "id",                           // short
                 "longlonglonglonglongUserId",   // long
@@ -74,14 +74,14 @@ class MemberTest {
         );
 
         for (String id : wrongIds) {
-            assertThatThrownBy(() -> Member.create(id, validPassword, validEmail, validFirstName, validLastName, validNickname, validBio))
+            assertThatThrownBy(() -> Member.join(id, validPassword, validEmail, validFirstName, validLastName, validNickname, validBio))
                     .isInstanceOf(IllegalArgumentException.class);
         }
     }
 
     @Test
     @DisplayName("잘못된 userPassword 로는 Member 객체를 생성할 수 없다")
-    void shouldNotCreateMember_whenPasswordIsInvalid() {
+    void shouldNotJoinMember_whenPasswordIsInvalid() {
         List<String> wrongPasswords = Arrays.asList(
                 "1234",                             // short
                 "12341234123412341234123412341234", // long
@@ -90,14 +90,14 @@ class MemberTest {
         );
 
         for (String pw : wrongPasswords) {
-            assertThatThrownBy(() -> Member.create(validId, pw, validEmail, validFirstName, validLastName, validNickname, validBio))
+            assertThatThrownBy(() -> Member.join(validId, pw, validEmail, validFirstName, validLastName, validNickname, validBio))
                     .isInstanceOf(IllegalArgumentException.class);
         }
     }
 
     @Test
     @DisplayName("잘못된 email 로는 Member 객체를 생성할 수 없다")
-    void shouldNotCreateMember_whenEmailIsInvalid() {
+    void shouldNotJoinMember_whenEmailIsInvalid() {
         List<String> wrongEmails = Arrays.asList(
                 "plainaddress",
                 "#@%^%#$@#$@#.com",
@@ -123,21 +123,21 @@ class MemberTest {
         );
 
         for (String email : wrongEmails) {
-            assertThatThrownBy(() -> Member.create(validId, validPassword, email, validFirstName, validLastName, validNickname, validBio))
+            assertThatThrownBy(() -> Member.join(validId, validPassword, email, validFirstName, validLastName, validNickname, validBio))
                     .isInstanceOf(IllegalArgumentException.class);
         }
     }
 
     @Test
     @DisplayName("잘못된 name 으로는 Member 객체를 생성할 수 없다")
-    void shouldNotCreateMember_whenNameIsInvalid() {
+    void shouldNotJoinMember_whenNameIsInvalid() {
         List<String> wrongFirstNames = Arrays.asList(
                 "",     // blank
                 null    // null
         );
 
         for (String first : wrongFirstNames) {
-            assertThatThrownBy(() -> Member.create(validId, validPassword, validEmail, first, validLastName, validNickname, validBio))
+            assertThatThrownBy(() -> Member.join(validId, validPassword, validEmail, first, validLastName, validNickname, validBio))
                     .isInstanceOf(IllegalArgumentException.class);
         }
 
@@ -147,21 +147,21 @@ class MemberTest {
         );
 
         for (String last : wrongLastNames) {
-            assertThatThrownBy(() -> Member.create(validId, validPassword, validEmail, validFirstName, last, validNickname, validBio))
+            assertThatThrownBy(() -> Member.join(validId, validPassword, validEmail, validFirstName, last, validNickname, validBio))
                     .isInstanceOf(IllegalArgumentException.class);
         }
     }
 
     @Test
     @DisplayName("잘못된 nickname 으로는 Member 객체를 생성할 수 없다")
-    void shouldNotCreateMember_whenNicknameIsInvalid() {
+    void shouldNotJoinMember_whenNicknameIsInvalid() {
         List<String> wrongNicknames = Arrays.asList(
                 "",     // blank
                 null    // null
         );
 
         for (String nick : wrongNicknames) {
-            assertThatThrownBy(() -> Member.create(validId, validPassword, validEmail, validFirstName, validLastName, nick, validBio))
+            assertThatThrownBy(() -> Member.join(validId, validPassword, validEmail, validFirstName, validLastName, nick, validBio))
                     .isInstanceOf(IllegalArgumentException.class);
         }
     }
@@ -171,7 +171,7 @@ class MemberTest {
     @DisplayName("Member의 닉네임을 변경할 수 있다.")
     void shouldUpdateNickname_whenRequiredFieldsProvided() {
         String newNickname = "changed";
-        Member member = Member.create(validId, validPassword, validEmail, validFirstName, validLastName, validNickname, validBio);
+        Member member = Member.join(validId, validPassword, validEmail, validFirstName, validLastName, validNickname, validBio);
 
         member.updateNickname(newNickname);
 
@@ -182,7 +182,7 @@ class MemberTest {
     @DisplayName("Member의 비밀번호를 변경할 수 있다.")
     void shouldUpdatePassword_whenRequiredFieldsProvided() {
         String newPassword = "changed";
-        Member member = Member.create(validId, validPassword, validEmail, validFirstName, validLastName, validNickname, validBio);
+        Member member = Member.join(validId, validPassword, validEmail, validFirstName, validLastName, validNickname, validBio);
 
         member.updatePassword(newPassword);
 
@@ -193,7 +193,7 @@ class MemberTest {
     @DisplayName("Member의 이메일을 변경할 수 있다.")
     void shouldUpdateEmail_whenRequiredFieldsProvided() {
         String newEmail = "changed@test.com";
-        Member member = Member.create(validId, validPassword, validEmail, validFirstName, validLastName, validNickname, validBio);
+        Member member = Member.join(validId, validPassword, validEmail, validFirstName, validLastName, validNickname, validBio);
 
         member.updateEmail(newEmail);
 
@@ -204,7 +204,7 @@ class MemberTest {
     @DisplayName("Member의 자기소개를 변경할 수 있다.")
     void shouldUpdateBio_whenRequiredFieldsProvided() {
         String newBio = "this is new bio";
-        Member member = Member.create(validId, validPassword, validEmail, validFirstName, validLastName, validNickname, validBio);
+        Member member = Member.join(validId, validPassword, validEmail, validFirstName, validLastName, validNickname, validBio);
 
         member.updateBio(newBio);
 
@@ -214,7 +214,7 @@ class MemberTest {
     @Test
     @DisplayName("Member의 MemberType을 변경할 수 있다.")
     void shouldUpdateMemberType_whenRequiredFieldsProvided() {
-        Member member = Member.create(validId, validPassword, validEmail, validFirstName, validLastName, validNickname, validBio);
+        Member member = Member.join(validId, validPassword, validEmail, validFirstName, validLastName, validNickname, validBio);
 
         member.updateMemberType(MemberType.ADMIN);
         assertThat(member.getMemberType()).isEqualTo(MemberType.ADMIN);

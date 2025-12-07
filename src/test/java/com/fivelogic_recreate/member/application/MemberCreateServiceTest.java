@@ -1,8 +1,8 @@
 package com.fivelogic_recreate.member.application;
 
+import com.fivelogic_recreate.fixture.member.MemberFixture;
 import com.fivelogic_recreate.member.application.command.MemberCreateCommand;
 import com.fivelogic_recreate.member.domain.Member;
-import com.fivelogic_recreate.member.domain.MemberType;
 import com.fivelogic_recreate.member.domain.UserId;
 import com.fivelogic_recreate.member.domain.port.MemberRepositoryPort;
 import org.junit.jupiter.api.DisplayName;
@@ -25,6 +25,8 @@ class MemberCreateServiceTest {
     @InjectMocks
     MemberCreateService memberCreateService;
 
+    private MemberFixture memberFixture = new MemberFixture();
+
     @Test
     @DisplayName("사용자 정보가 주어지면 성공적으로 Member객체를 저장하고 반환한다.")
     void shouldSaveAndReturnMemberWhenValidUserInfoProvided() {
@@ -38,16 +40,7 @@ class MemberCreateServiceTest {
                 "Hello bio"
         );
 
-        Member mockedMember = Member.create(
-                command.userId(),
-                command.password(),
-                command.email(),
-                command.firstname(),
-                command.lastname(),
-                command.nickname(),
-                MemberType.MENTEE,
-                command.bio()
-        );
+        Member mockedMember = memberFixture.build();
 
         when(memberRepositoryPort.save(any(Member.class))).thenReturn(mockedMember);
 

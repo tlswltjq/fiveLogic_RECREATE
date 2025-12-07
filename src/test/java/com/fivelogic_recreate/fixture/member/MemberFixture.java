@@ -54,7 +54,7 @@ public class MemberFixture {
     }
 
     public Member build() {
-        return Member.create(
+        return Member.join(
                 userId,
                 password,
                 email,

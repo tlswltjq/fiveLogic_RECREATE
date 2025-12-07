@@ -2,7 +2,6 @@ package com.fivelogic_recreate.member.application;
 
 import com.fivelogic_recreate.member.application.command.MemberCreateCommand;
 import com.fivelogic_recreate.member.domain.Member;
-import com.fivelogic_recreate.member.domain.MemberType;
 import com.fivelogic_recreate.member.domain.UserId;
 import com.fivelogic_recreate.member.domain.port.MemberRepositoryPort;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +17,7 @@ public class MemberCreateService {
         if(repository.existsByUserId(userId)){
             throw new RuntimeException("Member already exists");
         }
-        Member member = Member.create(command.userId(), command.password(), command.email(), command.firstname(), command.lastname(), command.nickname(), MemberType.MENTEE, command.bio());
+        Member member = Member.join(command.userId(), command.password(), command.email(), command.firstname(), command.lastname(), command.nickname(),command.bio());
         return repository.save(member);
     }
 }

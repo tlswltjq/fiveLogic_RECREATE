@@ -28,20 +28,30 @@ public class Member {
         this.bio = bio;
     }
 
-    public static Member create(String userId, String password, String email, String firstName, String lastName, String nickname, MemberType memberType, String bio) {
-        UserId createdUserId = new UserId(userId);
-        UserPassword createdUserPassword = new UserPassword(password);
-        Email createdEmail = new Email(email);
-        Name createdName = new Name(firstName, lastName);
-        Nickname createdNickname = new Nickname(nickname);
-        Bio createdBio = new Bio(bio);
-        return new Member(null, createdUserId, createdUserPassword, createdName, createdNickname, memberType, true, createdEmail, createdBio);
+    public static Member reconstitute(MemberId id, UserId userId, UserPassword password, Name name,
+                                      Nickname nickname, MemberType memberType, Boolean isActivated,
+                                      Email email, Bio bio
+    ) {
+        return new Member(id, userId, password, name, nickname, memberType, isActivated, email, bio);
     }
 
-    public static Member create(String userId, String password, String email, String firstName, String lastName, String nickname, String bio) {
-        return create(userId, password, email, firstName, lastName, nickname, MemberType.MENTEE, bio);
+    public static Member join(String userId, String password, String email, String firstName, String lastName, String nickname, String bio) {
+        return join(userId, password, email, firstName, lastName, nickname, MemberType.MENTEE, bio);
     }
 
+    public static Member join(String userId, String password, String email, String firstName, String lastName, String nickname, MemberType memberType, String bio) {
+        return new Member(
+                null,
+                new UserId(userId),
+                new UserPassword(password),
+                new Name(firstName, lastName),
+                new Nickname(nickname),
+                memberType,
+                true,
+                new Email(email),
+                new Bio(bio)
+        );
+    }
 
     public void delete() {
         this.isActivated = false;
