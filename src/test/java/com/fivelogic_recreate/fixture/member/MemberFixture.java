@@ -1,9 +1,9 @@
 package com.fivelogic_recreate.fixture.member;
 
-import com.fivelogic_recreate.member.domain.Member;
-import com.fivelogic_recreate.member.domain.MemberType;
+import com.fivelogic_recreate.member.domain.*;
 
 public class MemberFixture {
+    private Long memberId = 1L;
     private String userId = "user1";
     private String password = "password";
     private String email = "email@test.com";
@@ -12,6 +12,11 @@ public class MemberFixture {
     private String nickname = "johnd";
     private MemberType memberType = MemberType.MENTEE;
     private String bio = "Hello bio";
+
+    public MemberFixture withMemberId(Long memberId) {
+        this.memberId = memberId;
+        return this;
+    }
 
     public MemberFixture withUserId(String userId) {
         this.userId = userId;
@@ -54,15 +59,16 @@ public class MemberFixture {
     }
 
     public Member build() {
-        return Member.join(
-                userId,
-                password,
-                email,
-                firstname,
-                lastname,
-                nickname,
+        return Member.reconstitute(
+                new MemberId(memberId),
+                new UserId(userId),
+                new UserPassword(password),
+                new Name(firstname, lastname),
+                new Nickname(nickname),
                 memberType,
-                bio
+                true,
+                new Email(email),
+                new Bio(bio)
         );
     }
 }
