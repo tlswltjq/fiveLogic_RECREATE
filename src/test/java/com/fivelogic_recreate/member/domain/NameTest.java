@@ -7,7 +7,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class NameTest {
-
     @Test
     @DisplayName("정상적으로 Name 이 생성된다.")
     void nameCreationTest() {
@@ -41,5 +40,15 @@ class NameTest {
                 .isInstanceOf(IllegalArgumentException.class);
         assertThatThrownBy(() -> new Name(firstName, " "))
                 .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    @DisplayName("이름과 성을 합친 문자열을 반환한다.")
+    void shouldReturnFirstNameAndLastName() {
+        String firstName = "first";
+        String lastName = "last";
+        Name name = new Name(firstName, lastName);
+        assertThat(name).isNotNull();
+        assertThat(name.value()).isEqualTo(firstName + " " + lastName);
     }
 }

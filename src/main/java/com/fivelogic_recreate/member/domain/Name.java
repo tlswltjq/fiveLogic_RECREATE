@@ -9,4 +9,7 @@ public record Name(String firstName, String lastName) {
             throw new IllegalArgumentException("Invalid last name");
         }
     }
+    public String value(){
+        return firstName + " " + lastName;
+    }
 }
