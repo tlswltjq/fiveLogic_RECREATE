@@ -16,6 +16,4 @@ public interface MemberRepositoryPort {
     Member save(Member member);
 
     boolean existsByUserId(UserId userId);
-
-    void delete(UserId id);
 }
