@@ -21,6 +21,11 @@ class MemberResponseTest {
         assertThat(dto.userId()).isEqualTo(member.getUserId().value());
         assertThat(dto.email()).isEqualTo(member.getEmail().value());
         assertThat(dto.name()).isEqualTo(member.getName().firstName() + " " + member.getName().lastName());
+        assertThat(dto.email()).isEqualTo(member.getEmail().value());
+        assertThat(dto.nickname()).isEqualTo(member.getNickname().value());
+        assertThat(dto.memberType()).isEqualTo(member.getMemberType().name());
+        assertThat(dto.bio()).isEqualTo(member.getBio().value());
+        assertThat(dto.isActive()).isEqualTo(member.getIsActivated());
     }
 
 }
