@@ -6,9 +6,11 @@ import com.fivelogic_recreate.member.domain.UserId;
 import com.fivelogic_recreate.member.domain.port.MemberRepositoryPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class MemberCreateService {
     private final MemberRepositoryPort repository;
 
