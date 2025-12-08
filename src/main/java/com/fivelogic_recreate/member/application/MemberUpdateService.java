@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class MemberUpdateService {
     private final MemberRepositoryPort repository;
 
+    //todo DTO로 감쌀 것
     public Member update(MemberUpdateCommand command) {
         UserId userId = new UserId(command.userId());
         Member member = repository.findByUserId(userId).orElseThrow(() -> new RuntimeException("User not found"));
