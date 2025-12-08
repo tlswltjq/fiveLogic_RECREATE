@@ -1,6 +1,7 @@
 package com.fivelogic_recreate.member.application;
 
 import com.fivelogic_recreate.fixture.member.MemberFixture;
+import com.fivelogic_recreate.member.application.command.MemberCreateService;
 import com.fivelogic_recreate.member.application.command.dto.MemberCreateCommand;
 import com.fivelogic_recreate.member.domain.Member;
 import com.fivelogic_recreate.member.domain.UserId;

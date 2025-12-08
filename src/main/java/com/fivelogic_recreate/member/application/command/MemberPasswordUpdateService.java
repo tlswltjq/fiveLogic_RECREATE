@@ -1,4 +1,4 @@
-package com.fivelogic_recreate.member.application;
+package com.fivelogic_recreate.member.application.command;
 
 import com.fivelogic_recreate.member.application.command.dto.MemberPasswordUpdateCommand;
 import com.fivelogic_recreate.member.domain.Member;
