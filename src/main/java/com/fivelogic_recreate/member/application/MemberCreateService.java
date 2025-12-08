@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class MemberCreateService {
     private final MemberRepositoryPort repository;
 
+    //todo DTO로 감쌀 것
     public Member create(MemberCreateCommand command) {
         UserId userId = new UserId(command.userId());
         if(repository.existsByUserId(userId)){
