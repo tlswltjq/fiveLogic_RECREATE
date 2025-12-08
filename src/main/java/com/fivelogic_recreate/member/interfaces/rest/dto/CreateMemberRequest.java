@@ -1,6 +1,6 @@
 package com.fivelogic_recreate.member.interfaces.rest.dto;
 
-import com.fivelogic_recreate.member.application.command.MemberCreateCommand;
+import com.fivelogic_recreate.member.application.command.dto.MemberCreateCommand;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

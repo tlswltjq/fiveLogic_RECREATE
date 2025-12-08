@@ -1,6 +1,6 @@
 package com.fivelogic_recreate.member.interfaces.rest.dto;
 
-import com.fivelogic_recreate.member.application.command.MemberUpdateCommand;
+import com.fivelogic_recreate.member.application.command.dto.MemberUpdateCommand;
 
 public record UpdateMemberRequest(
         //TODO Validation추가

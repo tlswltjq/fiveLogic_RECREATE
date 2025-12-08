@@ -1,6 +1,6 @@
 package com.fivelogic_recreate.member.application;
 
-import com.fivelogic_recreate.member.application.command.MemberUpdateCommand;
+import com.fivelogic_recreate.member.application.command.dto.MemberUpdateCommand;
 import com.fivelogic_recreate.member.domain.Member;
 import com.fivelogic_recreate.member.domain.MemberType;
 import com.fivelogic_recreate.member.domain.UserId;

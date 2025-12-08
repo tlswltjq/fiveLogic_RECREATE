@@ -1,6 +1,6 @@
 package com.fivelogic_recreate.member.application;
 
-import com.fivelogic_recreate.member.application.command.MemberDeleteCommand;
+import com.fivelogic_recreate.member.application.command.dto.MemberDeleteCommand;
 import com.fivelogic_recreate.member.domain.Member;
 import com.fivelogic_recreate.member.domain.UserId;
 import com.fivelogic_recreate.member.domain.port.MemberRepositoryPort;

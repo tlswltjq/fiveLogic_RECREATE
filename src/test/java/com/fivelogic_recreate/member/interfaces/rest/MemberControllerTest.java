@@ -4,7 +4,7 @@ import com.fivelogic_recreate.fixture.member.MemberFixture;
 import com.fivelogic_recreate.member.application.MemberCreateService;
 import com.fivelogic_recreate.member.application.MemberDeleteService;
 import com.fivelogic_recreate.member.application.MemberUpdateService;
-import com.fivelogic_recreate.member.application.command.MemberDeleteCommand;
+import com.fivelogic_recreate.member.application.command.dto.MemberDeleteCommand;
 import com.fivelogic_recreate.member.application.query.MemberQueryService;
 import com.fivelogic_recreate.member.application.query.dto.MemberResponse;
 import com.fivelogic_recreate.member.domain.Member;
