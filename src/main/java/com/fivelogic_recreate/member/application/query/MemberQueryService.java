@@ -3,6 +3,7 @@ package com.fivelogic_recreate.member.application.query;
 import com.fivelogic_recreate.member.application.query.dto.MemberResponse;
 import com.fivelogic_recreate.member.domain.UserId;
 import com.fivelogic_recreate.member.domain.port.MemberQueryRepositoryPort;
+import com.fivelogic_recreate.member.exception.MemberNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,7 +20,7 @@ public class MemberQueryService {
     public MemberResponse getByUserId(String userId) {
         return repository.findByUserId(new UserId(userId))
                 .map(MemberResponse::new)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(MemberNotFoundException::new);
     }
 
     public List<MemberResponse> getAll() {

@@ -10,7 +10,7 @@ public record Email(String value) {
 
     public Email {
         if (value == null || !EMAIL_PATTERN.matcher(value).matches()) {
-            throw new IllegalArgumentException("Invalid email format");
+            throw new IllegalArgumentException("잘못된 이메일 형식입니다.");
         }
     }
 }

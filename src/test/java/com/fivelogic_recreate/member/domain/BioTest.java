@@ -29,7 +29,7 @@ class BioTest {
     void bioCreationWithBlankStringTest() {
         assertThatThrownBy(() -> new Bio(" "))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("Bio must be less than 500 characters and not blank");
+                .hasMessage("소개는 500자를 넘거나 공백일 수 없습니다.");
     }
 
     @Test
@@ -38,6 +38,6 @@ class BioTest {
         String longBio = "a".repeat(501);
         assertThatThrownBy(() -> new Bio(longBio))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("Bio must be less than 500 characters and not blank");
+                .hasMessage("소개는 500자를 넘거나 공백일 수 없습니다.");
     }
 }

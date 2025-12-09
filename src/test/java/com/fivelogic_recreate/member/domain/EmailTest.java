@@ -21,22 +21,22 @@ class EmailTest {
     void emailCreationTestWithInvalidEmail() {
         assertThatThrownBy(() -> new Email(null))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("Invalid email format");
+                .hasMessage("잘못된 이메일 형식입니다.");
 
         assertThatThrownBy(() -> new Email(""))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("Invalid email format");
+                .hasMessage("잘못된 이메일 형식입니다.");
 
         assertThatThrownBy(() -> new Email("test"))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("Invalid email format");
+                .hasMessage("잘못된 이메일 형식입니다.");
 
         assertThatThrownBy(() -> new Email("test@"))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("Invalid email format");
+                .hasMessage("잘못된 이메일 형식입니다.");
 
         assertThatThrownBy(() -> new Email("@example.com"))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("Invalid email format");
+                .hasMessage("잘못된 이메일 형식입니다.");
     }
 }

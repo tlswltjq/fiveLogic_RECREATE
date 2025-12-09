@@ -7,7 +7,7 @@ public enum MemberType {
         try {
             return MemberType.valueOf(value.toUpperCase());
         } catch (IllegalArgumentException | NullPointerException e) {
-            throw new IllegalArgumentException("Invalid member type: " + value);
+            throw new IllegalArgumentException("유효하지 않은 회원 유형입니다: " + value);
         }
     }
 }

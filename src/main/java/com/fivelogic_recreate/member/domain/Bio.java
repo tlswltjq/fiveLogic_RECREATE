@@ -5,7 +5,7 @@ public record Bio(String value) {
 
     public Bio {
         if (value != null && (value.isBlank() || value.length() > MAX_LENGTH)) {
-            throw new IllegalArgumentException("Bio must be less than " + MAX_LENGTH + " characters and not blank");
+            throw new IllegalArgumentException("소개는 " + MAX_LENGTH + "자를 넘거나 공백일 수 없습니다.");
         }
     }
 }

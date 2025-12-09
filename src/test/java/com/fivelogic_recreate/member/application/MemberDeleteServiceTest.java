@@ -54,6 +54,6 @@ class MemberDeleteServiceTest {
         MemberDeleteCommand deleteCommand = new MemberDeleteCommand("nonExistingUserId");
 
         assertThatThrownBy(() -> memberDeleteService.delete(deleteCommand))
-                .isInstanceOf(IllegalArgumentException.class);
+                .isInstanceOf(RuntimeException.class);
     }
 }

@@ -34,7 +34,7 @@ class MemberTypeTest {
 
         assertThatThrownBy(() -> MemberType.from(invalidType))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("Invalid member type: " + invalidType);
+                .hasMessage("유효하지 않은 회원 유형입니다: " + invalidType);
     }
 
     @Test
@@ -42,6 +42,6 @@ class MemberTypeTest {
     void fromNull() {
         assertThatThrownBy(() -> MemberType.from(null))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("Invalid member type: null");
+                .hasMessage("유효하지 않은 회원 유형입니다: null");
     }
 }

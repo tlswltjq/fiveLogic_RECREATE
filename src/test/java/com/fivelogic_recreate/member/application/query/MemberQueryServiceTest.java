@@ -5,6 +5,7 @@ import com.fivelogic_recreate.member.application.query.dto.MemberResponse;
 import com.fivelogic_recreate.member.domain.Member;
 import com.fivelogic_recreate.member.domain.UserId;
 import com.fivelogic_recreate.member.domain.port.MemberQueryRepositoryPort;
+import com.fivelogic_recreate.member.exception.MemberNotFoundException;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -53,7 +54,7 @@ class MemberQueryServiceTest {
         String nonExistUserId = "XXXXXXXX";
 
         Assertions.assertThatThrownBy(() -> memberQueryService.getByUserId(nonExistUserId))
-                .isInstanceOf(RuntimeException.class);
+                .isInstanceOf(MemberNotFoundException.class);
     }
 
     @Test
