@@ -2,6 +2,7 @@ package com.fivelogic_recreate.member.application;
 
 import com.fivelogic_recreate.fixture.member.MemberFixture;
 import com.fivelogic_recreate.member.application.command.MemberPasswordUpdateService;
+import com.fivelogic_recreate.member.application.command.dto.MemberInfo;
 import com.fivelogic_recreate.member.application.command.dto.MemberPasswordUpdateCommand;
 import com.fivelogic_recreate.member.domain.Member;
 import com.fivelogic_recreate.member.domain.UserId;
@@ -43,10 +44,10 @@ class MemberPasswordUpdateServiceTest {
         when(memberRepositoryPort.save(any(Member.class)))
                 .thenAnswer(invocation -> invocation.getArgument(0));
 
-        Member result = memberPasswordUpdateService.updatePassword(command);
+        MemberInfo result = memberPasswordUpdateService.updatePassword(command);
 
         verify(memberRepositoryPort).save(any(Member.class));
-        assertThat(result.getPassword().value()).isEqualTo(newPassword);
+        assertThat(result.password()).isEqualTo(newPassword);
     }
 
     @Test

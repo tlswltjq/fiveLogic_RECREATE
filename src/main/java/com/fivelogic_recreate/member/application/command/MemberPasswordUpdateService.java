@@ -1,5 +1,6 @@
 package com.fivelogic_recreate.member.application.command;
 
+import com.fivelogic_recreate.member.application.command.dto.MemberInfo;
 import com.fivelogic_recreate.member.application.command.dto.MemberPasswordUpdateCommand;
 import com.fivelogic_recreate.member.domain.Member;
 import com.fivelogic_recreate.member.domain.UserId;
@@ -14,10 +15,11 @@ import org.springframework.transaction.annotation.Transactional;
 public class MemberPasswordUpdateService {
     private final MemberRepositoryPort repository;
 
-    public Member updatePassword(MemberPasswordUpdateCommand command) {
+    public MemberInfo updatePassword(MemberPasswordUpdateCommand command) {
         UserId userId = new UserId(command.userId());
         Member member = repository.findByUserId(userId).orElseThrow(RuntimeException::new);
         member.updatePassword(command.password());
-        return repository.save(member);
+
+        return new MemberInfo(repository.save(member));
     }
 }

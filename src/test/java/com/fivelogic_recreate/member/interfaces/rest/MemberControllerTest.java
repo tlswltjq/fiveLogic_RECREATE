@@ -5,9 +5,9 @@ import com.fivelogic_recreate.member.application.command.MemberCreateService;
 import com.fivelogic_recreate.member.application.command.MemberDeleteService;
 import com.fivelogic_recreate.member.application.command.MemberUpdateService;
 import com.fivelogic_recreate.member.application.command.dto.MemberDeleteCommand;
+import com.fivelogic_recreate.member.application.command.dto.MemberInfo;
 import com.fivelogic_recreate.member.application.query.MemberQueryService;
 import com.fivelogic_recreate.member.application.query.dto.MemberResponse;
-import com.fivelogic_recreate.member.domain.Member;
 import com.fivelogic_recreate.member.interfaces.rest.common.ApiResponse;
 import com.fivelogic_recreate.member.interfaces.rest.dto.*;
 import org.junit.jupiter.api.DisplayName;
@@ -42,8 +42,8 @@ class MemberControllerTest {
     @DisplayName("회원 생성 성공")
     void createMember_success() {
         CreateMemberRequest request = new CreateMemberRequest("user1", "password", "email@test.com", "first", "name", "nick", "bio");
-        Member mockMember = memberFixture.withUserId("user1").build();
-        given(memberCreateService.create(request.toCommand())).willReturn(mockMember);
+        MemberInfo mockMemberInfo = new MemberInfo(1L, "user1", "password", "first name", "nick", "MANTEE", true, "email@test.com", "bio");
+        given(memberCreateService.create(request.toCommand())).willReturn(mockMemberInfo);
 
         ApiResponse<CreateMemberResponse> response = controller.createMember(request);
 
@@ -85,8 +85,8 @@ class MemberControllerTest {
     void updateMemberInfo_success() {
         String userId = "user1";
         UpdateMemberRequest request = new UpdateMemberRequest("email@test.com", "first", "last", "newnickname", "bio", "mento");
-        Member updated = memberFixture.withUserId(userId).build();
-        given(memberUpdateService.update(request.toCommand(userId))).willReturn(updated);
+        MemberInfo updatedMemberInfo = new MemberInfo(1L, userId, "password", "first last", "newnickname", "MENTO", true, "email@test.com", "bio");
+        given(memberUpdateService.update(request.toCommand(userId))).willReturn(updatedMemberInfo);
 
         ApiResponse<UpdateMemberResponse> response = controller.updateMemberInfo(userId, request);
 
@@ -98,8 +98,8 @@ class MemberControllerTest {
     @DisplayName("회원 삭제 성공")
     void deleteMember_success() {
         String userId = "user1";
-        Member mockMember = memberFixture.withUserId(userId).build();
-        given(memberDeleteService.delete(new MemberDeleteCommand(userId))).willReturn(mockMember);
+        MemberInfo deletedMemberInfo = new MemberInfo(1L, userId, "password", "name", "nick", "MANTEE", false, "email@test.com", "bio");
+        given(memberDeleteService.delete(new MemberDeleteCommand(userId))).willReturn(deletedMemberInfo);
 
         ApiResponse<DeleteMemberResponse> response = controller.deleteMember(userId);
 

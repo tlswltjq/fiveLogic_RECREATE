@@ -3,6 +3,7 @@ package com.fivelogic_recreate.member.application;
 import com.fivelogic_recreate.fixture.member.MemberFixture;
 import com.fivelogic_recreate.member.application.command.MemberCreateService;
 import com.fivelogic_recreate.member.application.command.dto.MemberCreateCommand;
+import com.fivelogic_recreate.member.application.command.dto.MemberInfo;
 import com.fivelogic_recreate.member.domain.Member;
 import com.fivelogic_recreate.member.domain.UserId;
 import com.fivelogic_recreate.member.domain.port.MemberRepositoryPort;
@@ -41,15 +42,23 @@ class MemberCreateServiceTest {
                 "Hello bio"
         );
 
-        Member mockedMember = memberFixture.build();
+        Member mockedMember = memberFixture.withMemberId(1L).build();
 
         when(memberRepositoryPort.save(any(Member.class))).thenReturn(mockedMember);
 
-        Member createdMember = memberCreateService.create(command);
+        MemberInfo createdMember = memberCreateService.create(command);
 
-        assertThat(createdMember).isEqualTo(mockedMember);
         verify(memberRepositoryPort).existsByUserId(new UserId("user1"));
         verify(memberRepositoryPort).save(any(Member.class));
+        assertThat(createdMember.id()).isEqualTo(mockedMember.getId().value());
+        assertThat(createdMember.userId()).isEqualTo(mockedMember.getUserId().value());
+        assertThat(createdMember.password()).isEqualTo(mockedMember.getPassword().value());
+        assertThat(createdMember.name()).isEqualTo(mockedMember.getName().value());
+        assertThat(createdMember.nickname()).isEqualTo(mockedMember.getNickname().value());
+        assertThat(createdMember.memberType()).isEqualTo(mockedMember.getMemberType().name());
+        assertThat(createdMember.isActivated()).isEqualTo(mockedMember.getIsActivated());
+        assertThat(createdMember.email()).isEqualTo(mockedMember.getEmail().value());
+        assertThat(createdMember.bio()).isEqualTo(mockedMember.getBio().value());
 
     }
 

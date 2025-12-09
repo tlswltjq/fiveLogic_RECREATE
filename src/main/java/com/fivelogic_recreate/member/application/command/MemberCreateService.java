@@ -1,6 +1,7 @@
 package com.fivelogic_recreate.member.application.command;
 
 import com.fivelogic_recreate.member.application.command.dto.MemberCreateCommand;
+import com.fivelogic_recreate.member.application.command.dto.MemberInfo;
 import com.fivelogic_recreate.member.domain.Member;
 import com.fivelogic_recreate.member.domain.UserId;
 import com.fivelogic_recreate.member.domain.port.MemberRepositoryPort;
@@ -14,13 +15,13 @@ import org.springframework.transaction.annotation.Transactional;
 public class MemberCreateService {
     private final MemberRepositoryPort repository;
 
-    //todo DTO로 감쌀 것
-    public Member create(MemberCreateCommand command) {
+    public MemberInfo create(MemberCreateCommand command) {
         UserId userId = new UserId(command.userId());
-        if(repository.existsByUserId(userId)){
+        if (repository.existsByUserId(userId)) {
             throw new RuntimeException("Member already exists");
         }
-        Member member = Member.join(command.userId(), command.password(), command.email(), command.firstname(), command.lastname(), command.nickname(),command.bio());
-        return repository.save(member);
+        Member member = Member.join(command.userId(), command.password(), command.email(), command.firstname(), command.lastname(), command.nickname(), command.bio());
+
+        return new MemberInfo(repository.save(member));
     }
 }

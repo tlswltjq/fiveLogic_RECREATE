@@ -3,6 +3,7 @@ package com.fivelogic_recreate.member.application;
 import com.fivelogic_recreate.fixture.member.MemberFixture;
 import com.fivelogic_recreate.member.application.command.MemberDeleteService;
 import com.fivelogic_recreate.member.application.command.dto.MemberDeleteCommand;
+import com.fivelogic_recreate.member.application.command.dto.MemberInfo;
 import com.fivelogic_recreate.member.domain.Member;
 import com.fivelogic_recreate.member.domain.UserId;
 import com.fivelogic_recreate.member.domain.port.MemberRepositoryPort;
@@ -41,10 +42,10 @@ class MemberDeleteServiceTest {
         when(memberRepositoryPort.findByUserId(any(UserId.class))).thenReturn(Optional.of(member));
         when(memberRepositoryPort.save(any(Member.class))).thenAnswer(i -> i.getArgument(0));
 
-        Member result = memberDeleteService.delete(deleteCommand);
+        MemberInfo result = memberDeleteService.delete(deleteCommand);
 
         verify(memberRepositoryPort).save(any(Member.class));
-        assertThat(result.getIsActivated()).isFalse();
+        assertThat(result.isActivated()).isFalse();
     }
 
     @Test

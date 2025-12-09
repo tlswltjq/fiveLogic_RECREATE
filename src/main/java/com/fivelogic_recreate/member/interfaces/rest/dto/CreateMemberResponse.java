@@ -1,11 +1,11 @@
 package com.fivelogic_recreate.member.interfaces.rest.dto;
 
-import com.fivelogic_recreate.member.domain.Member;
+import com.fivelogic_recreate.member.application.command.dto.MemberInfo;
 
 public record CreateMemberResponse(
         String userId, String name, String email
 ) {
-    public CreateMemberResponse(Member member) {
-        this(member.getUserId().value(), member.getName().value(), member.getEmail().value());
+    public CreateMemberResponse(MemberInfo memberinfo) {
+        this(memberinfo.userId(), memberinfo.name(), memberinfo.email());
     }
 }

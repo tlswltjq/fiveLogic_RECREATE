@@ -1,6 +1,6 @@
 package com.fivelogic_recreate.member.interfaces.rest.dto;
 
-import com.fivelogic_recreate.member.domain.Member;
+import com.fivelogic_recreate.member.application.command.dto.MemberInfo;
 
 public record UpdateMemberResponse(
         String userId,
@@ -10,7 +10,7 @@ public record UpdateMemberResponse(
         String bio,
         String memberType
 ) {
-    public UpdateMemberResponse(Member member) {
-        this(member.getUserId().value(), member.getEmail().value(), member.getName().value(), member.getNickname().value(), member.getBio().value(), member.getMemberType().name());
+    public UpdateMemberResponse(MemberInfo memberInfo) {
+        this(memberInfo.userId(), memberInfo.email(), memberInfo.name(), memberInfo.nickname(), memberInfo.bio(), memberInfo.memberType());
     }
 }

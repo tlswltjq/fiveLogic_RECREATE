@@ -1,6 +1,7 @@
 package com.fivelogic_recreate.member.application.command;
 
 import com.fivelogic_recreate.member.application.command.dto.MemberDeleteCommand;
+import com.fivelogic_recreate.member.application.command.dto.MemberInfo;
 import com.fivelogic_recreate.member.domain.Member;
 import com.fivelogic_recreate.member.domain.UserId;
 import com.fivelogic_recreate.member.domain.port.MemberRepositoryPort;
@@ -14,11 +15,11 @@ import org.springframework.transaction.annotation.Transactional;
 public class MemberDeleteService {
     private final MemberRepositoryPort repository;
 
-    public Member delete(MemberDeleteCommand command) {
+    public MemberInfo delete(MemberDeleteCommand command) {
         UserId userId = new UserId(command.userId());
         Member member = repository.findByUserId(userId).orElseThrow(() -> new RuntimeException("User " + userId + " does not exist"));
-
         member.delete();
-        return repository.save(member);
+
+        return new MemberInfo(repository.save(member));
     }
 }

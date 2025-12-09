@@ -1,5 +1,6 @@
 package com.fivelogic_recreate.member.application.command;
 
+import com.fivelogic_recreate.member.application.command.dto.MemberInfo;
 import com.fivelogic_recreate.member.application.command.dto.MemberUpdateCommand;
 import com.fivelogic_recreate.member.domain.Member;
 import com.fivelogic_recreate.member.domain.MemberType;
@@ -15,8 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class MemberUpdateService {
     private final MemberRepositoryPort repository;
 
-    //todo DTO로 감쌀 것
-    public Member update(MemberUpdateCommand command) {
+    public MemberInfo update(MemberUpdateCommand command) {
         UserId userId = new UserId(command.userId());
         Member member = repository.findByUserId(userId).orElseThrow(() -> new RuntimeException("User not found"));
 
@@ -47,6 +47,7 @@ public class MemberUpdateService {
         if (bio != null && !bio.isBlank()) {
             member.updateBio(bio);
         }
-        return repository.save(member);
+
+        return new MemberInfo(repository.save(member));
     }
 }

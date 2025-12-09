@@ -2,6 +2,7 @@ package com.fivelogic_recreate.member.application;
 
 import com.fivelogic_recreate.fixture.member.MemberFixture;
 import com.fivelogic_recreate.member.application.command.MemberUpdateService;
+import com.fivelogic_recreate.member.application.command.dto.MemberInfo;
 import com.fivelogic_recreate.member.application.command.dto.MemberUpdateCommand;
 import com.fivelogic_recreate.member.domain.Member;
 import com.fivelogic_recreate.member.domain.MemberType;
@@ -50,15 +51,15 @@ class MemberUpdateServiceTest {
                 .thenReturn(Optional.of(member));
         when(memberRepositoryPort.save(any(Member.class)))
                 .thenReturn(member);
-        Member updated = memberUpdateService.update(updateCommand);
+        MemberInfo memberInfo = memberUpdateService.update(updateCommand);
 
         verify(memberRepositoryPort).save(member);
-        assertThat(member).isEqualTo(updated);
-        assertThat(member.getEmail().value()).isEqualTo("updatedMail@email.com");
-        assertThat(member.getName()).isEqualTo(new Name("updated", "name"));
-        assertThat(member.getNickname().value()).isEqualTo("updatednickname");
-        assertThat(member.getBio().value()).isEqualTo("updated bio");
-        assertThat(member.getMemberType()).isEqualTo(MemberType.MENTOR);
+        assertThat(memberInfo).isNotNull();
+        assertThat(memberInfo.email()).isEqualTo("updatedMail@email.com");
+        assertThat(memberInfo.name()).isEqualTo("updated name");
+        assertThat(memberInfo.nickname()).isEqualTo("updatednickname");
+        assertThat(memberInfo.bio()).isEqualTo("updated bio");
+        assertThat(memberInfo.memberType()).isEqualTo(MemberType.MENTOR.name());
     }
 
     @Test
@@ -73,8 +74,7 @@ class MemberUpdateServiceTest {
                 "bio",
                 "mentor"
         );
-        when(memberRepositoryPort.findByUserId(any(UserId.class)))
-                .thenReturn(Optional.empty());
+        when(memberRepositoryPort.findByUserId(any(UserId.class))).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> memberUpdateService.update(updateCommand))
                 .isInstanceOf(RuntimeException.class);
@@ -98,8 +98,9 @@ class MemberUpdateServiceTest {
                 null,
                 null
         );
-        when(memberRepositoryPort.findByUserId(any(UserId.class)))
-                .thenReturn(Optional.of(member));
+        when(memberRepositoryPort.findByUserId(any(UserId.class))).thenReturn(Optional.of(member));
+        when(memberRepositoryPort.save(any(Member.class))).thenReturn(member);
+
         memberUpdateService.update(updateCommand);
 
         verify(memberRepositoryPort).save(member);
@@ -118,6 +119,7 @@ class MemberUpdateServiceTest {
                 "userId", null, null, null, null, null, "MENTOR"
         );
         when(memberRepositoryPort.findByUserId(any(UserId.class))).thenReturn(Optional.of(member));
+        when(memberRepositoryPort.save(any(Member.class))).thenReturn(member);
 
         memberUpdateService.update(updateCommand);
 
@@ -133,6 +135,7 @@ class MemberUpdateServiceTest {
                 "userId", null, "updatedFirst", "updatedLast", null, null, null
         );
         when(memberRepositoryPort.findByUserId(any(UserId.class))).thenReturn(Optional.of(member));
+        when(memberRepositoryPort.save(any(Member.class))).thenReturn(member);
 
         memberUpdateService.update(updateCommand);
 
@@ -149,6 +152,7 @@ class MemberUpdateServiceTest {
                 "userId", null, "updatedFirst", null, null, null, null
         );
         when(memberRepositoryPort.findByUserId(any(UserId.class))).thenReturn(Optional.of(member));
+        when(memberRepositoryPort.save(any(Member.class))).thenReturn(member);
 
         memberUpdateService.update(updateCommand);
 
@@ -163,6 +167,7 @@ class MemberUpdateServiceTest {
                 "userId", "updated@email.com", null, null, null, null, null
         );
         when(memberRepositoryPort.findByUserId(any(UserId.class))).thenReturn(Optional.of(member));
+        when(memberRepositoryPort.save(any(Member.class))).thenReturn(member);
 
         memberUpdateService.update(updateCommand);
 
@@ -178,6 +183,7 @@ class MemberUpdateServiceTest {
                 "userId", null, null, null, null, "updated bio", null
         );
         when(memberRepositoryPort.findByUserId(any(UserId.class))).thenReturn(Optional.of(member));
+        when(memberRepositoryPort.save(any(Member.class))).thenReturn(member);
 
         memberUpdateService.update(updateCommand);
 
