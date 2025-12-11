@@ -1,5 +1,6 @@
 package com.fivelogic_recreate.member.interfaces.rest;
 
+import com.fivelogic_recreate.common.rest.ApiResponse;
 import com.fivelogic_recreate.member.application.command.MemberCreateService;
 import com.fivelogic_recreate.member.application.command.MemberDeleteService;
 import com.fivelogic_recreate.member.application.command.MemberUpdateService;
@@ -7,15 +8,15 @@ import com.fivelogic_recreate.member.application.command.dto.MemberDeleteCommand
 import com.fivelogic_recreate.member.application.command.dto.MemberInfo;
 import com.fivelogic_recreate.member.application.query.MemberQueryService;
 import com.fivelogic_recreate.member.application.query.dto.MemberResponse;
-import com.fivelogic_recreate.member.interfaces.rest.common.ApiResponse;
 import com.fivelogic_recreate.member.interfaces.rest.dto.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
+@Controller
 @RequestMapping("/api/members")
 @RequiredArgsConstructor
 public class MemberController {
