@@ -1,5 +1,6 @@
 package com.fivelogic_recreate.member.interfaces.rest;
 
+import com.fivelogic_recreate.common.rest.ApiResponse;
 import com.fivelogic_recreate.fixture.member.MemberFixture;
 import com.fivelogic_recreate.member.application.command.MemberCreateService;
 import com.fivelogic_recreate.member.application.command.MemberDeleteService;
@@ -8,7 +9,6 @@ import com.fivelogic_recreate.member.application.command.dto.MemberDeleteCommand
 import com.fivelogic_recreate.member.application.command.dto.MemberInfo;
 import com.fivelogic_recreate.member.application.query.MemberQueryService;
 import com.fivelogic_recreate.member.application.query.dto.MemberResponse;
-import com.fivelogic_recreate.member.interfaces.rest.common.ApiResponse;
 import com.fivelogic_recreate.member.interfaces.rest.dto.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -35,8 +35,6 @@ class MemberControllerTest {
 
     @InjectMocks
     private MemberController controller;
-
-    private MemberFixture memberFixture = new MemberFixture();
 
     @Test
     @DisplayName("회원 생성 성공")
