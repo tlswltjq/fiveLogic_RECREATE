@@ -11,9 +11,9 @@ public enum ErrorCode {
     INTERNAL_SERVER_ERROR("C003", "Internal Server Error", HttpStatus.INTERNAL_SERVER_ERROR),
 
     // Member
-    MEMBER_NOT_FOUND("M001", "Member not found", HttpStatus.NOT_FOUND),
-    USER_ID_DUPLICATION("M002", "UserId is already taken", HttpStatus.CONFLICT),
-    EMAIL_DUPLICATION("M003", "Email is already taken", HttpStatus.CONFLICT)
+    MEMBER_NOT_FOUND("M001", "사용자를 찾을 수 없습니다", HttpStatus.NOT_FOUND),
+    USER_ID_DUPLICATION("M002", "이미 사용중인 사용자 ID 입니다", HttpStatus.CONFLICT),
+    EMAIL_DUPLICATION("M003", "이미 사용중인 Email 입니다", HttpStatus.CONFLICT)
 
     ,;
 

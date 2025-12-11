@@ -1,4 +1,4 @@
-package com.fivelogic_recreate.member.interfaces.rest.common;
+package com.fivelogic_recreate.common.rest;
 
 import lombok.Getter;
 
