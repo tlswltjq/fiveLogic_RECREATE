@@ -4,9 +4,12 @@ import com.fivelogic_recreate.fixture.member.MemberFixture;
 import com.fivelogic_recreate.member.application.command.MemberCreateService;
 import com.fivelogic_recreate.member.application.command.dto.MemberCreateCommand;
 import com.fivelogic_recreate.member.application.command.dto.MemberInfo;
+import com.fivelogic_recreate.member.domain.Email;
 import com.fivelogic_recreate.member.domain.Member;
 import com.fivelogic_recreate.member.domain.UserId;
 import com.fivelogic_recreate.member.domain.port.MemberRepositoryPort;
+import com.fivelogic_recreate.member.exception.EmailDuplicationException;
+import com.fivelogic_recreate.member.exception.UserIdDuplicationException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -49,6 +52,7 @@ class MemberCreateServiceTest {
         MemberInfo createdMember = memberCreateService.create(command);
 
         verify(memberRepositoryPort).existsByUserId(new UserId("user1"));
+        verify(memberRepositoryPort).existsByEmail(new Email("email@test.com"));
         verify(memberRepositoryPort).save(any(Member.class));
         assertThat(createdMember.id()).isEqualTo(mockedMember.getId().value());
         assertThat(createdMember.userId()).isEqualTo(mockedMember.getUserId().value());
@@ -76,14 +80,35 @@ class MemberCreateServiceTest {
                 "Hello bio"
         );
 
-        when(memberRepositoryPort.existsByUserId(any(UserId.class)))
-                .thenReturn(true);
+        when(memberRepositoryPort.existsByUserId(any(UserId.class))).thenReturn(true);
 
         assertThatThrownBy(() -> memberCreateService.create(command))
-                .isInstanceOf(RuntimeException.class)
-                .hasMessage("Member already exists");
+                .isInstanceOf(UserIdDuplicationException.class)
+                .hasMessage("이미 사용중인 사용자 ID 입니다");
 
         verify(memberRepositoryPort).existsByUserId(any(UserId.class));
         verify(memberRepositoryPort, never()).save(any());
+    }
+
+    @Test
+    @DisplayName("동일한 Email로는 객체를 생성할 수 없다.")
+    void shouldThrowException_whenEmailAlreadyExists() {
+        String existEmail = "email@test.com";
+        MemberCreateCommand command = new MemberCreateCommand(
+                "user1d",
+                "password",
+                existEmail,
+                "John",
+                "Doe",
+                "johnd",
+                "Hello bio"
+        );
+        Member mockedMember = memberFixture.withMemberId(1L).build();
+
+        when(memberRepositoryPort.existsByEmail(any(Email.class))).thenReturn(true);
+
+        assertThatThrownBy(() -> memberCreateService.create(command))
+                .isInstanceOf(EmailDuplicationException.class)
+                .hasMessage("이미 사용중인 Email 입니다");
     }
 }

@@ -7,6 +7,7 @@ import com.fivelogic_recreate.member.application.command.dto.MemberInfo;
 import com.fivelogic_recreate.member.domain.Member;
 import com.fivelogic_recreate.member.domain.UserId;
 import com.fivelogic_recreate.member.domain.port.MemberRepositoryPort;
+import com.fivelogic_recreate.member.exception.MemberNotFoundException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -54,6 +55,6 @@ class MemberDeleteServiceTest {
         MemberDeleteCommand deleteCommand = new MemberDeleteCommand("nonExistingUserId");
 
         assertThatThrownBy(() -> memberDeleteService.delete(deleteCommand))
-                .isInstanceOf(RuntimeException.class);
+                .isInstanceOf(MemberNotFoundException.class);
     }
 }

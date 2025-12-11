@@ -7,6 +7,7 @@ import com.fivelogic_recreate.member.application.command.dto.MemberPasswordUpdat
 import com.fivelogic_recreate.member.domain.Member;
 import com.fivelogic_recreate.member.domain.UserId;
 import com.fivelogic_recreate.member.domain.port.MemberRepositoryPort;
+import com.fivelogic_recreate.member.exception.MemberNotFoundException;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -58,6 +59,6 @@ class MemberPasswordUpdateServiceTest {
         MemberPasswordUpdateCommand command = new MemberPasswordUpdateCommand(nonExistUserId, newPassword);
 
         Assertions.assertThatThrownBy(() -> memberPasswordUpdateService.updatePassword(command))
-                .isInstanceOf(RuntimeException.class);
+                .isInstanceOf(MemberNotFoundException.class);
     }
 }

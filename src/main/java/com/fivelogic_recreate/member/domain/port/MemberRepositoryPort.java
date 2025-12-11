@@ -1,6 +1,7 @@
 package com.fivelogic_recreate.member.domain.port;
 
 
+import com.fivelogic_recreate.member.domain.Email;
 import com.fivelogic_recreate.member.domain.Member;
 import com.fivelogic_recreate.member.domain.Nickname;
 import com.fivelogic_recreate.member.domain.UserId;
@@ -16,4 +17,6 @@ public interface MemberRepositoryPort {
     Member save(Member member);
 
     boolean existsByUserId(UserId userId);
+
+    boolean existsByEmail(Email email);
 }

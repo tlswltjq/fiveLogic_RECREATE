@@ -5,6 +5,7 @@ import com.fivelogic_recreate.member.application.command.dto.MemberPasswordUpdat
 import com.fivelogic_recreate.member.domain.Member;
 import com.fivelogic_recreate.member.domain.UserId;
 import com.fivelogic_recreate.member.domain.port.MemberRepositoryPort;
+import com.fivelogic_recreate.member.exception.MemberNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,7 +18,7 @@ public class MemberPasswordUpdateService {
 
     public MemberInfo updatePassword(MemberPasswordUpdateCommand command) {
         UserId userId = new UserId(command.userId());
-        Member member = repository.findByUserId(userId).orElseThrow(RuntimeException::new);
+        Member member = repository.findByUserId(userId).orElseThrow(MemberNotFoundException::new);
         member.updatePassword(command.password());
 
         return new MemberInfo(repository.save(member));

@@ -1,5 +1,6 @@
 package com.fivelogic_recreate.member.infrastructure.persistence;
 
+import com.fivelogic_recreate.member.domain.Email;
 import com.fivelogic_recreate.member.domain.Member;
 import com.fivelogic_recreate.member.domain.Nickname;
 import com.fivelogic_recreate.member.domain.UserId;
@@ -38,6 +39,11 @@ public class MemberRepositoryAdapter implements MemberQueryRepositoryPort, Membe
     @Override
     public boolean existsByUserId(UserId userId) {
         return repository.existsByUserId((userId.value()));
+    }
+
+    @Override
+    public boolean existsByEmail(Email email) {
+        return repository.existsByEmail(email.value());
     }
 
     @Override

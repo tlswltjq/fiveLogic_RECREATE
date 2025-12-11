@@ -6,6 +6,7 @@ import com.fivelogic_recreate.member.domain.Member;
 import com.fivelogic_recreate.member.domain.MemberType;
 import com.fivelogic_recreate.member.domain.UserId;
 import com.fivelogic_recreate.member.domain.port.MemberRepositoryPort;
+import com.fivelogic_recreate.member.exception.MemberNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,7 +19,7 @@ public class MemberUpdateService {
 
     public MemberInfo update(MemberUpdateCommand command) {
         UserId userId = new UserId(command.userId());
-        Member member = repository.findByUserId(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        Member member = repository.findByUserId(userId).orElseThrow(MemberNotFoundException::new);
 
         String nickname = command.nickname();
         if (nickname != null && !nickname.isBlank()) {
