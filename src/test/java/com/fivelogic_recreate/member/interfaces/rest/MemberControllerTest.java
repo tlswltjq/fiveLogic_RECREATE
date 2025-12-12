@@ -1,13 +1,8 @@
 package com.fivelogic_recreate.member.interfaces.rest;
 
 import com.fivelogic_recreate.common.rest.ApiResponse;
-import com.fivelogic_recreate.fixture.member.MemberFixture;
-import com.fivelogic_recreate.member.application.command.MemberCreateService;
-import com.fivelogic_recreate.member.application.command.MemberDeleteService;
-import com.fivelogic_recreate.member.application.command.MemberUpdateService;
-import com.fivelogic_recreate.member.application.command.dto.MemberDeleteCommand;
+import com.fivelogic_recreate.member.application.MemberManagementService;
 import com.fivelogic_recreate.member.application.command.dto.MemberInfo;
-import com.fivelogic_recreate.member.application.query.MemberQueryService;
 import com.fivelogic_recreate.member.application.query.dto.MemberResponse;
 import com.fivelogic_recreate.member.interfaces.rest.dto.*;
 import org.junit.jupiter.api.DisplayName;
@@ -25,13 +20,7 @@ import static org.mockito.BDDMockito.given;
 @ExtendWith(MockitoExtension.class)
 class MemberControllerTest {
     @Mock
-    private MemberCreateService memberCreateService;
-    @Mock
-    private MemberQueryService memberQueryService;
-    @Mock
-    private MemberUpdateService memberUpdateService;
-    @Mock
-    private MemberDeleteService memberDeleteService;
+    private MemberManagementService memberManagementService;
 
     @InjectMocks
     private MemberController controller;
@@ -41,7 +30,7 @@ class MemberControllerTest {
     void createMember_success() {
         CreateMemberRequest request = new CreateMemberRequest("user1", "password", "email@test.com", "first", "name", "nick", "bio");
         MemberInfo mockMemberInfo = new MemberInfo(1L, "user1", "password", "first name", "nick", "MANTEE", true, "email@test.com", "bio");
-        given(memberCreateService.create(request.toCommand())).willReturn(mockMemberInfo);
+        given(memberManagementService.createMember(request)).willReturn(mockMemberInfo);
 
         ApiResponse<CreateMemberResponse> response = controller.createMember(request);
 
@@ -55,7 +44,7 @@ class MemberControllerTest {
     void getMember_success() {
         String userId = "user1";
         MemberResponse result = new MemberResponse(userId, "email@test.com", "name", "nickname", "ADMIN", "bio", true);
-        given(memberQueryService.getByUserId(userId)).willReturn(result);
+        given(memberManagementService.getByUserId(userId)).willReturn(result);
 
         ApiResponse<GetMemberResponse> response = controller.getMember(userId);
 
@@ -70,7 +59,7 @@ class MemberControllerTest {
                 new MemberResponse("user1", "a@test.com", "name1", "nickname1", "MANTEE", "bio1", true),
                 new MemberResponse("user2", "b@test.com", "name2", "nickname2", "MENTO", "bio2", true)
         );
-        given(memberQueryService.getAll()).willReturn(list);
+        given(memberManagementService.getAll()).willReturn(list);
 
         ApiResponse<GetAllMembersResponse> response = controller.getMembers();
 
@@ -84,7 +73,7 @@ class MemberControllerTest {
         String userId = "user1";
         UpdateMemberRequest request = new UpdateMemberRequest("email@test.com", "first", "last", "newnickname", "bio", "mento");
         MemberInfo updatedMemberInfo = new MemberInfo(1L, userId, "password", "first last", "newnickname", "MENTO", true, "email@test.com", "bio");
-        given(memberUpdateService.update(request.toCommand(userId))).willReturn(updatedMemberInfo);
+        given(memberManagementService.updateMember(userId, request)).willReturn(updatedMemberInfo);
 
         ApiResponse<UpdateMemberResponse> response = controller.updateMemberInfo(userId, request);
 
@@ -97,7 +86,7 @@ class MemberControllerTest {
     void deleteMember_success() {
         String userId = "user1";
         MemberInfo deletedMemberInfo = new MemberInfo(1L, userId, "password", "name", "nick", "MANTEE", false, "email@test.com", "bio");
-        given(memberDeleteService.delete(new MemberDeleteCommand(userId))).willReturn(deletedMemberInfo);
+        given(memberManagementService.deleteMember(userId)).willReturn(deletedMemberInfo);
 
         ApiResponse<DeleteMemberResponse> response = controller.deleteMember(userId);
 
