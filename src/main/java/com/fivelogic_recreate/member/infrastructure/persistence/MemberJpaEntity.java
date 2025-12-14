@@ -24,6 +24,7 @@ public class MemberJpaEntity {
     @Enumerated(EnumType.STRING)
     private MemberType memberType;
     private Boolean isActivated;
+    @Column(unique = true, nullable = false)
     private String email;
     @Column(columnDefinition = "TEXT")
     private String bio;
