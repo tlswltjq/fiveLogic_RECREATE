@@ -11,23 +11,23 @@ public class News {
     private Title title;
     private Description description;
     private Content content;
-    private Author author;
+    private AuthorId authorId;
     private LocalDateTime publishedDate;
     private NewsStatus status;
     //조회수는 통계 도메인으로 분리해보자
 
-    private News(NewsId id, Title title, Description description, Content content, Author author, LocalDateTime publishedDate, NewsStatus status) {
+    private News(NewsId id, Title title, Description description, Content content, AuthorId authorId, LocalDateTime publishedDate, NewsStatus status) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.content = content;
-        this.author = author;
+        this.authorId = authorId;
         this.publishedDate = publishedDate;
         this.status = status;
     }
 
-    public static News reconsitute(NewsId id, Title title, Description description, Content content, Author author, LocalDateTime publishedDate, NewsStatus status) {
-        return new News(id, title, description, content, author, publishedDate, status);
+    public static News reconsitute(NewsId id, Title title, Description description, Content content, AuthorId authorId, LocalDateTime publishedDate, NewsStatus status) {
+        return new News(id, title, description, content, authorId, publishedDate, status);
     }
 
     public static News draft(String title, String description, String content, String videoUrl, String author) {
@@ -36,7 +36,7 @@ public class News {
                 new Title(title),
                 new Description(description),
                 new Content(content, videoUrl),
-                new Author(author),
+                new AuthorId(author),
                 LocalDateTime.now(),
                 NewsStatus.DRAFT
         );

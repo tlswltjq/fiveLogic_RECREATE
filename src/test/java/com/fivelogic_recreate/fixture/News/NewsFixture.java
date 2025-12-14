@@ -60,7 +60,7 @@ public class NewsFixture {
                 new Title(title),
                 new Description(description),
                 new Content(content, videoUrl),
-                new Author(authorId),
+                new AuthorId(authorId),
                 publishedDate,
                 status
         );

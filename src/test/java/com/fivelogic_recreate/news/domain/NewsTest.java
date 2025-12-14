@@ -19,11 +19,11 @@ class NewsTest {
         Title title = new Title("title");
         Description description = new Description("description");
         Content content = new Content("content", "video.com");
-        Author author = new Author("authorId");
+        AuthorId authorId = new AuthorId("authorId");
         LocalDateTime publishedDate = LocalDateTime.now();
         NewsStatus status = NewsStatus.DRAFT;
 
-        News news = News.reconsitute(id, title, description, content, author, publishedDate, status);
+        News news = News.reconsitute(id, title, description, content, authorId, publishedDate, status);
 
         assertThat(news).isNotNull();
         assertThat(news.getId()).isEqualTo(id);
@@ -31,7 +31,7 @@ class NewsTest {
         assertThat(news.getDescription()).isEqualTo(description);
         assertThat(news.getContent().text()).isEqualTo("content");
         assertThat(news.getContent().videoUrl()).isEqualTo("video.com");
-        assertThat(news.getAuthor()).isEqualTo(author);
+        assertThat(news.getAuthorId()).isEqualTo(authorId);
         assertThat(news.getPublishedDate()).isEqualTo(publishedDate);
         assertThat(news.getStatus()).isEqualTo(status);
     }
@@ -51,7 +51,7 @@ class NewsTest {
         assertThat(draft.getDescription().value()).isEqualTo(description);
         assertThat(draft.getContent().text()).isEqualTo(content);
         assertThat(draft.getContent().videoUrl()).isEqualTo(video);
-        assertThat(draft.getAuthor().value()).isEqualTo(author);
+        assertThat(draft.getAuthorId().value()).isEqualTo(author);
         assertThat(draft.getPublishedDate()).isBefore(LocalDateTime.now());
         assertThat(draft.getStatus()).isEqualTo(NewsStatus.DRAFT);
     }
