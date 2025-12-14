@@ -126,4 +126,24 @@ class NewsStatusTest {
                     .isInstanceOf(IllegalStateException.class);
         }
     }
+
+    @Nested
+    @DisplayName("from() 메서드")
+    class FromMethod {
+        @ParameterizedTest
+        @EnumSource(NewsStatus.class)
+        @DisplayName("유효한 문자열로부터 NewsStatus를 생성할 수 있다.")
+        void shouldCreateNewsStatusFromValidString(NewsStatus status) {
+            assertThat(NewsStatus.from(status.name())).isEqualTo(status);
+        }
+
+        @Test
+        @DisplayName("유효하지 않은 문자열로부터 NewsStatus를 생성하려고 하면 예외가 발생한다.")
+        void shouldThrowExceptionForInvalidString() {
+            String invalidStatusString = "INVALID_STATUS";
+            assertThatThrownBy(() -> NewsStatus.from(invalidStatusString))
+                    .isInstanceOf(IllegalArgumentException.class)
+                    .hasMessageContaining("유효하지 않은 상태입니다: " + invalidStatusString);
+        }
+    }
 }
