@@ -30,13 +30,13 @@ public class News {
         return new News(id, title, description, content, authorId, publishedDate, status);
     }
 
-    public static News draft(String title, String description, String content, String videoUrl, String author) {
+    public static News draft(String title, String description, String content, String videoUrl, String authorId) {
         return new News(
                 null,
                 new Title(title),
                 new Description(description),
                 new Content(content, videoUrl),
-                new AuthorId(author),
+                new AuthorId(authorId),
                 LocalDateTime.now(),
                 NewsStatus.DRAFT
         );
