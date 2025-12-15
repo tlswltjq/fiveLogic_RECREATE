@@ -74,12 +74,12 @@ public class News {
         this.description = new Description(newDescription);
     }
 
-    public void changeTextContent(String newTextContent) {
-        this.content = new Content(newTextContent, this.content.videoUrl());
+    public void changeTextContent(String newText) {
+        this.content = new Content(new TextContent(newText), this.content.videoUrl());
     }
 
-    public void changeVideoUrl(String newVideoUrl) {
-        this.content = new Content(this.content.text(), newVideoUrl);
+    public void changeVideoUrl(String newUrl) {
+        this.content = new Content(this.content.text(), new VideoUrl(newUrl));
     }
 
     @Override

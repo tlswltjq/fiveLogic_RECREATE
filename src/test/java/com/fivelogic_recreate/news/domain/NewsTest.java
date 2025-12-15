@@ -29,8 +29,8 @@ class NewsTest {
         assertThat(news.getId()).isEqualTo(id);
         assertThat(news.getTitle()).isEqualTo(title);
         assertThat(news.getDescription()).isEqualTo(description);
-        assertThat(news.getContent().text()).isEqualTo("content");
-        assertThat(news.getContent().videoUrl()).isEqualTo("video.com");
+        assertThat(news.getContent().text().value()).isEqualTo("content");
+        assertThat(news.getContent().videoUrl().value()).isEqualTo("video.com");
         assertThat(news.getAuthorId()).isEqualTo(authorId);
         assertThat(news.getPublishedDate()).isEqualTo(publishedDate);
         assertThat(news.getStatus()).isEqualTo(status);
@@ -49,8 +49,8 @@ class NewsTest {
         assertThat(draft).isNotNull();
         assertThat(draft.getTitle().value()).isEqualTo(title);
         assertThat(draft.getDescription().value()).isEqualTo(description);
-        assertThat(draft.getContent().text()).isEqualTo(content);
-        assertThat(draft.getContent().videoUrl()).isEqualTo(video);
+        assertThat(draft.getContent().text().value()).isEqualTo(content);
+        assertThat(draft.getContent().videoUrl().value()).isEqualTo(video);
         assertThat(draft.getAuthorId().value()).isEqualTo(author);
         assertThat(draft.getPublishedDate()).isBefore(LocalDateTime.now());
         assertThat(draft.getStatus()).isEqualTo(NewsStatus.DRAFT);
@@ -188,7 +188,7 @@ class NewsTest {
 
         news.changeTextContent(newContent);
 
-        assertThat(news.getContent().text()).isEqualTo(newContent);
+        assertThat(news.getContent().text().value()).isEqualTo(newContent);
     }
 
     @Test
@@ -199,7 +199,7 @@ class NewsTest {
 
         news.changeVideoUrl(newVideoLink);
 
-        assertThat(news.getContent().videoUrl()).isEqualTo(newVideoLink);
+        assertThat(news.getContent().videoUrl().value()).isEqualTo(newVideoLink);
     }
 
     @Test

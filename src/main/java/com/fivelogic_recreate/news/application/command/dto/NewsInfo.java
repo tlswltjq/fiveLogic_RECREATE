@@ -15,6 +15,6 @@ public record NewsInfo(
         String status
 ) {
     public NewsInfo(News news) {
-        this(news.getId().value(), news.getTitle().value(), news.getDescription().value(), news.getContent().text(), news.getContent().videoUrl(), news.getAuthorId().value(), news.getPublishedDate(), news.getStatus().name());
+        this(news.getId().value(), news.getTitle().value(), news.getDescription().value(), news.getContent().text().value(), news.getContent().videoUrl().value(), news.getAuthorId().value(), news.getPublishedDate(), news.getStatus().name());
     }
 }

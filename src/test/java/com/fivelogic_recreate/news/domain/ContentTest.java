@@ -14,8 +14,8 @@ class ContentTest {
         String videoUrl = "http://example.com/video.mp4";
         Content content = new Content(text, videoUrl);
         assertThat(content).isNotNull();
-        assertThat(content.text()).isEqualTo(text);
-        assertThat(content.videoUrl()).isEqualTo(videoUrl);
+        assertThat(content.text().value()).isEqualTo(text);
+        assertThat(content.videoUrl().value()).isEqualTo(videoUrl);
     }
 
     @Test
