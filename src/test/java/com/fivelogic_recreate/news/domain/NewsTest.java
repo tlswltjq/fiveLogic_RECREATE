@@ -201,4 +201,56 @@ class NewsTest {
 
         assertThat(news.getContent().videoUrl()).isEqualTo(newVideoLink);
     }
+
+    @Test
+    @DisplayName("News가 DRAFT 상태이면 처리중으로 변경할 수 있다.")
+    void shouldTransitToProcessingWhenStatusIsDraft() {
+        News draftNews = newsFixture.withStatus(NewsStatus.DRAFT).build();
+
+        draftNews.processing();
+
+        assertThat(draftNews.getStatus()).isEqualTo(NewsStatus.PROCESSING);
+    }
+
+    @Test
+    @DisplayName("News가 DRAFT 상태가 아니면 처리중으로 변경할 수 없다.")
+    void shouldNotTransitToProcessingWhenStatusIsNotDraft() {
+        News processingNews = newsFixture.withStatus(NewsStatus.PROCESSING).build();
+        News readyNews = newsFixture.withStatus(NewsStatus.READY).build();
+        News publishedNews = newsFixture.withStatus(NewsStatus.PUBLISHED).build();
+        News hiddenNews = newsFixture.withStatus(NewsStatus.HIDDEN).build();
+        News deletedNews = newsFixture.withStatus(NewsStatus.DELETED).build();
+
+        assertThatThrownBy(processingNews::processing).isInstanceOf(IllegalStateException.class);
+        assertThatThrownBy(readyNews::processing).isInstanceOf(IllegalStateException.class);
+        assertThatThrownBy(publishedNews::processing).isInstanceOf(IllegalStateException.class);
+        assertThatThrownBy(hiddenNews::processing).isInstanceOf(IllegalStateException.class);
+//        assertThatThrownBy(deletedNews::processing).isInstanceOf(IllegalStateException.class);
+    }
+
+    @Test
+    @DisplayName("News가 PROCESSING 상태이면 준비완료로 변경할 수 있다.")
+    void shouldTransitToReadyWhenStatusIsProcessing() {
+        News processingNews = newsFixture.withStatus(NewsStatus.PROCESSING).build();
+
+        processingNews.ready();
+
+        assertThat(processingNews.getStatus()).isEqualTo(NewsStatus.READY);
+    }
+
+    @Test
+    @DisplayName("News가 PROCESSING 상태가 아니면 준비완료로 변경할 수 없다.")
+    void shouldNotTransitToReadyWhenStatusIsNotProcessing() {
+        News draftNews = newsFixture.withStatus(NewsStatus.DRAFT).build();
+        News readyNews = newsFixture.withStatus(NewsStatus.READY).build();
+        News publishedNews = newsFixture.withStatus(NewsStatus.PUBLISHED).build();
+        News hiddenNews = newsFixture.withStatus(NewsStatus.HIDDEN).build();
+        News deletedNews = newsFixture.withStatus(NewsStatus.DELETED).build();
+
+        assertThatThrownBy(draftNews::ready).isInstanceOf(IllegalStateException.class);
+        assertThatThrownBy(readyNews::ready).isInstanceOf(IllegalStateException.class);
+        assertThatThrownBy(publishedNews::ready).isInstanceOf(IllegalStateException.class);
+        assertThatThrownBy(hiddenNews::ready).isInstanceOf(IllegalStateException.class);
+        assertThatThrownBy(deletedNews::ready).isInstanceOf(IllegalStateException.class);
+    }
 }

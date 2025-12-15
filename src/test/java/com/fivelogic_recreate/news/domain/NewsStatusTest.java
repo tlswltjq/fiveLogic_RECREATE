@@ -111,11 +111,9 @@ class NewsStatusTest {
     @DisplayName("DELETED 상태에서")
     class DeletedStatus {
         @Test
-        @DisplayName("DRAFT, PROCESSING, READY로 변경할 수 있다.")
+        @DisplayName("DRAFT로 변경할 수 있다.")
         void shouldTransitToDraftProcessingReady() {
             assertThat(NewsStatus.DELETED.transitTo(NewsStatus.DRAFT)).isEqualTo(NewsStatus.DRAFT);
-            assertThat(NewsStatus.DELETED.transitTo(NewsStatus.PROCESSING)).isEqualTo(NewsStatus.PROCESSING);
-            assertThat(NewsStatus.DELETED.transitTo(NewsStatus.READY)).isEqualTo(NewsStatus.READY);
         }
 
         @ParameterizedTest

@@ -44,7 +44,7 @@ public enum NewsStatus {
     }, DELETED {
         @Override
         public NewsStatus transitTo(NewsStatus target) {
-            if (target == DRAFT || target == PROCESSING || target == READY) {
+            if (target == DRAFT) {
                 return target;
             }
             throw invalidTransition(this, target);

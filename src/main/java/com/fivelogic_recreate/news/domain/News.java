@@ -42,6 +42,14 @@ public class News {
         );
     }
 
+    public void processing() {
+        this.status = this.status.transitTo(NewsStatus.PROCESSING);
+    }
+
+    public void ready() {
+        this.status = this.status.transitTo(NewsStatus.READY);
+    }
+
     public void publish() {
         this.status = this.status.transitTo(NewsStatus.PUBLISHED);
     }
