@@ -1,8 +1,8 @@
 package com.fivelogic_recreate.news.application.command;
 
 import com.fivelogic_recreate.fixture.News.NewsFixture;
-import com.fivelogic_recreate.news.application.command.dto.NewsInfo;
 import com.fivelogic_recreate.news.application.command.dto.NewsPublishCommand;
+import com.fivelogic_recreate.news.application.command.dto.NewsPublishResult;
 import com.fivelogic_recreate.news.domain.News;
 import com.fivelogic_recreate.news.domain.NewsId;
 import com.fivelogic_recreate.news.domain.NewsStatus;
@@ -45,11 +45,11 @@ class NewsPublishServiceTest {
         when(newsRepositoryPort.findById(any(NewsId.class))).thenReturn(Optional.of(news));
         when(newsRepositoryPort.save(any(News.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
-        NewsInfo result = newsPublishService.publishNews(command);
+        NewsPublishResult result = newsPublishService.publishNews(command);
 
         verify(newsRepositoryPort).findById(new NewsId(newsId));
         verify(newsRepositoryPort).save(any(News.class));
-        assertThat(result.status()).isEqualTo(NewsStatus.PUBLISHED.name());
+        assertThat(result.status()).isEqualTo(NewsStatus.PUBLISHED);
     }
 
     @Test

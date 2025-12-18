@@ -1,7 +1,7 @@
 package com.fivelogic_recreate.news.application.command;
 
-import com.fivelogic_recreate.news.application.command.dto.NewsInfo;
 import com.fivelogic_recreate.news.application.command.dto.NewsPublishCommand;
+import com.fivelogic_recreate.news.application.command.dto.NewsPublishResult;
 import com.fivelogic_recreate.news.domain.News;
 import com.fivelogic_recreate.news.domain.NewsId;
 import com.fivelogic_recreate.news.domain.port.NewsRepositoryPort;
@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class NewsPublishService {
     private final NewsRepositoryPort newsRepositoryPort;
 
-    public NewsInfo publishNews(NewsPublishCommand command) {
+    public NewsPublishResult publishNews(NewsPublishCommand command) {
         NewsId newsId = new NewsId(command.newsId());
         News news = newsRepositoryPort.findById(newsId).orElseThrow(NewsNotFoundException::new);
 
@@ -26,7 +26,8 @@ public class NewsPublishService {
         } catch (IllegalStateException e) {
             throw new NewsPublishNotAllowedException();
         }
+        News published = newsRepositoryPort.save(news);
 
-        return new NewsInfo(newsRepositoryPort.save(news));
+        return new NewsPublishResult(published.getId().value(), published.getTitle().value(), published.getPublishedDate(), published.getStatus());
     }
 }
