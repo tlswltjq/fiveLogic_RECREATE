@@ -52,7 +52,6 @@ class NewsTest {
         assertThat(draft.getContent().text().value()).isEqualTo(content);
         assertThat(draft.getContent().videoUrl().value()).isEqualTo(video);
         assertThat(draft.getAuthorId().value()).isEqualTo(author);
-        assertThat(draft.getPublishedDate()).isBefore(LocalDateTime.now());
         assertThat(draft.getStatus()).isEqualTo(NewsStatus.DRAFT);
     }
 
@@ -66,7 +65,9 @@ class NewsTest {
         hiddenNews.publish();
 
         assertThat(readyNews.getStatus()).isEqualTo(NewsStatus.PUBLISHED);
+        assertThat(readyNews.getPublishedDate()).isNotNull();
         assertThat(hiddenNews.getStatus()).isEqualTo(NewsStatus.PUBLISHED);
+        assertThat(hiddenNews.getPublishedDate()).isNotNull();
     }
 
     @Test

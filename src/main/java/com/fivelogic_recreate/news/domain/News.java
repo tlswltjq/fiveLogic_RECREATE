@@ -37,7 +37,7 @@ public class News {
                 new Description(description),
                 new Content(content, videoUrl),
                 new AuthorId(authorId),
-                LocalDateTime.now(),
+                null,
                 NewsStatus.DRAFT
         );
     }
@@ -52,6 +52,7 @@ public class News {
 
     public void publish() {
         this.status = this.status.transitTo(NewsStatus.PUBLISHED);
+        this.publishedDate = LocalDateTime.now();
     }
 
     public void hide() {
