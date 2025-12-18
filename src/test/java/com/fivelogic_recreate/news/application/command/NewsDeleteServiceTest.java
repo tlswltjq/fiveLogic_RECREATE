@@ -2,7 +2,7 @@ package com.fivelogic_recreate.news.application.command;
 
 import com.fivelogic_recreate.fixture.News.NewsFixture;
 import com.fivelogic_recreate.news.application.command.dto.NewsDeleteCommand;
-import com.fivelogic_recreate.news.application.command.dto.NewsInfo;
+import com.fivelogic_recreate.news.application.command.dto.NewsDeleteResult;
 import com.fivelogic_recreate.news.domain.News;
 import com.fivelogic_recreate.news.domain.NewsId;
 import com.fivelogic_recreate.news.domain.NewsStatus;
@@ -44,11 +44,11 @@ class NewsDeleteServiceTest {
         when(newsRepositoryPort.findById(any(NewsId.class))).thenReturn(Optional.of(news));
         when(newsRepositoryPort.save(any(News.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
-        NewsInfo result = newsDeleteService.deleteNews(command);
+        NewsDeleteResult result = newsDeleteService.deleteNews(command);
 
         verify(newsRepositoryPort).findById(new NewsId(newsId));
         verify(newsRepositoryPort).save(any(News.class));
-        assertThat(result.status()).isEqualTo(NewsStatus.DELETED.name());
+        assertThat(result.status()).isEqualTo(NewsStatus.DELETED);
     }
 
     @Test
