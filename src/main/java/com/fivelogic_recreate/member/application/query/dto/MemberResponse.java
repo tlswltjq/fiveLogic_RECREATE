@@ -13,6 +13,7 @@ public record MemberResponse(
         boolean isActive
 
 ) {
+    //TODO News도메인처럼 MemberQueryResponse로 이름을 변경하고 생성자 제거, QueryService에서 변환 메서드 추가할 것
     public MemberResponse(Member member) {
         this(
                 member.getUserId().value(),
