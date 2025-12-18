@@ -2,7 +2,7 @@ package com.fivelogic_recreate.news.application.command;
 
 import com.fivelogic_recreate.fixture.News.NewsFixture;
 import com.fivelogic_recreate.news.application.command.dto.NewsHideCommand;
-import com.fivelogic_recreate.news.application.command.dto.NewsInfo;
+import com.fivelogic_recreate.news.application.command.dto.NewsHideResult;
 import com.fivelogic_recreate.news.domain.News;
 import com.fivelogic_recreate.news.domain.NewsId;
 import com.fivelogic_recreate.news.domain.NewsStatus;
@@ -44,11 +44,11 @@ class NewsHideServiceTest {
         when(newsRepositoryPort.findById(any(NewsId.class))).thenReturn(Optional.of(news));
         when(newsRepositoryPort.save(any(News.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
-        NewsInfo result = newsHideService.hideNews(command);
+        NewsHideResult result = newsHideService.hideNews(command);
 
         verify(newsRepositoryPort).findById(new NewsId(newsId));
         verify(newsRepositoryPort).save(any(News.class));
-        assertThat(result.status()).isEqualTo(NewsStatus.HIDDEN.name());
+        assertThat(result.status()).isEqualTo(NewsStatus.HIDDEN);
     }
 
     @Test

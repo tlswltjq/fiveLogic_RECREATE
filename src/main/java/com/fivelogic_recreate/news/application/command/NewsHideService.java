@@ -1,7 +1,7 @@
 package com.fivelogic_recreate.news.application.command;
 
 import com.fivelogic_recreate.news.application.command.dto.NewsHideCommand;
-import com.fivelogic_recreate.news.application.command.dto.NewsInfo;
+import com.fivelogic_recreate.news.application.command.dto.NewsHideResult;
 import com.fivelogic_recreate.news.domain.News;
 import com.fivelogic_recreate.news.domain.NewsId;
 import com.fivelogic_recreate.news.domain.port.NewsRepositoryPort;
@@ -17,16 +17,17 @@ import org.springframework.transaction.annotation.Transactional;
 public class NewsHideService {
     private final NewsRepositoryPort newsRepositoryPort;
 
-    public NewsInfo hideNews(NewsHideCommand command){
+    public NewsHideResult hideNews(NewsHideCommand command) {
         NewsId newsId = new NewsId(command.newsId());
         News news = newsRepositoryPort.findById(newsId).orElseThrow(NewsNotFoundException::new);
 
         try {
             news.hide();
-        }catch (IllegalStateException e){
+        } catch (IllegalStateException e) {
             throw new NewsHideNotAllowedException();
         }
+        News hidden = newsRepositoryPort.save(news);
 
-        return new NewsInfo(newsRepositoryPort.save(news));
+        return new NewsHideResult(hidden.getId().value(), hidden.getTitle().value(), hidden.getStatus());
     }
 }
