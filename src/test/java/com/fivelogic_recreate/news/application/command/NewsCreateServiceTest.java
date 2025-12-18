@@ -2,7 +2,7 @@ package com.fivelogic_recreate.news.application.command;
 
 import com.fivelogic_recreate.fixture.News.NewsFixture;
 import com.fivelogic_recreate.news.application.command.dto.NewsCreateCommand;
-import com.fivelogic_recreate.news.application.command.dto.NewsInfo;
+import com.fivelogic_recreate.news.application.command.dto.NewsCreateResult;
 import com.fivelogic_recreate.news.domain.News;
 import com.fivelogic_recreate.news.domain.NewsStatus;
 import com.fivelogic_recreate.news.domain.port.NewsRepositoryPort;
@@ -38,17 +38,17 @@ class NewsCreateServiceTest {
         "default-news-video-url.com",
         "authorId"
         );
-        News draftNews = newsFixture.withStatus(NewsStatus.PROCESSING).build();
+        News draftNews = newsFixture.withStatus(NewsStatus.PROCESSING).withId(1L).build();
 
         when(newsRepositoryPort.save(any(News.class))).thenReturn(draftNews);
 
-        NewsInfo result = newsCreateService.createNews(command);
+        NewsCreateResult result = newsCreateService.createNews(command);
 
         verify(newsRepositoryPort).save(any(News.class));
         assertThat(result).isNotNull();
+        assertThat(result.newsId()).isNotNull();
         assertThat(result.title()).isEqualTo(command.title());
-        assertThat(result.description()).isEqualTo(command.description());
-        assertThat(result.textContent()).isEqualTo(command.textContent());
-        assertThat(result.status()).isEqualTo(NewsStatus.PROCESSING.name());
+        assertThat(result.authorId()).isEqualTo(command.authorId());
+        assertThat(result.status()).isEqualTo(NewsStatus.PROCESSING);
     }
 }
