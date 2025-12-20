@@ -79,6 +79,18 @@ public class NewsQueryService {
                 .findByPublishedDateBetween(startDate, endDate, pageable)
                 .map(this::toResponse);
     }
+
+    /** TODO
+     *  - Query 유스케이스임에도 도메인 객체(News)를 데이터 캐리어처럼 사용 중
+     *  - 메서드들은 비즈니스 행위가 없으며 Aggregate Root를 통과할 필요가 없음
+     *  - Projection 도입 시 toDomain() 재사용 불가 → 구조적 문제 노출
+     * Action Plan
+     * - NewsJpaRepositoryImpl(Query 역할)에서 Domain 반환 로직 제거
+     * - Query 전용 Read Model(DTO) 도입 (e.g. NewsSummary, NewsResult 등)
+     * - Infrastructure 계층에서 인터페이스 기반 Projection 적용
+     * - QueryService는 Read Model을 그대로 사용 (Domain 의존 제거)
+     */
+
     private NewsQueryResponse toResponse(News n) {
         return new NewsQueryResponse(
                 n.getTitle().value(),
