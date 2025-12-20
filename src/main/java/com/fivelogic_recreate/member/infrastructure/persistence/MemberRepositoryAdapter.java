@@ -14,7 +14,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Repository
-@RequiredArgsConstructor
+@RequiredArgsConstructor//TODO MemberRepositoryAdapter -> MemberJpaRepositoryImpl로 이름 변경
 public class MemberRepositoryAdapter implements MemberQueryRepositoryPort, MemberRepositoryPort {
     private final MemberJpaRepository repository;
 
