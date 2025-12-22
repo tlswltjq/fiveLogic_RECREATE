@@ -2,7 +2,9 @@ package com.fivelogic_recreate.member.interfaces.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fivelogic_recreate.member.application.MemberManagementService;
-import com.fivelogic_recreate.member.application.command.dto.MemberInfo;
+import com.fivelogic_recreate.member.application.command.dto.MemberCreateResult;
+import com.fivelogic_recreate.member.application.command.dto.MemberUpdateResult;
+import com.fivelogic_recreate.member.application.command.dto.MemberDeleteResult;
 import com.fivelogic_recreate.member.application.query.dto.MemberResponse;
 import com.fivelogic_recreate.member.exception.EmailDuplicationException;
 import com.fivelogic_recreate.member.exception.MemberNotFoundException;
@@ -42,8 +44,8 @@ class MemberControllerMVCTest {
     @DisplayName("회원 생성 API 호출 성공")
     void createMember_success() throws Exception {
         CreateMemberRequest request = new CreateMemberRequest("testuser", "password123", "test@example.com", "길동", "홍", "테스트닉", "안녕하세요");
-        MemberInfo mockMemberInfo = new MemberInfo(
-                1L, "testuser", "password123", "홍 길동", "테스트닉",
+        MemberCreateResult mockMemberInfo = new MemberCreateResult(
+                "testuser", "홍 길동", "테스트닉",
                 "MENTEE", true, "test@example.com", "안녕하세요"
         );
 
@@ -102,8 +104,8 @@ class MemberControllerMVCTest {
     void updateMemberInfo_success() throws Exception {
         String userId = "testuser";
         UpdateMemberRequest request = new UpdateMemberRequest("new@example.com", "새", "이름", "새닉", "새로운 바이오", "MENTO");
-        MemberInfo mockUpdatedMemberInfo = new MemberInfo(
-                1L, userId, "password123", "새 이름", "새닉",
+        MemberUpdateResult mockUpdatedMemberInfo = new MemberUpdateResult(
+                1L, userId, "새 이름", "새닉",
                 "MENTO", true, "new@example.com", "새로운 바이오"
         );
 
@@ -124,9 +126,9 @@ class MemberControllerMVCTest {
     @DisplayName("회원 삭제 API 호출 성공")
     void deleteMember_success() throws Exception {
         String userId = "testuser";
-        MemberInfo mockDeletedMemberInfo = new MemberInfo(
-                1L, userId, "password123", "홍 길동", "테스트닉",
-                "MENTEE", false, "test@example.com", "안녕하세요"
+        MemberDeleteResult mockDeletedMemberInfo = new MemberDeleteResult(
+                1L, userId, "홍 길동", "테스트닉",
+                "MENTEE", false
         );
 
         when(memberManagementService.deleteMember(any(String.class))).thenReturn(mockDeletedMemberInfo);

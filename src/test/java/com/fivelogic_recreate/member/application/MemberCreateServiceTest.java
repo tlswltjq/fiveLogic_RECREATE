@@ -3,7 +3,7 @@ package com.fivelogic_recreate.member.application;
 import com.fivelogic_recreate.fixture.member.MemberFixture;
 import com.fivelogic_recreate.member.application.command.MemberCreateService;
 import com.fivelogic_recreate.member.application.command.dto.MemberCreateCommand;
-import com.fivelogic_recreate.member.application.command.dto.MemberInfo;
+import com.fivelogic_recreate.member.application.command.dto.MemberCreateResult;
 import com.fivelogic_recreate.member.domain.Email;
 import com.fivelogic_recreate.member.domain.Member;
 import com.fivelogic_recreate.member.domain.UserId;
@@ -49,17 +49,15 @@ class MemberCreateServiceTest {
 
         when(memberRepositoryPort.save(any(Member.class))).thenReturn(mockedMember);
 
-        MemberInfo createdMember = memberCreateService.create(command);
+        MemberCreateResult createdMember = memberCreateService.create(command);
 
         verify(memberRepositoryPort).existsByUserId(new UserId("user1"));
         verify(memberRepositoryPort).existsByEmail(new Email("email@test.com"));
         verify(memberRepositoryPort).save(any(Member.class));
-        assertThat(createdMember.id()).isEqualTo(mockedMember.getId().value());
         assertThat(createdMember.userId()).isEqualTo(mockedMember.getUserId().value());
-        assertThat(createdMember.password()).isEqualTo(mockedMember.getPassword().value());
-        assertThat(createdMember.name()).isEqualTo(mockedMember.getName().value());
+        assertThat(createdMember.name()).isEqualTo(mockedMember.getName().firstName() + " " + mockedMember.getName().lastName());
         assertThat(createdMember.nickname()).isEqualTo(mockedMember.getNickname().value());
-        assertThat(createdMember.memberType()).isEqualTo(mockedMember.getMemberType().name());
+        assertThat(createdMember.memberType()).isEqualTo(mockedMember.getMemberType().toString());
         assertThat(createdMember.isActivated()).isEqualTo(mockedMember.getIsActivated());
         assertThat(createdMember.email()).isEqualTo(mockedMember.getEmail().value());
         assertThat(createdMember.bio()).isEqualTo(mockedMember.getBio().value());

@@ -2,8 +2,8 @@ package com.fivelogic_recreate.member.application;
 
 import com.fivelogic_recreate.fixture.member.MemberFixture;
 import com.fivelogic_recreate.member.application.command.MemberUpdateService;
-import com.fivelogic_recreate.member.application.command.dto.MemberInfo;
 import com.fivelogic_recreate.member.application.command.dto.MemberUpdateCommand;
+import com.fivelogic_recreate.member.application.command.dto.MemberUpdateResult;
 import com.fivelogic_recreate.member.domain.Member;
 import com.fivelogic_recreate.member.domain.MemberType;
 import com.fivelogic_recreate.member.domain.Name;
@@ -51,7 +51,7 @@ class MemberUpdateServiceTest {
                 .thenReturn(Optional.of(member));
         when(memberRepositoryPort.save(any(Member.class)))
                 .thenReturn(member);
-        MemberInfo memberInfo = memberUpdateService.update(updateCommand);
+        MemberUpdateResult memberInfo = memberUpdateService.update(updateCommand);
 
         verify(memberRepositoryPort).save(member);
         assertThat(memberInfo).isNotNull();
@@ -59,7 +59,7 @@ class MemberUpdateServiceTest {
         assertThat(memberInfo.name()).isEqualTo("updated name");
         assertThat(memberInfo.nickname()).isEqualTo("updatednickname");
         assertThat(memberInfo.bio()).isEqualTo("updated bio");
-        assertThat(memberInfo.memberType()).isEqualTo(MemberType.MENTOR.name());
+        assertThat(memberInfo.memberType()).isEqualTo(MemberType.MENTOR.toString());
     }
 
     @Test
