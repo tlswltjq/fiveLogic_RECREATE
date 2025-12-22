@@ -22,13 +22,13 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class MemberRepositoryAdapterTest {
+class MemberJpaRepositoryImplTest {
 
     @Mock
     private MemberJpaRepository repository;
 
     @InjectMocks
-    private MemberRepositoryAdapter adapter;
+    private MemberJpaRepositoryImpl adapter;
 
     private final MemberFixture memberFixture = new MemberFixture();
 
