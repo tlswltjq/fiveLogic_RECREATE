@@ -90,30 +90,24 @@ public class NewsJpaRepositoryImpl implements NewsRepositoryPort, NewsQueryRepos
 
     @Override
     public Optional<News> findById(NewsId id) {
-        //프로젝션 적용 전 까지 땜빵
+        //이하 모든 메서드 프로젝션 적용 전 까지 땜빵
         return findById(id.value());
     }
 
     @Override
     public List<News> findAll() {
-        //TODO
-        return List.of();
+        return newsRepository.findAll().stream()
+                .map(NewsJpaEntity::toDomain)
+                .toList();
     }
 
     @Override
     public List<News> findOwnedBy(AuthorId authorId) {
-        //TODO
-        return List.of();
+        return findByAuthorId(authorId.value());
     }
 
     @Override
     public List<News> findByStatus(NewsStatus status) {
-        //TODO
-        return List.of();
-    }
-
-    @Override
-    public void deleteById(NewsId id) {
-        //TODO
+        return findByNewsStatus(status.name());
     }
 }

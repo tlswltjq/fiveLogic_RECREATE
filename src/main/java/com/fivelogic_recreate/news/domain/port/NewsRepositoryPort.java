@@ -14,5 +14,4 @@ public interface NewsRepositoryPort {
     List<News> findAll();
     List<News> findOwnedBy(AuthorId authorId);
     List<News> findByStatus(NewsStatus status);
-    void deleteById(NewsId id);
 }
