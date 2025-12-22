@@ -1,7 +1,7 @@
 package com.fivelogic_recreate.member.application.command;
 
-import com.fivelogic_recreate.member.application.command.dto.MemberInfo;
 import com.fivelogic_recreate.member.application.command.dto.MemberUpdateCommand;
+import com.fivelogic_recreate.member.application.command.dto.MemberUpdateResult;
 import com.fivelogic_recreate.member.domain.Member;
 import com.fivelogic_recreate.member.domain.MemberType;
 import com.fivelogic_recreate.member.domain.UserId;
@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class MemberUpdateService {
     private final MemberRepositoryPort repository;
 
-    public MemberInfo update(MemberUpdateCommand command) {
+    public MemberUpdateResult update(MemberUpdateCommand command) {
         UserId userId = new UserId(command.userId());
         Member member = repository.findByUserId(userId).orElseThrow(MemberNotFoundException::new);
 
@@ -48,7 +48,7 @@ public class MemberUpdateService {
         if (bio != null && !bio.isBlank()) {
             member.updateBio(bio);
         }
-
-        return new MemberInfo(repository.save(member));
+        repository.save(member);
+        return new MemberUpdateResult(member.getId().value(), member.getUserId().value(), member.getName().value(), member.getNickname().value(), member.getMemberType().name(), member.getIsActivated(), member.getEmail().value(), member.getBio().value());
     }
 }

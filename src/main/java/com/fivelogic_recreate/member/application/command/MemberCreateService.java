@@ -1,7 +1,7 @@
 package com.fivelogic_recreate.member.application.command;
 
 import com.fivelogic_recreate.member.application.command.dto.MemberCreateCommand;
-import com.fivelogic_recreate.member.application.command.dto.MemberInfo;
+import com.fivelogic_recreate.member.application.command.dto.MemberCreateResult;
 import com.fivelogic_recreate.member.domain.Email;
 import com.fivelogic_recreate.member.domain.Member;
 import com.fivelogic_recreate.member.domain.UserId;
@@ -18,17 +18,20 @@ import org.springframework.transaction.annotation.Transactional;
 public class MemberCreateService {
     private final MemberRepositoryPort repository;
 
-    public MemberInfo create(MemberCreateCommand command) {
+    public MemberCreateResult create(MemberCreateCommand command) {
         UserId userId = new UserId(command.userId());
         Email email = new Email(command.email());
+
         if (repository.existsByUserId(userId)) {
             throw new UserIdDuplicationException();
         }
         if (repository.existsByEmail(email)) {
             throw new EmailDuplicationException();
         }
-        Member member = Member.join(command.userId(), command.password(), command.email(), command.firstname(), command.lastname(), command.nickname(), command.bio());
 
-        return new MemberInfo(repository.save(member));
+        Member member = Member.join(command.userId(), command.password(), command.email(), command.firstname(), command.lastname(), command.nickname(), command.bio());
+        repository.save(member);
+
+        return new MemberCreateResult(member.getId().value(), member.getUserId().value(), member.getName().value(), member.getNickname().value(), member.getMemberType().name(), member.getIsActivated(), member.getEmail().value(), member.getBio().value());
     }
 }

@@ -2,7 +2,9 @@ package com.fivelogic_recreate.member.interfaces.rest;
 
 import com.fivelogic_recreate.common.rest.ApiResponse;
 import com.fivelogic_recreate.member.application.MemberManagementService;
-import com.fivelogic_recreate.member.application.command.dto.MemberInfo;
+import com.fivelogic_recreate.member.application.command.dto.MemberCreateResult;
+import com.fivelogic_recreate.member.application.command.dto.MemberDeleteResult;
+import com.fivelogic_recreate.member.application.command.dto.MemberUpdateResult;
 import com.fivelogic_recreate.member.application.query.dto.MemberResponse;
 import com.fivelogic_recreate.member.interfaces.rest.dto.*;
 import jakarta.validation.Valid;
@@ -20,8 +22,9 @@ public class MemberController {
 
     @PostMapping
     public ApiResponse<CreateMemberResponse> createMember(@Valid @RequestBody CreateMemberRequest request) {
-        MemberInfo memberInfo = memberManagementService.createMember(request);
-        CreateMemberResponse response = new CreateMemberResponse(memberInfo);
+        MemberCreateResult createResult = memberManagementService.createMember(request);
+        CreateMemberResponse response = new CreateMemberResponse(createResult.userId(), createResult.name(), createResult.email());
+
         return ApiResponse.success(201, "사용자 생성 완료", response);
     }
 
@@ -42,15 +45,17 @@ public class MemberController {
 
     @PutMapping("/{userId}")
     public ApiResponse<UpdateMemberResponse> updateMemberInfo(@PathVariable String userId, @Valid @RequestBody UpdateMemberRequest request) {
-        MemberInfo memberInfo = memberManagementService.updateMember(userId, request);
-        UpdateMemberResponse response = new UpdateMemberResponse(memberInfo);
+        MemberUpdateResult updateResult = memberManagementService.updateMember(userId, request);
+
+        UpdateMemberResponse response = new UpdateMemberResponse(updateResult.userId(), updateResult.email(), updateResult.name(), updateResult.nickname(), updateResult.bio(), updateResult.memberType());
         return ApiResponse.success(200, "수정완료", response);
     }
 
     @DeleteMapping("/{userId}")
     public ApiResponse<DeleteMemberResponse> deleteMember(@PathVariable String userId) {
-        MemberInfo deleted = memberManagementService.deleteMember(userId);
-        DeleteMemberResponse response = new DeleteMemberResponse(deleted.userId());
+        MemberDeleteResult deleteResult = memberManagementService.deleteMember(userId);
+
+        DeleteMemberResponse response = new DeleteMemberResponse(deleteResult.userId());
         return ApiResponse.success(200, response.userId() + " 삭제완료", response);
     }
 }
