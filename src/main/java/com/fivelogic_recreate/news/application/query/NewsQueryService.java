@@ -1,7 +1,6 @@
 package com.fivelogic_recreate.news.application.query;
 
 import com.fivelogic_recreate.news.application.query.dto.NewsQueryResponse;
-import com.fivelogic_recreate.news.domain.News;
 import com.fivelogic_recreate.news.domain.port.NewsQueryRepositoryPort;
 import com.fivelogic_recreate.news.exception.NewsNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -20,36 +19,24 @@ public class NewsQueryService {
     private final NewsQueryRepositoryPort newsQueryRepository;
 
     public NewsQueryResponse findById(Long id) {
-        NewsQueryResponse queryResponse = newsQueryRepository.findById(id)
-                .map(this::toResponse)
+        return newsQueryRepository.findQueryById(id)
                 .orElseThrow(NewsNotFoundException::new);
-
-        return queryResponse;
     }
 
     public List<NewsQueryResponse> findByTitle(String title) {
-        List<NewsQueryResponse> queryResponses = newsQueryRepository.findByTitle(title).stream()
-                .map(this::toResponse)
-                .toList();
-        return queryResponses;
+        return newsQueryRepository.findByTitle(title);
     }
 
     public List<NewsQueryResponse> findByContent(String textcontent) {
-        return newsQueryRepository.findByContent(textcontent).stream()
-                .map(this::toResponse)
-                .toList();
+        return newsQueryRepository.findByContent(textcontent);
     }
 
     public List<NewsQueryResponse> findByAuthorId(String authorId) {
-        return newsQueryRepository.findByAuthorId(authorId).stream()
-                .map(this::toResponse)
-                .toList();
+        return newsQueryRepository.findByAuthorId(authorId);
     }
 
     public List<NewsQueryResponse> findByStatus(String newsStatus) {
-        return newsQueryRepository.findByNewsStatus(newsStatus).stream()
-                .map(this::toResponse)
-                .toList();
+        return newsQueryRepository.findByNewsStatus(newsStatus);
     }
 
     public Page<NewsQueryResponse> findByPublishedDateAfter(
@@ -57,8 +44,7 @@ public class NewsQueryService {
             Pageable pageable
     ) {
         return newsQueryRepository
-                .findByPublishedDateAfter(publishedDate, pageable)
-                .map(this::toResponse);
+                .findByPublishedDateAfter(publishedDate, pageable);
     }
 
     public Page<NewsQueryResponse> findByPublishedDateBefore(
@@ -66,8 +52,7 @@ public class NewsQueryService {
             Pageable pageable
     ) {
         return newsQueryRepository
-                .findByPublishedDateBefore(publishedDate, pageable)
-                .map(this::toResponse);
+                .findByPublishedDateBefore(publishedDate, pageable);
     }
 
     public Page<NewsQueryResponse> findByPublishedDateBetween(
@@ -76,30 +61,6 @@ public class NewsQueryService {
             Pageable pageable
     ) {
         return newsQueryRepository
-                .findByPublishedDateBetween(startDate, endDate, pageable)
-                .map(this::toResponse);
-    }
-
-    /** TODO
-     *  - Query 유스케이스임에도 도메인 객체(News)를 데이터 캐리어처럼 사용 중
-     *  - 메서드들은 비즈니스 행위가 없으며 Aggregate Root를 통과할 필요가 없음
-     *  - Projection 도입 시 toDomain() 재사용 불가 → 구조적 문제 노출
-     * Action Plan
-     * - NewsJpaRepositoryImpl(Query 역할)에서 Domain 반환 로직 제거
-     * - Query 전용 Read Model(DTO) 도입 (e.g. NewsSummary, NewsResult 등)
-     * - Infrastructure 계층에서 인터페이스 기반 Projection 적용
-     * - QueryService는 Read Model을 그대로 사용 (Domain 의존 제거)
-     */
-
-    private NewsQueryResponse toResponse(News n) {
-        return new NewsQueryResponse(
-                n.getTitle().value(),
-                n.getDescription().value(),
-                n.getContent().text().value(),
-                n.getContent().videoUrl().value(),
-                n.getAuthorId().value(),
-                n.getPublishedDate(),
-                n.getStatus()
-        );
+                .findByPublishedDateBetween(startDate, endDate, pageable);
     }
 }
