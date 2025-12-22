@@ -5,7 +5,7 @@ import com.fivelogic_recreate.member.application.MemberManagementService;
 import com.fivelogic_recreate.member.application.command.dto.MemberCreateResult;
 import com.fivelogic_recreate.member.application.command.dto.MemberUpdateResult;
 import com.fivelogic_recreate.member.application.command.dto.MemberDeleteResult;
-import com.fivelogic_recreate.member.application.query.dto.MemberResponse;
+import com.fivelogic_recreate.member.application.query.dto.MemberQueryResponse;
 import com.fivelogic_recreate.member.exception.EmailDuplicationException;
 import com.fivelogic_recreate.member.exception.MemberNotFoundException;
 import com.fivelogic_recreate.member.interfaces.rest.dto.CreateMemberRequest;
@@ -65,12 +65,12 @@ class MemberControllerMVCTest {
     @DisplayName("회원 단일 조회 API 호출 성공")
     void getMember_success() throws Exception {
         String userId = "testuser";
-        MemberResponse mockMemberResponse = new MemberResponse(
+        MemberQueryResponse mockMemberQueryResponse = new MemberQueryResponse(
                 userId, "test@example.com", "홍 길동", "테스트닉",
                 "MENTEE", "안녕하세요", true
         );
 
-        when(memberManagementService.getByUserId(userId)).thenReturn(mockMemberResponse);
+        when(memberManagementService.getByUserId(userId)).thenReturn(mockMemberQueryResponse);
 
         mockMvc.perform(get("/api/members/{userId}", userId)
                         .accept(MediaType.APPLICATION_JSON))
@@ -83,9 +83,9 @@ class MemberControllerMVCTest {
     @Test
     @DisplayName("회원 전체 조회 API 호출 성공")
     void getAllMembers_success() throws Exception {
-        List<MemberResponse> mockMemberList = List.of(
-                new MemberResponse("user1", "user1@example.com", "김길동", "김닉", "MENTEE", "안녕하세요1", true),
-                new MemberResponse("user2", "user2@example.com", "이길동", "이닉", "MENTO", "안녕하세요2", true)
+        List<MemberQueryResponse> mockMemberList = List.of(
+                new MemberQueryResponse("user1", "user1@example.com", "김길동", "김닉", "MENTEE", "안녕하세요1", true),
+                new MemberQueryResponse("user2", "user2@example.com", "이길동", "이닉", "MENTO", "안녕하세요2", true)
         );
 
         when(memberManagementService.getAll()).thenReturn(mockMemberList);

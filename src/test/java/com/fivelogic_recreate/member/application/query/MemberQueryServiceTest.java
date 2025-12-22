@@ -1,7 +1,7 @@
 package com.fivelogic_recreate.member.application.query;
 
 import com.fivelogic_recreate.fixture.member.MemberFixture;
-import com.fivelogic_recreate.member.application.query.dto.MemberResponse;
+import com.fivelogic_recreate.member.application.query.dto.MemberQueryResponse;
 import com.fivelogic_recreate.member.domain.Member;
 import com.fivelogic_recreate.member.domain.UserId;
 import com.fivelogic_recreate.member.domain.port.MemberQueryRepositoryPort;
@@ -40,7 +40,7 @@ class MemberQueryServiceTest {
         when(memberQueryRepositoryPort.findByUserId(any(UserId.class)))
                 .thenReturn(Optional.of(member));
 
-        MemberResponse response = memberQueryService.getByUserId("userId");
+        MemberQueryResponse response = memberQueryService.getByUserId("userId");
 
         assertThat(response).isNotNull();
         assertThat(response.userId()).isEqualTo(member.getUserId().value());
@@ -66,7 +66,7 @@ class MemberQueryServiceTest {
 
         when(memberQueryRepositoryPort.findAll()).thenReturn(memberList);
 
-        List<MemberResponse> response = memberQueryService.getAll();
+        List<MemberQueryResponse> response = memberQueryService.getAll();
 
         assertThat(response).isNotNull();
         assertThat(response).hasSize(3);

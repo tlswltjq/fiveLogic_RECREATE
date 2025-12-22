@@ -5,7 +5,7 @@ import com.fivelogic_recreate.member.application.MemberManagementService;
 import com.fivelogic_recreate.member.application.command.dto.MemberCreateResult;
 import com.fivelogic_recreate.member.application.command.dto.MemberUpdateResult;
 import com.fivelogic_recreate.member.application.command.dto.MemberDeleteResult;
-import com.fivelogic_recreate.member.application.query.dto.MemberResponse;
+import com.fivelogic_recreate.member.application.query.dto.MemberQueryResponse;
 import com.fivelogic_recreate.member.interfaces.rest.dto.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -45,7 +45,7 @@ class MemberControllerTest {
     @DisplayName("회원 단일 조회 성공")
     void getMember_success() {
         String userId = "user1";
-        MemberResponse result = new MemberResponse(userId, "email@test.com", "name", "nickname", "ADMIN", "bio", true);
+        MemberQueryResponse result = new MemberQueryResponse(userId, "email@test.com", "name", "nickname", "ADMIN", "bio", true);
         given(memberManagementService.getByUserId(userId)).willReturn(result);
 
         ApiResponse<GetMemberResponse> response = controller.getMember(userId);
@@ -57,9 +57,9 @@ class MemberControllerTest {
     @Test
     @DisplayName("회원 전체 조회 성공")
     void getMembers_success() {
-        List<MemberResponse> list = List.of(
-                new MemberResponse("user1", "a@test.com", "name1", "nickname1", "MANTEE", "bio1", true),
-                new MemberResponse("user2", "b@test.com", "name2", "nickname2", "MENTO", "bio2", true)
+        List<MemberQueryResponse> list = List.of(
+                new MemberQueryResponse("user1", "a@test.com", "name1", "nickname1", "MANTEE", "bio1", true),
+                new MemberQueryResponse("user2", "b@test.com", "name2", "nickname2", "MENTO", "bio2", true)
         );
         given(memberManagementService.getAll()).willReturn(list);
 

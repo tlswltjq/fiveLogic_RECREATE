@@ -8,7 +8,7 @@ import com.fivelogic_recreate.member.application.command.dto.MemberDeleteCommand
 import com.fivelogic_recreate.member.application.command.dto.MemberDeleteResult;
 import com.fivelogic_recreate.member.application.command.dto.MemberUpdateResult;
 import com.fivelogic_recreate.member.application.query.MemberQueryService;
-import com.fivelogic_recreate.member.application.query.dto.MemberResponse;
+import com.fivelogic_recreate.member.application.query.dto.MemberQueryResponse;
 import com.fivelogic_recreate.member.interfaces.rest.dto.CreateMemberRequest;
 import com.fivelogic_recreate.member.interfaces.rest.dto.UpdateMemberRequest;
 import lombok.RequiredArgsConstructor;
@@ -28,11 +28,11 @@ public class MemberManagementService {
         return memberCreateService.create(request.toCommand());
     }
 
-    public MemberResponse getByUserId(String userId) {
+    public MemberQueryResponse getByUserId(String userId) {
         return memberQueryService.getByUserId(userId);
     }
 
-    public List<MemberResponse> getAll() {
+    public List<MemberQueryResponse> getAll() {
         return memberQueryService.getAll();
     }
 

@@ -5,7 +5,7 @@ import com.fivelogic_recreate.member.application.MemberManagementService;
 import com.fivelogic_recreate.member.application.command.dto.MemberCreateResult;
 import com.fivelogic_recreate.member.application.command.dto.MemberDeleteResult;
 import com.fivelogic_recreate.member.application.command.dto.MemberUpdateResult;
-import com.fivelogic_recreate.member.application.query.dto.MemberResponse;
+import com.fivelogic_recreate.member.application.query.dto.MemberQueryResponse;
 import com.fivelogic_recreate.member.interfaces.rest.dto.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +30,7 @@ public class MemberController {
 
     @GetMapping("/{userId}")
     public ApiResponse<GetMemberResponse> getMember(@PathVariable String userId) {
-        MemberResponse result = memberManagementService.getByUserId(userId);
+        MemberQueryResponse result = memberManagementService.getByUserId(userId);
         GetMemberResponse response = new GetMemberResponse(result);
         return ApiResponse.success(200, "조회 완료", response);
     }
@@ -38,7 +38,7 @@ public class MemberController {
 
     @GetMapping
     public ApiResponse<GetAllMembersResponse> getMembers() {
-        List<MemberResponse> result = memberManagementService.getAll();
+        List<MemberQueryResponse> result = memberManagementService.getAll();
         GetAllMembersResponse response = GetAllMembersResponse.from(result);
         return ApiResponse.success(200, "모든 사용자 조회 완료", response);
     }

@@ -1,6 +1,6 @@
 package com.fivelogic_recreate.member.interfaces.rest.dto;
 
-import com.fivelogic_recreate.member.application.query.dto.MemberResponse;
+import com.fivelogic_recreate.member.application.query.dto.MemberQueryResponse;
 
 public record GetMemberResponse(
         String userId,
@@ -8,7 +8,7 @@ public record GetMemberResponse(
         String memberType,
         boolean isActive
 ) {
-    public GetMemberResponse (MemberResponse memberInfo){
+    public GetMemberResponse (MemberQueryResponse memberInfo){
         this(memberInfo.userId(), memberInfo.email(), memberInfo.memberType(), memberInfo.isActive());
     }
 }
