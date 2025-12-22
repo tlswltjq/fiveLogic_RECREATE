@@ -32,6 +32,6 @@ public class MemberCreateService {
         Member member = Member.join(command.userId(), command.password(), command.email(), command.firstname(), command.lastname(), command.nickname(), command.bio());
         repository.save(member);
 
-        return new MemberCreateResult(member.getId().value(), member.getUserId().value(), member.getName().value(), member.getNickname().value(), member.getMemberType().name(), member.getIsActivated(), member.getEmail().value(), member.getBio().value());
+        return new MemberCreateResult(member.getUserId().value(), member.getName().value(), member.getNickname().value(), member.getMemberType().name(), member.getIsActivated(), member.getEmail().value(), member.getBio().value());
     }
 }
