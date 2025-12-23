@@ -21,7 +21,7 @@ import java.util.Optional;
 @Repository
 @RequiredArgsConstructor
 public class NewsJpaRepositoryImpl implements NewsRepositoryPort, NewsQueryRepositoryPort {
-    private final NewsJpaEntityRepository newsRepository;
+    private final NewsJpaRepository newsRepository;
     private final MemberJpaRepository memberRepository;
 
     @Override

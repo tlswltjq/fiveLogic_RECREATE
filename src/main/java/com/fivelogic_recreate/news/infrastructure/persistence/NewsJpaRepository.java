@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-public interface NewsJpaEntityRepository extends JpaRepository<NewsJpaEntity, Long> {
+public interface NewsJpaRepository extends JpaRepository<NewsJpaEntity, Long> {
     @Query("SELECT n.id as id, n.title AS title, n.description AS description, n.content AS content, n.videoUrl AS videoUrl, n.author.userId AS authorId, n.publishedDate AS publishedDate, n.status AS status FROM NewsJpaEntity n WHERE n.id = :id")
     Optional<NewsQueryResponse> findQueryById(@Param("id") Long id);
 
