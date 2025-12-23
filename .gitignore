@@ -36,6 +36,5 @@ nbdist/
 
 # VS Code
 .vscode/
-MEMBER_REFACTOR_REPORT.md
-.gitignore
+*.md
 trace_log.txt
