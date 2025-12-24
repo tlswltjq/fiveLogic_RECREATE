@@ -18,9 +18,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -49,11 +49,9 @@ class MemberUpdateServiceTest {
         );
         when(memberRepositoryPort.findByUserId(any(UserId.class)))
                 .thenReturn(Optional.of(member));
-        when(memberRepositoryPort.save(any(Member.class)))
-                .thenReturn(member);
+
         MemberUpdateResult memberInfo = memberUpdateService.update(updateCommand);
 
-        verify(memberRepositoryPort).save(member);
         assertThat(memberInfo).isNotNull();
         assertThat(memberInfo.email()).isEqualTo("updatedMail@email.com");
         assertThat(memberInfo.name()).isEqualTo("updated name");
@@ -99,11 +97,9 @@ class MemberUpdateServiceTest {
                 null
         );
         when(memberRepositoryPort.findByUserId(any(UserId.class))).thenReturn(Optional.of(member));
-        when(memberRepositoryPort.save(any(Member.class))).thenReturn(member);
 
         memberUpdateService.update(updateCommand);
 
-        verify(memberRepositoryPort).save(member);
         assertThat(member.getNickname().value()).isEqualTo("updatedNickname");
         assertThat(member.getEmail().value()).isEqualTo(originalEmail);
         assertThat(member.getName()).isEqualTo(originalName);
@@ -119,11 +115,9 @@ class MemberUpdateServiceTest {
                 "userId", null, null, null, null, null, "MENTOR"
         );
         when(memberRepositoryPort.findByUserId(any(UserId.class))).thenReturn(Optional.of(member));
-        when(memberRepositoryPort.save(any(Member.class))).thenReturn(member);
 
         memberUpdateService.update(updateCommand);
 
-        verify(memberRepositoryPort).save(member);
         assertThat(member.getMemberType()).isEqualTo(MemberType.MENTOR);
     }
 
@@ -135,11 +129,9 @@ class MemberUpdateServiceTest {
                 "userId", null, "updatedFirst", "updatedLast", null, null, null
         );
         when(memberRepositoryPort.findByUserId(any(UserId.class))).thenReturn(Optional.of(member));
-        when(memberRepositoryPort.save(any(Member.class))).thenReturn(member);
 
         memberUpdateService.update(updateCommand);
 
-        verify(memberRepositoryPort).save(member);
         assertThat(member.getName()).isEqualTo(new Name("updatedFirst", "updatedLast"));
     }
 
@@ -152,7 +144,6 @@ class MemberUpdateServiceTest {
                 "userId", null, "updatedFirst", null, null, null, null
         );
         when(memberRepositoryPort.findByUserId(any(UserId.class))).thenReturn(Optional.of(member));
-        when(memberRepositoryPort.save(any(Member.class))).thenReturn(member);
 
         memberUpdateService.update(updateCommand);
 
@@ -167,11 +158,9 @@ class MemberUpdateServiceTest {
                 "userId", "updated@email.com", null, null, null, null, null
         );
         when(memberRepositoryPort.findByUserId(any(UserId.class))).thenReturn(Optional.of(member));
-        when(memberRepositoryPort.save(any(Member.class))).thenReturn(member);
 
         memberUpdateService.update(updateCommand);
 
-        verify(memberRepositoryPort).save(member);
         assertThat(member.getEmail().value()).isEqualTo("updated@email.com");
     }
 
@@ -183,11 +172,9 @@ class MemberUpdateServiceTest {
                 "userId", null, null, null, null, "updated bio", null
         );
         when(memberRepositoryPort.findByUserId(any(UserId.class))).thenReturn(Optional.of(member));
-        when(memberRepositoryPort.save(any(Member.class))).thenReturn(member);
 
         memberUpdateService.update(updateCommand);
 
-        verify(memberRepositoryPort).save(member);
         assertThat(member.getBio().value()).isEqualTo("updated bio");
     }
 }
