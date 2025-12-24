@@ -20,7 +20,6 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -42,12 +41,9 @@ class MemberPasswordUpdateServiceTest {
 
         when(memberRepositoryPort.findByUserId(any(UserId.class)))
                 .thenReturn(Optional.of(member));
-        when(memberRepositoryPort.save(any(Member.class)))
-                .thenAnswer(invocation -> invocation.getArgument(0));
 
         MemberPasswordUpdateResult result = memberPasswordUpdateService.updatePassword(command);
 
-        verify(memberRepositoryPort).save(any(Member.class));
         assertThat(result.userId()).isEqualTo(member.getUserId().value());
     }
 

@@ -20,7 +20,7 @@ public class MemberPasswordUpdateService {
         UserId userId = new UserId(command.userId());
         Member member = repository.findByUserId(userId).orElseThrow(MemberNotFoundException::new);
         member.updatePassword(command.password());
-        repository.save(member);
-        return new MemberPasswordUpdateResult(member.getId().value(), member.getUserId().value());
+
+        return new MemberPasswordUpdateResult(member.getId(), member.getUserId().value());
     }
 }

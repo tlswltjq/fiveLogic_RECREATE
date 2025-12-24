@@ -20,9 +20,7 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-
 
 @ExtendWith(MockitoExtension.class)
 class MemberDeleteServiceTest {
@@ -41,11 +39,9 @@ class MemberDeleteServiceTest {
         Member member = memberFixture.withUserId("userId").build();
 
         when(memberRepositoryPort.findByUserId(any(UserId.class))).thenReturn(Optional.of(member));
-        when(memberRepositoryPort.save(any(Member.class))).thenAnswer(i -> i.getArgument(0));
 
         MemberDeleteResult result = memberDeleteService.delete(deleteCommand);
 
-        verify(memberRepositoryPort).save(any(Member.class));
         assertThat(result.isActivated()).isFalse();
     }
 

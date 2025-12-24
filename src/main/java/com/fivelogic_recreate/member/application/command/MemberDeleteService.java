@@ -20,8 +20,8 @@ public class MemberDeleteService {
         UserId userId = new UserId(command.userId());
         Member member = repository.findByUserId(userId).orElseThrow(MemberNotFoundException::new);
         member.delete();
-        repository.save(member);
 
-        return new MemberDeleteResult(member.getId(), member.getUserId().value(), member.getName().value(), member.getNickname().value(), member.getMemberType().name(), member.getIsActivated());
+        return new MemberDeleteResult(member.getId(), member.getUserId().value(), member.getName().value(),
+                member.getNickname().value(), member.getMemberType().name(), member.getIsActivated());
     }
 }
