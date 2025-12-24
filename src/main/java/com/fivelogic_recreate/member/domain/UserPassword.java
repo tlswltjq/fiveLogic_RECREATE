@@ -1,5 +1,8 @@
 package com.fivelogic_recreate.member.domain;
 
+import jakarta.persistence.Embeddable;
+
+@Embeddable
 public record UserPassword(String value) {
     public UserPassword {
         if (value == null || value.trim().isEmpty()) {

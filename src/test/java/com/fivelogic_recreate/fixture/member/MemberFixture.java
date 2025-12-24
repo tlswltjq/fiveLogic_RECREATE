@@ -60,7 +60,7 @@ public class MemberFixture {
 
     public Member build() {
         return Member.reconstitute(
-                new MemberId(memberId),
+                memberId,
                 new UserId(userId),
                 new UserPassword(password),
                 new Name(firstname, lastname),
@@ -68,7 +68,6 @@ public class MemberFixture {
                 memberType,
                 true,
                 new Email(email),
-                new Bio(bio)
-        );
+                new Bio(bio));
     }
 }

@@ -49,6 +49,8 @@ public class MemberUpdateService {
             member.updateBio(bio);
         }
         repository.save(member);
-        return new MemberUpdateResult(member.getId().value(), member.getUserId().value(), member.getName().value(), member.getNickname().value(), member.getMemberType().name(), member.getIsActivated(), member.getEmail().value(), member.getBio().value());
+        return new MemberUpdateResult(member.getId(), member.getUserId().value(), member.getName().value(),
+                member.getNickname().value(), member.getMemberType().name(), member.getIsActivated(),
+                member.getEmail().value(), member.getBio().value());
     }
 }

@@ -1,5 +1,8 @@
 package com.fivelogic_recreate.member.domain;
 
+import jakarta.persistence.Embeddable;
+
+@Embeddable
 public record Name(String firstName, String lastName) {
     public Name {
         if (firstName == null || firstName.isBlank()) {
@@ -9,7 +12,8 @@ public record Name(String firstName, String lastName) {
             throw new IllegalArgumentException("잘못된 last name 입니다.");
         }
     }
-    public String value(){
+
+    public String value() {
         return firstName + " " + lastName;
     }
 }

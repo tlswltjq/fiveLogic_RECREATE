@@ -1,5 +1,8 @@
 package com.fivelogic_recreate.member.domain;
 
+import jakarta.persistence.Embeddable;
+
+@Embeddable
 public record Nickname(String value) {
     public Nickname {
         if (value == null || value.isEmpty()) {

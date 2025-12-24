@@ -2,6 +2,7 @@ package com.fivelogic_recreate.member.infrastructure.persistence;
 
 import com.fivelogic_recreate.fixture.member.MemberFixture;
 import com.fivelogic_recreate.member.domain.Member;
+import com.fivelogic_recreate.member.domain.MemberId;
 import com.fivelogic_recreate.member.domain.Nickname;
 import com.fivelogic_recreate.member.domain.UserId;
 import org.junit.jupiter.api.DisplayName;
@@ -32,14 +33,26 @@ class MemberJpaRepositoryImplTest {
 
     private final MemberFixture memberFixture = new MemberFixture();
 
+    @Test
+    @DisplayName("존재하는 MemberId로 조회 시 Member 도메인 객체를 반환한다.")
+    void shouldReturnMemberDomainObjectWhenFindingByMemberId() {
+        Member member = memberFixture.build();
+        MemberId memberId = new MemberId(member.getId());
+        when(repository.findById(memberId.value())).thenReturn(Optional.of(member));
+
+        Optional<Member> result = adapter.findById(memberId);
+
+        assertThat(result).isPresent();
+        assertThat(result.get().getId()).isEqualTo(memberId.value());
+        verify(repository).findById(memberId.value());
+    }
 
     @Test
     @DisplayName("존재하는 UserId로 조회 시 Member 도메인 객체를 반환한다.")
     void shouldReturnMemberDomainObjectWhenFindingByExistingUserId() {
         Member member = memberFixture.build();
         UserId userId = member.getUserId();
-        MemberJpaEntity entity = MemberJpaEntity.from(member);
-        when(repository.findByUserId(userId.value())).thenReturn(Optional.of(entity));
+        when(repository.findByUserId(userId.value())).thenReturn(Optional.of(member));
 
         Optional<Member> result = adapter.findByUserId(userId);
 
@@ -65,8 +78,7 @@ class MemberJpaRepositoryImplTest {
     void shouldReturnMemberDomainObjectWhenFindingByExistingNickname() {
         Member member = memberFixture.build();
         Nickname nickname = member.getNickname();
-        MemberJpaEntity entity = MemberJpaEntity.from(member);
-        when(repository.findByNickname(nickname.value())).thenReturn(Optional.of(entity));
+        when(repository.findByNickname(nickname.value())).thenReturn(Optional.of(member));
 
         Optional<Member> result = adapter.findByNickname(nickname);
 
@@ -91,15 +103,14 @@ class MemberJpaRepositoryImplTest {
     @DisplayName("Member 객체를 저장하고 저장된 Member 객체를 반환한다.")
     void shouldSaveAndReturnMember() {
         Member memberToSave = memberFixture.build();
-        MemberJpaEntity entity = MemberJpaEntity.from(memberToSave);
-        when(repository.save(any(MemberJpaEntity.class))).thenReturn(entity);
+        when(repository.save(any(Member.class))).thenReturn(memberToSave);
 
         Member savedMember = adapter.save(memberToSave);
 
         assertThat(savedMember).isNotNull();
         assertThat(savedMember.getId()).isEqualTo(memberToSave.getId());
         assertThat(savedMember.getUserId()).isEqualTo(memberToSave.getUserId());
-        verify(repository).save(any(MemberJpaEntity.class));
+        verify(repository).save(any(Member.class));
     }
 
     @Test
@@ -131,10 +142,9 @@ class MemberJpaRepositoryImplTest {
     void shouldReturnListOfMembersWhenFindAll() {
         Member member1 = memberFixture.withUserId("user1").build();
         Member member2 = memberFixture.withUserId("user2").build();
-        List<MemberJpaEntity> entities = Arrays.asList(
-                MemberJpaEntity.from(member1),
-                MemberJpaEntity.from(member2)
-        );
+        List<Member> entities = Arrays.asList(
+                member1,
+                member2);
         when(repository.findAll()).thenReturn(entities);
 
         List<Member> resultList = adapter.findAll();

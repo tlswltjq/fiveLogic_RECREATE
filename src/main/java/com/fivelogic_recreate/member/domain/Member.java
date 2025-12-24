@@ -1,22 +1,56 @@
 package com.fivelogic_recreate.member.domain;
 
+import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.Objects;
 
+@Entity
+@Table(name = "members")
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member {
-    private final MemberId id;
-    private final UserId userId;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "member_id")
+    private Long id;
+
+    @Embedded
+    @AttributeOverride(name = "value", column = @Column(name = "user_id", unique = true, nullable = false))
+    private UserId userId;
+
+    @Embedded
+    @AttributeOverride(name = "value", column = @Column(name = "password", nullable = false))
     private UserPassword password;
+
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "firstName", column = @Column(name = "first_name", nullable = false)),
+            @AttributeOverride(name = "lastName", column = @Column(name = "last_name", nullable = false))
+    })
     private Name name;
+
+    @Embedded
+    @AttributeOverride(name = "value", column = @Column(name = "nickname", nullable = false))
     private Nickname nickname;
+
+    @Enumerated(EnumType.STRING)
     private MemberType memberType;
+
     private Boolean isActivated;
+
+    @Embedded
+    @AttributeOverride(name = "value", column = @Column(name = "email", unique = true, nullable = false))
     private Email email;
+
+    @Embedded
+    @AttributeOverride(name = "value", column = @Column(name = "bio", columnDefinition = "TEXT"))
     private Bio bio;
 
-    private Member(MemberId id, UserId userId, UserPassword password, Name name, Nickname nickname, MemberType memberType, Boolean isActivated, Email email, Bio bio) {
+    private Member(Long id, UserId userId, UserPassword password, Name name, Nickname nickname, MemberType memberType,
+            Boolean isActivated, Email email, Bio bio) {
         this.id = id;
         this.userId = userId;
         this.password = password;
@@ -28,18 +62,19 @@ public class Member {
         this.bio = bio;
     }
 
-    public static Member reconstitute(MemberId id, UserId userId, UserPassword password, Name name,
-                                      Nickname nickname, MemberType memberType, Boolean isActivated,
-                                      Email email, Bio bio
-    ) {
+    public static Member reconstitute(Long id, UserId userId, UserPassword password, Name name,
+            Nickname nickname, MemberType memberType, Boolean isActivated,
+            Email email, Bio bio) {
         return new Member(id, userId, password, name, nickname, memberType, isActivated, email, bio);
     }
 
-    public static Member join(String userId, String password, String email, String firstName, String lastName, String nickname, String bio) {
+    public static Member join(String userId, String password, String email, String firstName, String lastName,
+            String nickname, String bio) {
         return join(userId, password, email, firstName, lastName, nickname, MemberType.MENTEE, bio);
     }
 
-    public static Member join(String userId, String password, String email, String firstName, String lastName, String nickname, MemberType memberType, String bio) {
+    public static Member join(String userId, String password, String email, String firstName, String lastName,
+            String nickname, MemberType memberType, String bio) {
         return new Member(
                 null,
                 new UserId(userId),
@@ -49,8 +84,7 @@ public class Member {
                 memberType,
                 true,
                 new Email(email),
-                new Bio(bio)
-        );
+                new Bio(bio));
     }
 
     public void delete() {
@@ -83,13 +117,14 @@ public class Member {
 
     @Override
     public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) return false;
+        if (o == null || getClass() != o.getClass())
+            return false;
         Member member = (Member) o;
         return Objects.equals(id, member.id);
     }
 
     @Override
     public int hashCode() {
-        return 31;
+        return Objects.hash(id);
     }
 }
