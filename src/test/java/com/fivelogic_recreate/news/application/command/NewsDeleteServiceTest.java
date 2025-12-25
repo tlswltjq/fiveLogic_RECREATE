@@ -42,12 +42,12 @@ class NewsDeleteServiceTest {
         News news = newsFixture.withId(newsId).withStatus(NewsStatus.PUBLISHED).build();
 
         when(newsRepositoryPort.findById(any(NewsId.class))).thenReturn(Optional.of(news));
-        when(newsRepositoryPort.save(any(News.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
         NewsDeleteResult result = newsDeleteService.deleteNews(command);
 
         verify(newsRepositoryPort).findById(new NewsId(newsId));
-        verify(newsRepositoryPort).save(any(News.class));
+
+        assertThat(result.newsId()).isEqualTo(newsId);
         assertThat(result.status()).isEqualTo(NewsStatus.DELETED);
     }
 

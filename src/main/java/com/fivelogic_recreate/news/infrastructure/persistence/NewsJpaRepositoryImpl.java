@@ -1,8 +1,5 @@
 package com.fivelogic_recreate.news.infrastructure.persistence;
 
-import com.fivelogic_recreate.member.exception.MemberNotFoundException;
-import com.fivelogic_recreate.member.infrastructure.persistence.MemberJpaEntity;
-import com.fivelogic_recreate.member.infrastructure.persistence.MemberJpaRepository;
 import com.fivelogic_recreate.news.application.query.dto.NewsQueryResponse;
 import com.fivelogic_recreate.news.domain.News;
 import com.fivelogic_recreate.news.domain.NewsId;
@@ -22,7 +19,6 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class NewsJpaRepositoryImpl implements NewsRepositoryPort, NewsQueryRepositoryPort {
     private final NewsJpaRepository newsRepository;
-    private final MemberJpaRepository memberRepository;
 
     @Override
     public Optional<NewsQueryResponse> findQueryById(Long id) {
@@ -70,13 +66,11 @@ public class NewsJpaRepositoryImpl implements NewsRepositoryPort, NewsQueryRepos
 
     @Override
     public News save(News news) {
-        MemberJpaEntity memberEntity = memberRepository.findByUserId(news.getAuthorId().value()).orElseThrow(MemberNotFoundException::new);
-        NewsJpaEntity newsEntity = NewsJpaEntity.from(news, memberEntity);
-        return newsRepository.save(newsEntity).toDomain();
+        return newsRepository.save(news);
     }
 
     @Override
     public Optional<News> findById(NewsId id) {
-        return newsRepository.findById(id.value()).map(NewsJpaEntity::toDomain);
+        return newsRepository.findById(id.value());
     }
 }

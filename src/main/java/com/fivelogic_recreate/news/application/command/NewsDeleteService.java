@@ -27,8 +27,6 @@ public class NewsDeleteService {
             throw new NewsDeleteNotAllowedException();
         }
 
-        News deleted = newsRepositoryPort.save(news);
-
-        return new NewsDeleteResult(deleted.getId().value(), deleted.getTitle().value(), deleted.getStatus());
+        return new NewsDeleteResult(news.getId(), news.getTitle().value(), news.getStatus());
     }
 }

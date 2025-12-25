@@ -1,45 +1,78 @@
 package com.fivelogic_recreate.news.domain;
 
+import com.fivelogic_recreate.member.domain.Member;
+import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+@Entity
+@Table(name = "News")
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class News {
-    private final NewsId id;
-    private Title title;
-    private Description description;
-    private Content content;
-    private AuthorId authorId;
-    private LocalDateTime publishedDate;
-    private NewsStatus status;
-    //조회수는 통계 도메인으로 분리해보자
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "news_id")
+    private Long id;
 
-    private News(NewsId id, Title title, Description description, Content content, AuthorId authorId, LocalDateTime publishedDate, NewsStatus status) {
+    @Embedded
+    @AttributeOverride(name = "value", column = @Column(name = "news_title", nullable = false))
+    private Title title;
+
+    @Embedded
+    @AttributeOverride(name = "value", column = @Column(name = "description", nullable = false))
+    private Description description;
+
+    @Embedded
+    @AttributeOverride(name = "value", column = @Column(name = "content", nullable = false))
+    private TextContent textContent;
+
+    @Embedded
+    @AttributeOverride(name = "value", column = @Column(name = "videoUrl", nullable = false))
+    private VideoUrl videoUrl;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id", nullable = false)
+    private Member author;
+
+    private LocalDateTime publishedDate;
+
+    @Enumerated(EnumType.STRING)
+    private NewsStatus status;
+    // 조회수는 통계 도메인으로 분리해보자
+
+    private News(Long id, Title title, Description description, TextContent textContent, VideoUrl videoUrl,
+            Member author, LocalDateTime publishedDate, NewsStatus status) {
         this.id = id;
         this.title = title;
         this.description = description;
-        this.content = content;
-        this.authorId = authorId;
+        this.textContent = textContent;
+        this.videoUrl = videoUrl;
+        this.author = author;
         this.publishedDate = publishedDate;
         this.status = status;
     }
 
-    public static News reconsitute(NewsId id, Title title, Description description, Content content, AuthorId authorId, LocalDateTime publishedDate, NewsStatus status) {
-        return new News(id, title, description, content, authorId, publishedDate, status);
+    public static News reconsitute(Long id, Title title, Description description, TextContent textContent,
+            VideoUrl videoUrl, Member author,
+            LocalDateTime publishedDate, NewsStatus status) {
+        return new News(id, title, description, textContent, videoUrl, author, publishedDate, status);
     }
 
-    public static News draft(String title, String description, String content, String videoUrl, String authorId) {
+    public static News draft(String title, String description, String content, String videoUrl, Member author) {
         return new News(
                 null,
                 new Title(title),
                 new Description(description),
-                new Content(content, videoUrl),
-                new AuthorId(authorId),
+                new TextContent(content),
+                new VideoUrl(videoUrl),
+                author,
                 null,
-                NewsStatus.DRAFT
-        );
+                NewsStatus.DRAFT);
     }
 
     public void processing() {
@@ -76,22 +109,23 @@ public class News {
     }
 
     public void changeTextContent(String newText) {
-        this.content = new Content(new TextContent(newText), this.content.videoUrl());
+        this.textContent = new TextContent(newText);
     }
 
     public void changeVideoUrl(String newUrl) {
-        this.content = new Content(this.content.text(), new VideoUrl(newUrl));
+        this.videoUrl = new VideoUrl(newUrl);
     }
 
     @Override
     public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) return false;
+        if (o == null || getClass() != o.getClass())
+            return false;
         News news = (News) o;
         return Objects.equals(id, news.id);
     }
 
     @Override
     public int hashCode() {
-        return 31;
+        return Objects.hash(id);
     }
 }

@@ -43,12 +43,12 @@ class NewsPublishServiceTest {
         News news = newsFixture.withId(newsId).withStatus(NewsStatus.READY).build();
 
         when(newsRepositoryPort.findById(any(NewsId.class))).thenReturn(Optional.of(news));
-        when(newsRepositoryPort.save(any(News.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
         NewsPublishResult result = newsPublishService.publishNews(command);
 
         verify(newsRepositoryPort).findById(new NewsId(newsId));
-        verify(newsRepositoryPort).save(any(News.class));
+
+        assertThat(result.newsId()).isEqualTo(newsId);
         assertThat(result.status()).isEqualTo(NewsStatus.PUBLISHED);
     }
 

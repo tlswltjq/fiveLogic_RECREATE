@@ -1,5 +1,6 @@
 package com.fivelogic_recreate.fixture.News;
 
+import com.fivelogic_recreate.member.domain.Member;
 import com.fivelogic_recreate.news.domain.*;
 
 import java.time.LocalDateTime;
@@ -10,7 +11,7 @@ public class NewsFixture {
     private String description = "Default News Description";
     private String content = "Default News Content";
     private String videoUrl = "default-news-video-url.com";
-    private String authorId = "authorId";
+    private Member author = null;
     private LocalDateTime publishedDate = LocalDateTime.now();
     private NewsStatus status = NewsStatus.PUBLISHED;
 
@@ -39,8 +40,8 @@ public class NewsFixture {
         return this;
     }
 
-    public NewsFixture withAuthorId(String authorId) {
-        this.authorId = authorId;
+    public NewsFixture withAuthor(Member author) {
+        this.author = author;
         return this;
     }
 
@@ -56,13 +57,13 @@ public class NewsFixture {
 
     public News build() {
         return News.reconsitute(
-                new NewsId(id),
+                id,
                 new Title(title),
                 new Description(description),
-                new Content(content, videoUrl),
-                new AuthorId(authorId),
+                new TextContent(content),
+                new VideoUrl(videoUrl),
+                author,
                 publishedDate,
-                status
-        );
+                status);
     }
 }

@@ -1,5 +1,8 @@
 package com.fivelogic_recreate.news.domain;
 
+import jakarta.persistence.Embeddable;
+
+@Embeddable
 public record Title(String value) {
     public Title {
         if (value == null || value.isEmpty()) {

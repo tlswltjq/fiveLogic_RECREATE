@@ -26,7 +26,6 @@ public class NewsUnHideService {
         } catch (IllegalStateException e) {
             throw new NewsUnHideNotAllowedException();
         }
-        News unHide = newsRepositoryPort.save(news);
-        return new NewsHideResult(unHide.getId().value(), unHide.getTitle().value(), unHide.getStatus());
+        return new NewsHideResult(news.getId(), news.getTitle().value(), news.getStatus());
     }
 }

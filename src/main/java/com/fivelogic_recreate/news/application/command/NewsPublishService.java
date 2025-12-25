@@ -26,8 +26,6 @@ public class NewsPublishService {
         } catch (IllegalStateException e) {
             throw new NewsPublishNotAllowedException();
         }
-        News published = newsRepositoryPort.save(news);
-
-        return new NewsPublishResult(published.getId().value(), published.getTitle().value(), published.getPublishedDate(), published.getStatus());
+        return new NewsPublishResult(news.getId(), news.getTitle().value(), news.getPublishedDate(), news.getStatus());
     }
 }

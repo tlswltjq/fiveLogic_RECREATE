@@ -1,6 +1,8 @@
 package com.fivelogic_recreate.news.domain;
 
 import com.fivelogic_recreate.fixture.News.NewsFixture;
+import com.fivelogic_recreate.fixture.member.MemberFixture;
+import com.fivelogic_recreate.member.domain.Member;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -11,27 +13,29 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class NewsTest {
     private NewsFixture newsFixture = new NewsFixture();
+    private MemberFixture memberFixture = new MemberFixture();
 
     @Test
     @DisplayName("News객체가 주어진 정보를 바탕으로 복원된다.")
     void shouldReturnNews() {
-        NewsId id = new NewsId(1L);
+        Long id = 1L;
         Title title = new Title("title");
         Description description = new Description("description");
-        Content content = new Content("content", "video.com");
-        AuthorId authorId = new AuthorId("authorId");
+        TextContent textContent = new TextContent("content");
+        VideoUrl videoUrl = new VideoUrl("video.com");
+        Member author = memberFixture.build();
         LocalDateTime publishedDate = LocalDateTime.now();
         NewsStatus status = NewsStatus.DRAFT;
 
-        News news = News.reconsitute(id, title, description, content, authorId, publishedDate, status);
+        News news = News.reconsitute(id, title, description, textContent, videoUrl, author, publishedDate, status);
 
         assertThat(news).isNotNull();
         assertThat(news.getId()).isEqualTo(id);
         assertThat(news.getTitle()).isEqualTo(title);
         assertThat(news.getDescription()).isEqualTo(description);
-        assertThat(news.getContent().text().value()).isEqualTo("content");
-        assertThat(news.getContent().videoUrl().value()).isEqualTo("video.com");
-        assertThat(news.getAuthorId()).isEqualTo(authorId);
+        assertThat(news.getTextContent().value()).isEqualTo("content");
+        assertThat(news.getVideoUrl().value()).isEqualTo("video.com");
+        assertThat(news.getAuthor().getUserId().value()).isEqualTo(author.getUserId().value());
         assertThat(news.getPublishedDate()).isEqualTo(publishedDate);
         assertThat(news.getStatus()).isEqualTo(status);
     }
@@ -39,7 +43,7 @@ class NewsTest {
     @Test
     @DisplayName("초안을 작성할 수 있다.")
     void shouldReturnDraft() {
-        String author = "authorId";
+        Member author = memberFixture.build();
         String title = "title";
         String description = "description";
         String content = "content";
@@ -49,9 +53,9 @@ class NewsTest {
         assertThat(draft).isNotNull();
         assertThat(draft.getTitle().value()).isEqualTo(title);
         assertThat(draft.getDescription().value()).isEqualTo(description);
-        assertThat(draft.getContent().text().value()).isEqualTo(content);
-        assertThat(draft.getContent().videoUrl().value()).isEqualTo(video);
-        assertThat(draft.getAuthorId().value()).isEqualTo(author);
+        assertThat(draft.getTextContent().value()).isEqualTo(content);
+        assertThat(draft.getVideoUrl().value()).isEqualTo(video);
+        assertThat(draft.getAuthor().getUserId().value()).isEqualTo(author.getUserId().value());
         assertThat(draft.getStatus()).isEqualTo(NewsStatus.DRAFT);
     }
 
@@ -189,7 +193,7 @@ class NewsTest {
 
         news.changeTextContent(newContent);
 
-        assertThat(news.getContent().text().value()).isEqualTo(newContent);
+        assertThat(news.getTextContent().value()).isEqualTo(newContent);
     }
 
     @Test
@@ -200,7 +204,7 @@ class NewsTest {
 
         news.changeVideoUrl(newVideoLink);
 
-        assertThat(news.getContent().videoUrl().value()).isEqualTo(newVideoLink);
+        assertThat(news.getVideoUrl().value()).isEqualTo(newVideoLink);
     }
 
     @Test
@@ -226,7 +230,7 @@ class NewsTest {
         assertThatThrownBy(readyNews::processing).isInstanceOf(IllegalStateException.class);
         assertThatThrownBy(publishedNews::processing).isInstanceOf(IllegalStateException.class);
         assertThatThrownBy(hiddenNews::processing).isInstanceOf(IllegalStateException.class);
-//        assertThatThrownBy(deletedNews::processing).isInstanceOf(IllegalStateException.class);
+        // assertThatThrownBy(deletedNews::processing).isInstanceOf(IllegalStateException.class);
     }
 
     @Test
