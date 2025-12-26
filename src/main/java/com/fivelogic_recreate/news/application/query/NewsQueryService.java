@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
@@ -23,34 +22,32 @@ public class NewsQueryService {
                 .orElseThrow(NewsNotFoundException::new);
     }
 
-    public List<NewsQueryResponse> findByTitle(String title) {
-        return newsQueryRepository.findByTitle(title);
+    public Page<NewsQueryResponse> findByTitle(String title, Pageable pageable) {
+        return newsQueryRepository.findByTitle(title, pageable);
     }
 
-    public List<NewsQueryResponse> findByContent(String textcontent) {
-        return newsQueryRepository.findByContent(textcontent);
+    public Page<NewsQueryResponse> findByContent(String textcontent, Pageable pageable) {
+        return newsQueryRepository.findByContent(textcontent, pageable);
     }
 
-    public List<NewsQueryResponse> findByAuthorId(String authorId) {
-        return newsQueryRepository.findByAuthorId(authorId);
+    public Page<NewsQueryResponse> findByAuthorId(String authorId, Pageable pageable) {
+        return newsQueryRepository.findByAuthorId(authorId, pageable);
     }
 
-    public List<NewsQueryResponse> findByStatus(String newsStatus) {
-        return newsQueryRepository.findByNewsStatus(newsStatus);
+    public Page<NewsQueryResponse> findByStatus(String newsStatus, Pageable pageable) {
+        return newsQueryRepository.findByNewsStatus(newsStatus, pageable);
     }
 
     public Page<NewsQueryResponse> findByPublishedDateAfter(
             LocalDateTime publishedDate,
-            Pageable pageable
-    ) {
+            Pageable pageable) {
         return newsQueryRepository
                 .findByPublishedDateAfter(publishedDate, pageable);
     }
 
     public Page<NewsQueryResponse> findByPublishedDateBefore(
             LocalDateTime publishedDate,
-            Pageable pageable
-    ) {
+            Pageable pageable) {
         return newsQueryRepository
                 .findByPublishedDateBefore(publishedDate, pageable);
     }
@@ -58,8 +55,7 @@ public class NewsQueryService {
     public Page<NewsQueryResponse> findByPublishedDateBetween(
             LocalDateTime startDate,
             LocalDateTime endDate,
-            Pageable pageable
-    ) {
+            Pageable pageable) {
         return newsQueryRepository
                 .findByPublishedDateBetween(startDate, endDate, pageable);
     }
