@@ -115,6 +115,10 @@ public class Member {
         this.name = new Name(firstName, lastName);
     }
 
+    public boolean checkPassword(String rawPassword) {
+        return this.password.match(rawPassword);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass())

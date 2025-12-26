@@ -12,4 +12,8 @@ public record UserPassword(String value) {
             throw new IllegalArgumentException("사용자 PW는 5자 이상 12자 이하이어야 합니다.");
         }
     }
+
+    public boolean match(String rawPassword) {
+        return this.value.equals(rawPassword);
+    }
 }
