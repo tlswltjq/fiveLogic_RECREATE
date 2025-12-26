@@ -12,7 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
-import java.util.List;
+
 import java.util.Optional;
 
 @Repository
@@ -26,24 +26,24 @@ public class NewsJpaRepositoryImpl implements NewsRepositoryPort, NewsQueryRepos
     }
 
     @Override
-    public List<NewsQueryResponse> findByTitle(String title) {
-        return newsRepository.findQueryByTitle(title);
+    public Page<NewsQueryResponse> findByTitle(String title, Pageable pageable) {
+        return newsRepository.findQueryByTitle(title, pageable);
     }
 
     @Override
-    public List<NewsQueryResponse> findByContent(String textContent) {
-        return newsRepository.findQueryByContentContaining(textContent);
+    public Page<NewsQueryResponse> findByContent(String textContent, Pageable pageable) {
+        return newsRepository.findQueryByContentContaining(textContent, pageable);
     }
 
     @Override
-    public List<NewsQueryResponse> findByAuthorId(String authorId) {
-        return newsRepository.findQueryByAuthor_UserId(authorId);
+    public Page<NewsQueryResponse> findByAuthorId(String authorId, Pageable pageable) {
+        return newsRepository.findQueryByAuthor_UserId(authorId, pageable);
     }
 
     @Override
-    public List<NewsQueryResponse> findByNewsStatus(String status) {
+    public Page<NewsQueryResponse> findByNewsStatus(String status, Pageable pageable) {
         NewsStatus newsStatus = NewsStatus.from(status);
-        return newsRepository.findQueryByStatus(newsStatus);
+        return newsRepository.findQueryByStatus(newsStatus, pageable);
     }
 
     @Override

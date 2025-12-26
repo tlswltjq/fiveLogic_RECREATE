@@ -10,7 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDateTime;
-import java.util.List;
+
 import java.util.Optional;
 
 public interface NewsJpaRepository extends JpaRepository<News, Long> {
@@ -18,16 +18,16 @@ public interface NewsJpaRepository extends JpaRepository<News, Long> {
         Optional<NewsQueryResponse> findQueryById(@Param("id") Long id);
 
         @Query("SELECT n.id as id, n.title.value AS title, n.description.value AS description, n.textContent.value AS content, n.videoUrl.value AS videoUrl, n.author.userId.value AS authorId, n.publishedDate AS publishedDate, n.status AS status FROM News n WHERE n.title.value = :title")
-        List<NewsQueryResponse> findQueryByTitle(@Param("title") String title);
+        Page<NewsQueryResponse> findQueryByTitle(@Param("title") String title, Pageable pageable);
 
         @Query("SELECT n.id as id, n.title.value AS title, n.description.value AS description, n.textContent.value AS content, n.videoUrl.value AS videoUrl, n.author.userId.value AS authorId, n.publishedDate AS publishedDate, n.status AS status FROM News n WHERE n.textContent.value LIKE %:keyword%")
-        List<NewsQueryResponse> findQueryByContentContaining(@Param("keyword") String keyword);
+        Page<NewsQueryResponse> findQueryByContentContaining(@Param("keyword") String keyword, Pageable pageable);
 
         @Query("SELECT n.id as id, n.title.value AS title, n.description.value AS description, n.textContent.value AS content, n.videoUrl.value AS videoUrl, n.author.userId.value AS authorId, n.publishedDate AS publishedDate, n.status AS status FROM News n WHERE n.author.userId.value = :authorUserId")
-        List<NewsQueryResponse> findQueryByAuthor_UserId(@Param("authorUserId") String authorUserId);
+        Page<NewsQueryResponse> findQueryByAuthor_UserId(@Param("authorUserId") String authorUserId, Pageable pageable);
 
         @Query("SELECT n.id as id, n.title.value AS title, n.description.value AS description, n.textContent.value AS content, n.videoUrl.value AS videoUrl, n.author.userId.value AS authorId, n.publishedDate AS publishedDate, n.status AS status FROM News n WHERE n.status = :status")
-        List<NewsQueryResponse> findQueryByStatus(@Param("status") NewsStatus status);
+        Page<NewsQueryResponse> findQueryByStatus(@Param("status") NewsStatus status, Pageable pageable);
 
         @Query("SELECT n.id as id, n.title.value AS title, n.description.value AS description, n.textContent.value AS content, n.videoUrl.value AS videoUrl, n.author.userId.value AS authorId, n.publishedDate AS publishedDate, n.status AS status FROM News n WHERE n.publishedDate > :publishedDate")
         Page<NewsQueryResponse> findQueryByPublishedDateAfter(@Param("publishedDate") LocalDateTime publishedDate,
