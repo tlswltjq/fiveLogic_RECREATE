@@ -21,7 +21,11 @@ public enum ErrorCode {
     NEWS_HIDE_NOT_ALLOWED("N003", "숨김 처리할 수 없는 뉴스 상태입니다.", HttpStatus.CONFLICT),
     NEWS_UN_HIDE_NOT_ALLOWED("N004", "숨김 해제할 수 없는 뉴스 상태입니다.", HttpStatus.CONFLICT),
     NEWS_DELETE_NOT_ALLOWED("N005", "삭제할 수 없는 뉴스 상태입니다.", HttpStatus.CONFLICT),
-    ;
+
+    // Auth
+    LOGIN_FAILED("A001", "아이디 또는 비밀번호가 일치하지 않습니다.", HttpStatus.UNAUTHORIZED),
+    INVALID_TOKEN("A002", "유효하지 않은 토큰입니다.", HttpStatus.UNAUTHORIZED),
+    ACCESS_DENIED("A003", "접근이 거부되었습니다.", HttpStatus.FORBIDDEN);
 
     private final String code;
     private final String message;
