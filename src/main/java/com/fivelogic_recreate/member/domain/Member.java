@@ -131,4 +131,8 @@ public class Member {
     public int hashCode() {
         return Objects.hash(id);
     }
+
+    public boolean isSameUser(String targetUserId) {
+        return this.userId.value().equals(targetUserId);
+    }
 }

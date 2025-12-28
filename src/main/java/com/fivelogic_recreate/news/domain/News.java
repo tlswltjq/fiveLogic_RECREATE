@@ -1,6 +1,7 @@
 package com.fivelogic_recreate.news.domain;
 
 import com.fivelogic_recreate.member.domain.Member;
+import com.fivelogic_recreate.news.exception.NewsAccessDeniedException;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -127,5 +128,11 @@ public class News {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    public void validateOwner(String requesterId) {
+        if (!this.author.isSameUser(requesterId)) {
+            throw new NewsAccessDeniedException();
+        }
     }
 }
