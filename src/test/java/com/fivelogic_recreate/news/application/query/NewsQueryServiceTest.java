@@ -1,5 +1,6 @@
 package com.fivelogic_recreate.news.application.query;
 
+import com.fivelogic_recreate.fixture.News.TestNewsQueryResponse;
 import com.fivelogic_recreate.news.application.query.dto.NewsQueryResponse;
 import com.fivelogic_recreate.news.domain.NewsStatus;
 import com.fivelogic_recreate.news.domain.port.NewsQueryRepositoryPort;
@@ -35,16 +36,15 @@ class NewsQueryServiceTest {
     @Test
     void findById() {
         Long newsId = 1L;
-        NewsQueryResponse mockResponse = mock(NewsQueryResponse.class);
         LocalDateTime now = LocalDateTime.now();
-
-        when(mockResponse.getTitle()).thenReturn("Test Title");
-        when(mockResponse.getDescription()).thenReturn("Test Description");
-        when(mockResponse.getContent()).thenReturn("Test Content");
-        when(mockResponse.getVideoUrl()).thenReturn("http://test.video.url");
-        when(mockResponse.getAuthorId()).thenReturn("author123");
-        when(mockResponse.getPublishedDate()).thenReturn(now);
-        when(mockResponse.getStatus()).thenReturn(NewsStatus.PUBLISHED);
+        NewsQueryResponse mockResponse = new TestNewsQueryResponse(
+                "Test Title",
+                "Test Description",
+                "Test Content",
+                "http://test.video.url",
+                "author123",
+                now,
+                NewsStatus.PUBLISHED);
 
         when(newsRepositoryPort.findQueryById(newsId)).thenReturn(Optional.of(mockResponse));
 
@@ -77,8 +77,8 @@ class NewsQueryServiceTest {
     void findByTitle() {
         String title = "Test Title";
         Pageable pageable = Pageable.ofSize(10);
-        NewsQueryResponse mockResponse = mock(NewsQueryResponse.class);
-        when(mockResponse.getTitle()).thenReturn(title);
+        NewsQueryResponse mockResponse = new TestNewsQueryResponse(
+                title, "desc", "content", "url", "author", LocalDateTime.now(), NewsStatus.PUBLISHED);
 
         when(newsRepositoryPort.findByTitle(title, pageable))
                 .thenReturn(new PageImpl<>(List.of(mockResponse), pageable, 1));
@@ -95,8 +95,8 @@ class NewsQueryServiceTest {
     void findByContent() {
         String content = "Test Content";
         Pageable pageable = Pageable.ofSize(10);
-        NewsQueryResponse mockResponse = mock(NewsQueryResponse.class);
-        when(mockResponse.getContent()).thenReturn(content);
+        NewsQueryResponse mockResponse = new TestNewsQueryResponse(
+                "title", "desc", content, "url", "author", LocalDateTime.now(), NewsStatus.PUBLISHED);
 
         when(newsRepositoryPort.findByContent(content, pageable))
                 .thenReturn(new PageImpl<>(List.of(mockResponse), pageable, 1));
@@ -113,8 +113,8 @@ class NewsQueryServiceTest {
     void findByAuthorId() {
         String authorId = "author123";
         Pageable pageable = Pageable.ofSize(10);
-        NewsQueryResponse mockResponse = mock(NewsQueryResponse.class);
-        when(mockResponse.getAuthorId()).thenReturn(authorId);
+        NewsQueryResponse mockResponse = new TestNewsQueryResponse(
+                "title", "desc", "content", "url", authorId, LocalDateTime.now(), NewsStatus.PUBLISHED);
 
         when(newsRepositoryPort.findByAuthorId(authorId, pageable))
                 .thenReturn(new PageImpl<>(List.of(mockResponse), pageable, 1));
@@ -131,8 +131,8 @@ class NewsQueryServiceTest {
     void findByStatus() {
         String status = NewsStatus.PUBLISHED.name();
         Pageable pageable = Pageable.ofSize(10);
-        NewsQueryResponse mockResponse = mock(NewsQueryResponse.class);
-        when(mockResponse.getStatus()).thenReturn(NewsStatus.PUBLISHED);
+        NewsQueryResponse mockResponse = new TestNewsQueryResponse(
+                "title", "desc", "content", "url", "author", LocalDateTime.now(), NewsStatus.PUBLISHED);
 
         when(newsRepositoryPort.findByNewsStatus(status, pageable))
                 .thenReturn(new PageImpl<>(List.of(mockResponse), pageable, 1));
@@ -149,8 +149,8 @@ class NewsQueryServiceTest {
     void findByPublishedDateAfter() {
         LocalDateTime publishedDate = LocalDateTime.now().minusDays(1);
         Pageable pageable = Pageable.ofSize(10);
-        NewsQueryResponse mockResponse = mock(NewsQueryResponse.class);
-        when(mockResponse.getTitle()).thenReturn("Title");
+        NewsQueryResponse mockResponse = new TestNewsQueryResponse(
+                "Title", "desc", "content", "url", "author", LocalDateTime.now(), NewsStatus.PUBLISHED);
 
         when(newsRepositoryPort.findByPublishedDateAfter(publishedDate, pageable))
                 .thenReturn(new PageImpl<>(List.of(mockResponse), pageable, 1));
@@ -167,8 +167,8 @@ class NewsQueryServiceTest {
     void findByPublishedDateBefore() {
         LocalDateTime publishedDate = LocalDateTime.now().plusDays(1);
         Pageable pageable = Pageable.ofSize(10);
-        NewsQueryResponse mockResponse = mock(NewsQueryResponse.class);
-        when(mockResponse.getTitle()).thenReturn("Title");
+        NewsQueryResponse mockResponse = new TestNewsQueryResponse(
+                "Title", "desc", "content", "url", "author", LocalDateTime.now(), NewsStatus.PUBLISHED);
         when(newsRepositoryPort.findByPublishedDateBefore(publishedDate, pageable))
                 .thenReturn(new PageImpl<>(List.of(mockResponse), pageable, 1));
 
@@ -185,8 +185,8 @@ class NewsQueryServiceTest {
         LocalDateTime startDate = LocalDateTime.now().minusDays(5);
         LocalDateTime endDate = LocalDateTime.now().minusDays(1);
         Pageable pageable = Pageable.ofSize(10);
-        NewsQueryResponse mockResponse = mock(NewsQueryResponse.class);
-        when(mockResponse.getTitle()).thenReturn("Title");
+        NewsQueryResponse mockResponse = new TestNewsQueryResponse(
+                "Title", "desc", "content", "url", "author", LocalDateTime.now(), NewsStatus.PUBLISHED);
         when(newsRepositoryPort.findByPublishedDateBetween(startDate, endDate, pageable))
                 .thenReturn(new PageImpl<>(List.of(mockResponse), pageable, 1));
 
