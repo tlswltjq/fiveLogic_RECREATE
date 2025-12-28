@@ -1,6 +1,8 @@
 package com.fivelogic_recreate.news.application.command;
 
 import com.fivelogic_recreate.fixture.News.NewsFixture;
+import com.fivelogic_recreate.fixture.member.MemberFixture;
+import com.fivelogic_recreate.member.domain.Member;
 import com.fivelogic_recreate.news.application.command.dto.NewsDeleteCommand;
 import com.fivelogic_recreate.news.application.command.dto.NewsDeleteResult;
 import com.fivelogic_recreate.news.domain.News;
@@ -38,8 +40,9 @@ class NewsDeleteServiceTest {
     @DisplayName("뉴스를 성공적으로 삭제하고, 상태가 DELETED로 변경된다.")
     void shouldDeleteNewsSuccessfully() {
         Long newsId = 1L;
-        NewsDeleteCommand command = new NewsDeleteCommand(newsId);
-        News news = newsFixture.withId(newsId).withStatus(NewsStatus.PUBLISHED).build();
+        Member author = new MemberFixture().withUserId("author-1").build();
+        NewsDeleteCommand command = new NewsDeleteCommand(newsId, "author-1");
+        News news = newsFixture.withId(newsId).withStatus(NewsStatus.PUBLISHED).withAuthor(author).build();
 
         when(newsRepositoryPort.findById(any(NewsId.class))).thenReturn(Optional.of(news));
 
@@ -55,7 +58,7 @@ class NewsDeleteServiceTest {
     @DisplayName("삭제하려는 뉴스가 존재하지 않으면 예외를 발생시킨다.")
     void shouldThrowNotFoundExceptionWhenDeleting() {
         Long newsId = 999L;
-        NewsDeleteCommand command = new NewsDeleteCommand(newsId);
+        NewsDeleteCommand command = new NewsDeleteCommand(newsId, "any-user");
         when(newsRepositoryPort.findById(any(NewsId.class))).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> newsDeleteService.deleteNews(command))
@@ -66,9 +69,10 @@ class NewsDeleteServiceTest {
     @DisplayName("뉴스 상태 전이가 유효하지 않을 때 삭제 예외를 발생시킨다.")
     void shouldThrowNotAllowedExceptionWhenStateTransitionFails() {
         Long newsId = 1L;
-        NewsDeleteCommand command = new NewsDeleteCommand(newsId);
+        Member author = new MemberFixture().withUserId("author-1").build();
+        NewsDeleteCommand command = new NewsDeleteCommand(newsId, "author-1");
 
-        News news = newsFixture.withId(newsId).withStatus(NewsStatus.DELETED).build();
+        News news = newsFixture.withId(newsId).withStatus(NewsStatus.DELETED).withAuthor(author).build();
 
         when(newsRepositoryPort.findById(any(NewsId.class))).thenReturn(Optional.of(news));
 

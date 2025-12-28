@@ -52,7 +52,7 @@ class NewsServiceTest {
     @Test
     @DisplayName("updateNews 호출 시 NewsUpdateService로 위임한다.")
     void shouldDelegateUpdateNews() {
-        newsService.updateNews(new NewsUpdateCommand(1L, "Title", "Desc", "Content", "VideoUrl"));
+        newsService.updateNews(new NewsUpdateCommand(1L, "Title", "Desc", "Content", "VideoUrl", "test-user-id"));
         verify(newsUpdateService).updateNews(any(NewsUpdateCommand.class));
     }
 
@@ -66,7 +66,7 @@ class NewsServiceTest {
     @Test
     @DisplayName("deleteNews 호출 시 NewsDeleteService로 위임한다.")
     void shouldDelegateDeleteNews() {
-        newsService.deleteNews(new NewsDeleteCommand(1L));
+        newsService.deleteNews(new NewsDeleteCommand(1L, "test-user-id"));
         verify(newsDeleteService).deleteNews(any(NewsDeleteCommand.class));
     }
 

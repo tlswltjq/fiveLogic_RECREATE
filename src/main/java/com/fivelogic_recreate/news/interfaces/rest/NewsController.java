@@ -38,7 +38,8 @@ public class NewsController {
     @PutMapping("/{newsId}")
     public ApiResponse<UpdateNewsResponse> updateNews(@PathVariable Long newsId,
             @Valid @RequestBody UpdateNewsRequest request) {
-        NewsUpdateResult result = newsService.updateNews(request.toCommand(newsId));
+        // TODO: Auth 도입 후 변경 필요
+        NewsUpdateResult result = newsService.updateNews(request.toCommand(newsId, "test-user-id"));
         return ApiResponse.success(200, "뉴스 수정 완료", new UpdateNewsResponse(result));
     }
 
@@ -62,7 +63,8 @@ public class NewsController {
 
     @DeleteMapping("/{newsId}")
     public ApiResponse<Void> deleteNews(@PathVariable Long newsId) {
-        newsService.deleteNews(new NewsDeleteCommand(newsId));
+        // TODO: Auth 도입 후 변경 필요
+        newsService.deleteNews(new NewsDeleteCommand(newsId, "test-user-id"));
         return ApiResponse.success(200, "뉴스 삭제 완료", null);
     }
 }

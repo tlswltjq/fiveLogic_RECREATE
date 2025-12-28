@@ -7,7 +7,7 @@ public record UpdateNewsRequest(
         String description,
         String textContent,
         String videoUrl) {
-    public NewsUpdateCommand toCommand(Long id) {
-        return new NewsUpdateCommand(id, title, description, textContent, videoUrl);
+    public NewsUpdateCommand toCommand(Long id, String userId) {
+        return new NewsUpdateCommand(id, title, description, textContent, videoUrl, userId);
     }
 }

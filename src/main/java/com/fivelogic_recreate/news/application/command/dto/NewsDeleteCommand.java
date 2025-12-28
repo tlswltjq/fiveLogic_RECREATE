@@ -1,6 +1,6 @@
 package com.fivelogic_recreate.news.application.command.dto;
 
 public record NewsDeleteCommand(
-        Long newsId
-) {
+                Long newsId,
+                String currentUserId) {
 }

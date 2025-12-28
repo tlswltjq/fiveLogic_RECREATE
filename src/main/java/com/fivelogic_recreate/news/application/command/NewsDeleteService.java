@@ -21,6 +21,8 @@ public class NewsDeleteService {
         NewsId newsId = new NewsId(command.newsId());
         News news = newsRepositoryPort.findById(newsId).orElseThrow(NewsNotFoundException::new);
 
+        news.validateOwner(command.currentUserId());
+
         try {
             news.delete();
         } catch (IllegalStateException e) {

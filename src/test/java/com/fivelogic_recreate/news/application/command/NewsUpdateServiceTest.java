@@ -1,6 +1,8 @@
 package com.fivelogic_recreate.news.application.command;
 
 import com.fivelogic_recreate.fixture.News.NewsFixture;
+import com.fivelogic_recreate.fixture.member.MemberFixture;
+import com.fivelogic_recreate.member.domain.Member;
 import com.fivelogic_recreate.news.application.command.dto.NewsUpdateCommand;
 import com.fivelogic_recreate.news.application.command.dto.NewsUpdateResult;
 import com.fivelogic_recreate.news.domain.News;
@@ -35,13 +37,15 @@ class NewsUpdateServiceTest {
     void shouldUpdateNewsSuccessfully() {
         // given
         Long newsId = 1L;
-        News existingNews = newsFixture.withId(newsId).build();
+        Member author = new MemberFixture().withUserId("author-1").build();
+        News existingNews = newsFixture.withId(newsId).withAuthor(author).build();
         NewsUpdateCommand command = new NewsUpdateCommand(
                 newsId,
                 "Updated Title",
                 "Updated Description",
                 "Updated Content",
-                "updated-video-url.com");
+                "updated-video-url.com",
+                "author-1");
 
         when(newsRepositoryPort.findById(any(NewsId.class))).thenReturn(Optional.of(existingNews));
 
@@ -60,18 +64,21 @@ class NewsUpdateServiceTest {
     void shouldUpdatePartialFields() {
         // given
         Long newsId = 1L;
+        // Title only update
+        Member author = new MemberFixture().withUserId("author-1").build();
         News existingNews = newsFixture.withId(newsId)
                 .withTitle("Original Title")
                 .withDescription("Original Description")
+                .withAuthor(author)
                 .build();
 
-        // Title only update
         NewsUpdateCommand command = new NewsUpdateCommand(
                 newsId,
                 "Updated Title",
                 null,
                 null,
-                null);
+                null,
+                "author-1");
 
         when(newsRepositoryPort.findById(any(NewsId.class))).thenReturn(Optional.of(existingNews));
 

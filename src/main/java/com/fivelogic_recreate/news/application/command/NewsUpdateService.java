@@ -20,6 +20,8 @@ public class NewsUpdateService {
         News news = newsRepositoryPort.findById(new NewsId(command.id()))
                 .orElseThrow(NewsNotFoundException::new);
 
+        news.validateOwner(command.currentUserId());
+
         if (command.title() != null) {
             news.changeTitle(command.title());
         }
