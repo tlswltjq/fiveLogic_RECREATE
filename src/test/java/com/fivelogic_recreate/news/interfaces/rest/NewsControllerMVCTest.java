@@ -2,8 +2,9 @@ package com.fivelogic_recreate.news.interfaces.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fivelogic_recreate.fixture.News.TestNewsQueryResponse;
-import com.fivelogic_recreate.news.application.NewsService;
+import com.fivelogic_recreate.news.application.command.*;
 import com.fivelogic_recreate.news.application.command.dto.*;
+import com.fivelogic_recreate.news.application.query.NewsQueryService;
 import com.fivelogic_recreate.news.application.query.dto.NewsQueryResponse;
 import com.fivelogic_recreate.news.domain.NewsStatus;
 import com.fivelogic_recreate.news.interfaces.rest.dto.*;
@@ -39,7 +40,19 @@ class NewsControllerMVCTest {
         private ObjectMapper objectMapper;
 
         @MockBean
-        private NewsService newsService;
+        private NewsCreateService newsCreateService;
+        @MockBean
+        private NewsQueryService newsQueryService;
+        @MockBean
+        private NewsUpdateService newsUpdateService;
+        @MockBean
+        private NewsPublishService newsPublishService;
+        @MockBean
+        private NewsHideService newsHideService;
+        @MockBean
+        private NewsUnHideService newsUnHideService;
+        @MockBean
+        private NewsDeleteService newsDeleteService;
 
         @Test
         @DisplayName("뉴스 생성 API 호출 성공")
@@ -48,7 +61,7 @@ class NewsControllerMVCTest {
                                 "제목", "설명", "본문", "http://video.url", "author1");
                 NewsCreateResult result = new NewsCreateResult(1L, "제목", "author1", NewsStatus.DRAFT);
 
-                given(newsService.createNews(any(NewsCreateCommand.class))).willReturn(result);
+                given(newsCreateService.createNews(any(NewsCreateCommand.class))).willReturn(result);
 
                 mockMvc.perform(post("/api/news")
                                 .contentType(MediaType.APPLICATION_JSON)
@@ -71,7 +84,7 @@ class NewsControllerMVCTest {
                                 "제목", "설명", "본문", "http://video.url", "author1",
                                 LocalDateTime.of(2023, 1, 1, 10, 0), NewsStatus.DRAFT);
 
-                given(newsService.getNews(newsId)).willReturn(response);
+                given(newsQueryService.findById(newsId)).willReturn(response);
 
                 mockMvc.perform(get("/api/news/{newsId}", newsId))
                                 .andDo(print())
@@ -93,7 +106,8 @@ class NewsControllerMVCTest {
 
                 Page<NewsQueryResponse> page = new PageImpl<>(List.of(response1, response2));
 
-                given(newsService.getNewsList(any(Pageable.class))).willReturn(page);
+                given(newsQueryService.findByPublishedDateBefore(any(LocalDateTime.class), any(Pageable.class)))
+                                .willReturn(page);
 
                 mockMvc.perform(get("/api/news")
                                 .param("page", "0")
@@ -116,7 +130,7 @@ class NewsControllerMVCTest {
                 NewsUpdateResult result = new NewsUpdateResult(newsId, "새제목", "새설명", "새본문", "http://new.url",
                                 NewsStatus.DRAFT);
 
-                given(newsService.updateNews(any(NewsUpdateCommand.class))).willReturn(result);
+                given(newsUpdateService.updateNews(any(NewsUpdateCommand.class))).willReturn(result);
 
                 mockMvc.perform(put("/api/news/{newsId}", newsId)
                                 .contentType(MediaType.APPLICATION_JSON)
@@ -142,7 +156,7 @@ class NewsControllerMVCTest {
                                 .andExpect(jsonPath("$.status").value(200))
                                 .andExpect(jsonPath("$.message").value("뉴스 발행 완료"));
 
-                verify(newsService).publishNews(any(NewsPublishCommand.class));
+                verify(newsPublishService).publishNews(any(NewsPublishCommand.class));
         }
 
         @Test
@@ -159,7 +173,7 @@ class NewsControllerMVCTest {
                                 .andExpect(jsonPath("$.status").value(200))
                                 .andExpect(jsonPath("$.message").value("뉴스 숨김 완료"));
 
-                verify(newsService).hideNews(any(NewsHideCommand.class));
+                verify(newsHideService).hideNews(any(NewsHideCommand.class));
         }
 
         @Test
@@ -176,7 +190,7 @@ class NewsControllerMVCTest {
                                 .andExpect(jsonPath("$.status").value(200))
                                 .andExpect(jsonPath("$.message").value("뉴스 숨김 해제 완료"));
 
-                verify(newsService).unhideNews(any(NewsUnHideCommand.class));
+                verify(newsUnHideService).unHideNews(any(NewsUnHideCommand.class));
         }
 
         @Test
@@ -190,6 +204,6 @@ class NewsControllerMVCTest {
                                 .andExpect(jsonPath("$.status").value(200))
                                 .andExpect(jsonPath("$.message").value("뉴스 삭제 완료"));
 
-                verify(newsService).deleteNews(any(NewsDeleteCommand.class));
+                verify(newsDeleteService).deleteNews(any(NewsDeleteCommand.class));
         }
 }
