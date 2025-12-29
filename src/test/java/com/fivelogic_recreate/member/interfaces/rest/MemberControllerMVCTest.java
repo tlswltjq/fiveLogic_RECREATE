@@ -1,10 +1,11 @@
 package com.fivelogic_recreate.member.interfaces.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fivelogic_recreate.member.application.MemberManagementService;
-import com.fivelogic_recreate.member.application.command.dto.MemberCreateResult;
-import com.fivelogic_recreate.member.application.command.dto.MemberUpdateResult;
-import com.fivelogic_recreate.member.application.command.dto.MemberDeleteResult;
+import com.fivelogic_recreate.member.application.command.MemberCreateService;
+import com.fivelogic_recreate.member.application.command.MemberDeleteService;
+import com.fivelogic_recreate.member.application.command.MemberUpdateService;
+import com.fivelogic_recreate.member.application.command.dto.*;
+import com.fivelogic_recreate.member.application.query.MemberQueryService;
 import com.fivelogic_recreate.member.application.query.dto.MemberQueryResponse;
 import com.fivelogic_recreate.member.exception.EmailDuplicationException;
 import com.fivelogic_recreate.member.exception.MemberNotFoundException;
@@ -38,7 +39,13 @@ class MemberControllerMVCTest {
     private ObjectMapper objectMapper;
 
     @MockBean
-    private MemberManagementService memberManagementService;
+    private MemberCreateService memberCreateService;
+    @MockBean
+    private MemberQueryService memberQueryService;
+    @MockBean
+    private MemberUpdateService memberUpdateService;
+    @MockBean
+    private MemberDeleteService memberDeleteService;
 
     @Test
     @DisplayName("회원 생성 API 호출 성공")
@@ -49,7 +56,7 @@ class MemberControllerMVCTest {
                 "MENTEE", true, "test@example.com", "안녕하세요"
         );
 
-        when(memberManagementService.createMember(any())).thenReturn(mockMemberInfo);
+        when(memberCreateService.create(any(MemberCreateCommand.class))).thenReturn(mockMemberInfo);
 
         mockMvc.perform(post("/api/members")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -70,7 +77,7 @@ class MemberControllerMVCTest {
                 "MENTEE", "안녕하세요", true
         );
 
-        when(memberManagementService.getByUserId(userId)).thenReturn(mockMemberQueryResponse);
+        when(memberQueryService.getByUserId(userId)).thenReturn(mockMemberQueryResponse);
 
         mockMvc.perform(get("/api/members/{userId}", userId)
                         .accept(MediaType.APPLICATION_JSON))
@@ -88,7 +95,7 @@ class MemberControllerMVCTest {
                 new MemberQueryResponse("user2", "user2@example.com", "이길동", "이닉", "MENTO", "안녕하세요2", true)
         );
 
-        when(memberManagementService.getAll()).thenReturn(mockMemberList);
+        when(memberQueryService.getAll()).thenReturn(mockMemberList);
 
         mockMvc.perform(get("/api/members")
                         .accept(MediaType.APPLICATION_JSON))
@@ -109,7 +116,8 @@ class MemberControllerMVCTest {
                 "MENTO", true, "new@example.com", "새로운 바이오"
         );
 
-        when(memberManagementService.updateMember(any(String.class), any(UpdateMemberRequest.class))).thenReturn(mockUpdatedMemberInfo);
+        when(memberUpdateService.update(any(MemberUpdateCommand.class)))
+                .thenReturn(mockUpdatedMemberInfo);
 
         mockMvc.perform(put("/api/members/{userId}", userId)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -131,7 +139,7 @@ class MemberControllerMVCTest {
                 "MENTEE", false
         );
 
-        when(memberManagementService.deleteMember(any(String.class))).thenReturn(mockDeletedMemberInfo);
+        when(memberDeleteService.delete(any(MemberDeleteCommand.class))).thenReturn(mockDeletedMemberInfo);
 
         mockMvc.perform(delete("/api/members/{userId}", userId)
                         .accept(MediaType.APPLICATION_JSON))
@@ -149,7 +157,7 @@ class MemberControllerMVCTest {
                 "길동", "홍", "테스트닉", "안녕하세요"
         );
 
-        when(memberManagementService.createMember(any()))
+        when(memberCreateService.create(any(MemberCreateCommand.class)))
                 .thenThrow(new EmailDuplicationException());
 
         mockMvc.perform(post("/api/members")
@@ -166,7 +174,7 @@ class MemberControllerMVCTest {
     void getMember_notFound_fail() throws Exception {
         String userId = "unknownUser";
 
-        when(memberManagementService.getByUserId(userId))
+        when(memberQueryService.getByUserId(userId))
                 .thenThrow(new MemberNotFoundException());
 
         mockMvc.perform(get("/api/members/{userId}", userId))
