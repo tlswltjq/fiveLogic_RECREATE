@@ -9,7 +9,6 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 public class AuthToken {
     private final Long memberId;
-    private final AccessToken accessToken;
     private final RefreshToken refreshToken;
     private final LocalDateTime expiresIn;
 
