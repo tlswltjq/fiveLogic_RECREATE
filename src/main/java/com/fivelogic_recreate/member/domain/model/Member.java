@@ -91,31 +91,31 @@ public class Member {
         this.isActivated = false;
     }
 
-    public void updatePassword(String newPassword) {
-        this.password = new UserPassword(newPassword);
+    public void updatePassword(UserPassword newPassword) {
+        this.password = newPassword;
     }
 
-    public void updateNickname(String newNickname) {
-        this.nickname = new Nickname(newNickname);
+    public void updateNickname(Nickname newNickname) {
+        this.nickname = newNickname;
     }
 
     public void updateMemberType(MemberType newMemberType) {
         this.memberType = newMemberType;
     }
 
-    public void updateBio(String newBio) {
-        this.bio = new Bio(newBio);
+    public void updateBio(Bio newBio) {
+        this.bio = newBio;
     }
 
-    public void updateEmail(String newEmail) {
-        this.email = new Email(newEmail);
+    public void updateEmail(Email newEmail) {
+        this.email = newEmail;
     }
 
-    public void updateName(String firstName, String lastName) {
-        this.name = new Name(firstName, lastName);
+    public void updateName(Name newName) {
+        this.name = newName;
     }
 
-    public boolean checkPassword(String rawPassword) {
+    public boolean checkPassword(UserPassword rawPassword) {
         return this.password.match(rawPassword);
     }
 

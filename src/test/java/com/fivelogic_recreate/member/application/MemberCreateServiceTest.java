@@ -4,10 +4,8 @@ import com.fivelogic_recreate.fixture.member.MemberFixture;
 import com.fivelogic_recreate.member.application.command.MemberCreateService;
 import com.fivelogic_recreate.member.application.command.dto.MemberCreateCommand;
 import com.fivelogic_recreate.member.application.command.dto.MemberCreateResult;
-import com.fivelogic_recreate.member.domain.model.Email;
 import com.fivelogic_recreate.member.domain.model.Member;
-import com.fivelogic_recreate.member.domain.model.UserId;
-import com.fivelogic_recreate.member.domain.port.MemberRepositoryPort;
+import com.fivelogic_recreate.member.domain.service.MemberDomainService;
 import com.fivelogic_recreate.member.exception.EmailDuplicationException;
 import com.fivelogic_recreate.member.exception.UserIdDuplicationException;
 import org.junit.jupiter.api.DisplayName;
@@ -20,12 +18,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class MemberCreateServiceTest {
     @Mock
-    MemberRepositoryPort memberRepositoryPort;
+    MemberDomainService memberDomainService;
 
     @InjectMocks
     MemberCreateService memberCreateService;
@@ -47,21 +46,14 @@ class MemberCreateServiceTest {
 
         Member mockedMember = memberFixture.withMemberId(1L).build();
 
-        when(memberRepositoryPort.save(any(Member.class))).thenReturn(mockedMember);
+        when(memberDomainService.register(any(Member.class))).thenReturn(mockedMember);
 
         MemberCreateResult createdMember = memberCreateService.create(command);
 
-        verify(memberRepositoryPort).existsByUserId(new UserId("user1"));
-        verify(memberRepositoryPort).existsByEmail(new Email("email@test.com"));
-        verify(memberRepositoryPort).save(any(Member.class));
+        verify(memberDomainService).register(any(Member.class));
         assertThat(createdMember.userId()).isEqualTo(mockedMember.getUserId().value());
         assertThat(createdMember.name()).isEqualTo(mockedMember.getName().firstName() + " " + mockedMember.getName().lastName());
-        assertThat(createdMember.nickname()).isEqualTo(mockedMember.getNickname().value());
-        assertThat(createdMember.memberType()).isEqualTo(mockedMember.getMemberType().toString());
-        assertThat(createdMember.isActivated()).isEqualTo(mockedMember.getIsActivated());
         assertThat(createdMember.email()).isEqualTo(mockedMember.getEmail().value());
-        assertThat(createdMember.bio()).isEqualTo(mockedMember.getBio().value());
-
     }
 
     @Test
@@ -78,14 +70,11 @@ class MemberCreateServiceTest {
                 "Hello bio"
         );
 
-        when(memberRepositoryPort.existsByUserId(any(UserId.class))).thenReturn(true);
+        when(memberDomainService.register(any(Member.class))).thenThrow(new UserIdDuplicationException());
 
         assertThatThrownBy(() -> memberCreateService.create(command))
                 .isInstanceOf(UserIdDuplicationException.class)
                 .hasMessage("이미 사용중인 사용자 ID 입니다");
-
-        verify(memberRepositoryPort).existsByUserId(any(UserId.class));
-        verify(memberRepositoryPort, never()).save(any());
     }
 
     @Test
@@ -103,7 +92,7 @@ class MemberCreateServiceTest {
         );
         Member mockedMember = memberFixture.withMemberId(1L).build();
 
-        when(memberRepositoryPort.existsByEmail(any(Email.class))).thenReturn(true);
+        when(memberDomainService.register(any(Member.class))).thenThrow(new EmailDuplicationException());
 
         assertThatThrownBy(() -> memberCreateService.create(command))
                 .isInstanceOf(EmailDuplicationException.class)

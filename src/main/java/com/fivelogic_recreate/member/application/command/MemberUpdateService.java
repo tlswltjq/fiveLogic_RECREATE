@@ -3,10 +3,8 @@ package com.fivelogic_recreate.member.application.command;
 import com.fivelogic_recreate.member.application.command.dto.MemberUpdateCommand;
 import com.fivelogic_recreate.member.application.command.dto.MemberUpdateResult;
 import com.fivelogic_recreate.member.domain.model.Member;
-import com.fivelogic_recreate.member.domain.model.MemberType;
-import com.fivelogic_recreate.member.domain.model.UserId;
-import com.fivelogic_recreate.member.domain.port.MemberRepositoryPort;
-import com.fivelogic_recreate.member.exception.MemberNotFoundException;
+import com.fivelogic_recreate.member.domain.service.MemberDomainService;
+import com.fivelogic_recreate.member.domain.service.dto.MemberUpdateInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,42 +13,20 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Transactional
 public class MemberUpdateService {
-    private final MemberRepositoryPort repository;
+    private final MemberDomainService domainService;
 
     public MemberUpdateResult update(MemberUpdateCommand command) {
-        UserId userId = new UserId(command.userId());
-        Member member = repository.findByUserId(userId).orElseThrow(MemberNotFoundException::new);
+        MemberUpdateInfo updateInfo = new MemberUpdateInfo(
+                command.nickname(),
+                command.firstname(),
+                command.lastname(),
+                command.email(),
+                command.bio(),
+                command.memberType()
+        );
 
-        String nickname = command.nickname();
-        if (nickname != null && !nickname.isBlank()) {
-            member.updateNickname(nickname);
-        }
+        Member updatedMember = domainService.updateMember(command.userId(), updateInfo);
 
-        String memberType = command.memberType();
-        if (memberType != null && !memberType.isBlank()) {
-            member.updateMemberType(MemberType.from(memberType));
-        }
-
-        String firstname = command.firstname();
-        String lastname = command.lastname();
-        if (firstname != null && !firstname.isBlank()) {
-            if (lastname != null && !lastname.isBlank()) {
-                member.updateName(firstname, lastname);
-            }
-        }
-
-        String email = command.email();
-        if (email != null && !email.isBlank()) {
-            member.updateEmail(email);
-        }
-
-        String bio = command.bio();
-        if (bio != null && !bio.isBlank()) {
-            member.updateBio(bio);
-        }
-
-        return new MemberUpdateResult(member.getId(), member.getUserId().value(), member.getName().value(),
-                member.getNickname().value(), member.getMemberType().name(), member.getIsActivated(),
-                member.getEmail().value(), member.getBio().value());
+        return MemberUpdateResult.from(updatedMember);
     }
 }

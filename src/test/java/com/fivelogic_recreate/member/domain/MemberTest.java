@@ -1,7 +1,6 @@
 package com.fivelogic_recreate.member.domain;
 
-import com.fivelogic_recreate.member.domain.model.Member;
-import com.fivelogic_recreate.member.domain.model.MemberType;
+import com.fivelogic_recreate.member.domain.model.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -175,7 +174,7 @@ class MemberTest {
         String newNickname = "changed";
         Member member = Member.join(validId, validPassword, validEmail, validFirstName, validLastName, validNickname, validBio);
 
-        member.updateNickname(newNickname);
+        member.updateNickname(new Nickname(newNickname));
 
         assertThat(member.getNickname().value()).isEqualTo(newNickname);
     }
@@ -186,7 +185,7 @@ class MemberTest {
         String newPassword = "changed";
         Member member = Member.join(validId, validPassword, validEmail, validFirstName, validLastName, validNickname, validBio);
 
-        member.updatePassword(newPassword);
+        member.updatePassword(new UserPassword(newPassword));
 
         assertThat(member.getPassword().value()).isEqualTo(newPassword);
     }
@@ -197,7 +196,7 @@ class MemberTest {
         String newEmail = "changed@test.com";
         Member member = Member.join(validId, validPassword, validEmail, validFirstName, validLastName, validNickname, validBio);
 
-        member.updateEmail(newEmail);
+        member.updateEmail(new Email(newEmail));
 
         assertThat(member.getEmail().value()).isEqualTo(newEmail);
     }
@@ -208,7 +207,7 @@ class MemberTest {
         String newBio = "this is new bio";
         Member member = Member.join(validId, validPassword, validEmail, validFirstName, validLastName, validNickname, validBio);
 
-        member.updateBio(newBio);
+        member.updateBio(new Bio(newBio));
 
         assertThat(member.getBio().value()).isEqualTo(newBio);
     }

@@ -13,7 +13,7 @@ public record UserPassword(String value) {
         }
     }
 
-    public boolean match(String rawPassword) {
-        return this.value.equals(rawPassword);
+    public boolean match(UserPassword rawPassword) {
+        return this.equals(rawPassword);
     }
 }
