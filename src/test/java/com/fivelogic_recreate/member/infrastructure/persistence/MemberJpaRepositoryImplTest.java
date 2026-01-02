@@ -1,10 +1,10 @@
 package com.fivelogic_recreate.member.infrastructure.persistence;
 
 import com.fivelogic_recreate.fixture.member.MemberFixture;
-import com.fivelogic_recreate.member.domain.Member;
-import com.fivelogic_recreate.member.domain.MemberId;
-import com.fivelogic_recreate.member.domain.Nickname;
-import com.fivelogic_recreate.member.domain.UserId;
+import com.fivelogic_recreate.member.domain.model.Member;
+import com.fivelogic_recreate.member.domain.model.MemberId;
+import com.fivelogic_recreate.member.domain.model.Nickname;
+import com.fivelogic_recreate.member.domain.model.UserId;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

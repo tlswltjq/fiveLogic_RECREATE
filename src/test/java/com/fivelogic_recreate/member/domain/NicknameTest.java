@@ -1,5 +1,6 @@
 package com.fivelogic_recreate.member.domain;
 
+import com.fivelogic_recreate.member.domain.model.Nickname;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

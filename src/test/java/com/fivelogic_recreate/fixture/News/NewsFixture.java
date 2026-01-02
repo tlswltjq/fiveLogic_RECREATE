@@ -1,6 +1,6 @@
 package com.fivelogic_recreate.fixture.News;
 
-import com.fivelogic_recreate.member.domain.Member;
+import com.fivelogic_recreate.member.domain.model.Member;
 import com.fivelogic_recreate.news.domain.*;
 
 import java.time.LocalDateTime;

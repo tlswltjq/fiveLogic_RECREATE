@@ -2,7 +2,7 @@ package com.fivelogic_recreate.news.domain;
 
 import com.fivelogic_recreate.fixture.News.NewsFixture;
 import com.fivelogic_recreate.fixture.member.MemberFixture;
-import com.fivelogic_recreate.member.domain.Member;
+import com.fivelogic_recreate.member.domain.model.Member;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

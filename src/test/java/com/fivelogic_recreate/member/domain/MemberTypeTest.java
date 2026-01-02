@@ -1,5 +1,6 @@
 package com.fivelogic_recreate.member.domain;
 
+import com.fivelogic_recreate.member.domain.model.MemberType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;

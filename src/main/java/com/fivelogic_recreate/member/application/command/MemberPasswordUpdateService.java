@@ -2,8 +2,8 @@ package com.fivelogic_recreate.member.application.command;
 
 import com.fivelogic_recreate.member.application.command.dto.MemberPasswordUpdateCommand;
 import com.fivelogic_recreate.member.application.command.dto.MemberPasswordUpdateResult;
-import com.fivelogic_recreate.member.domain.Member;
-import com.fivelogic_recreate.member.domain.UserId;
+import com.fivelogic_recreate.member.domain.model.Member;
+import com.fivelogic_recreate.member.domain.model.UserId;
 import com.fivelogic_recreate.member.domain.port.MemberRepositoryPort;
 import com.fivelogic_recreate.member.exception.MemberNotFoundException;
 import lombok.RequiredArgsConstructor;

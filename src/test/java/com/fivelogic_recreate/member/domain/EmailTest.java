@@ -1,5 +1,6 @@
 package com.fivelogic_recreate.member.domain;
 
+import com.fivelogic_recreate.member.domain.model.Email;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;

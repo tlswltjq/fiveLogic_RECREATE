@@ -1,7 +1,7 @@
 package com.fivelogic_recreate.member.domain.port;
 
-import com.fivelogic_recreate.member.domain.Member;
-import com.fivelogic_recreate.member.domain.UserId;
+import com.fivelogic_recreate.member.domain.model.Member;
+import com.fivelogic_recreate.member.domain.model.UserId;
 
 import java.util.List;
 import java.util.Optional;

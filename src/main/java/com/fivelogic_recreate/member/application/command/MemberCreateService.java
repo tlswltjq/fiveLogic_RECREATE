@@ -2,9 +2,9 @@ package com.fivelogic_recreate.member.application.command;
 
 import com.fivelogic_recreate.member.application.command.dto.MemberCreateCommand;
 import com.fivelogic_recreate.member.application.command.dto.MemberCreateResult;
-import com.fivelogic_recreate.member.domain.Email;
-import com.fivelogic_recreate.member.domain.Member;
-import com.fivelogic_recreate.member.domain.UserId;
+import com.fivelogic_recreate.member.domain.model.Email;
+import com.fivelogic_recreate.member.domain.model.Member;
+import com.fivelogic_recreate.member.domain.model.UserId;
 import com.fivelogic_recreate.member.domain.port.MemberRepositoryPort;
 import com.fivelogic_recreate.member.exception.EmailDuplicationException;
 import com.fivelogic_recreate.member.exception.UserIdDuplicationException;

@@ -2,8 +2,8 @@ package com.fivelogic_recreate.member.application.query;
 
 import com.fivelogic_recreate.fixture.member.MemberFixture;
 import com.fivelogic_recreate.member.application.query.dto.MemberQueryResponse;
-import com.fivelogic_recreate.member.domain.Member;
-import com.fivelogic_recreate.member.domain.UserId;
+import com.fivelogic_recreate.member.domain.model.Member;
+import com.fivelogic_recreate.member.domain.model.UserId;
 import com.fivelogic_recreate.member.domain.port.MemberQueryRepositoryPort;
 import com.fivelogic_recreate.member.exception.MemberNotFoundException;
 import org.assertj.core.api.Assertions;

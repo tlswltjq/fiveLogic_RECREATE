@@ -1,6 +1,6 @@
 package com.fivelogic_recreate.news.domain;
 
-import com.fivelogic_recreate.member.domain.Member;
+import com.fivelogic_recreate.member.domain.model.Member;
 import com.fivelogic_recreate.news.exception.NewsAccessDeniedException;
 import jakarta.persistence.*;
 import lombok.AccessLevel;

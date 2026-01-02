@@ -1,4 +1,4 @@
-package com.fivelogic_recreate.member.domain;
+package com.fivelogic_recreate.member.domain.model;
 
 public enum MemberType {
     MENTOR, MENTEE, ADMIN;

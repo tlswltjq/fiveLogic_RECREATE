@@ -2,8 +2,8 @@ package com.fivelogic_recreate.news.application.command;
 
 import com.fivelogic_recreate.fixture.News.NewsFixture;
 import com.fivelogic_recreate.fixture.member.MemberFixture;
-import com.fivelogic_recreate.member.domain.Member;
-import com.fivelogic_recreate.member.domain.UserId;
+import com.fivelogic_recreate.member.domain.model.Member;
+import com.fivelogic_recreate.member.domain.model.UserId;
 import com.fivelogic_recreate.member.domain.port.MemberQueryRepositoryPort;
 import com.fivelogic_recreate.news.application.command.dto.NewsCreateCommand;
 import com.fivelogic_recreate.news.application.command.dto.NewsCreateResult;

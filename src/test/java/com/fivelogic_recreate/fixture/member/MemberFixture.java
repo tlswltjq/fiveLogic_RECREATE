@@ -1,6 +1,6 @@
 package com.fivelogic_recreate.fixture.member;
 
-import com.fivelogic_recreate.member.domain.*;
+import com.fivelogic_recreate.member.domain.model.*;
 
 public class MemberFixture {
     private Long memberId = 1L;

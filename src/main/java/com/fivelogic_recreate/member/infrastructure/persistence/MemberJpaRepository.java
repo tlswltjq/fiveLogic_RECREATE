@@ -1,6 +1,6 @@
 package com.fivelogic_recreate.member.infrastructure.persistence;
 
-import com.fivelogic_recreate.member.domain.Member;
+import com.fivelogic_recreate.member.domain.model.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
