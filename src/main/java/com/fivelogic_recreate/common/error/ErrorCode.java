@@ -15,6 +15,7 @@ public enum ErrorCode {
     USER_ID_DUPLICATION("M002", "이미 사용중인 사용자 ID 입니다", HttpStatus.CONFLICT),
     EMAIL_DUPLICATION("M003", "이미 사용중인 Email 입니다", HttpStatus.CONFLICT),
     PASSWORD_MISMATCH("M004", "비밀번호가 일치하지 않습니다.", HttpStatus.BAD_REQUEST),
+    SAME_PASSWORD("M005", "새 비밀번호는 기존 비밀번호와 다르게 설정해야 합니다.", HttpStatus.BAD_REQUEST),
 
     // News
     NEWS_NOT_FOUND("N001", "뉴스를 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
