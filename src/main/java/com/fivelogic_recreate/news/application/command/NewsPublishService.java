@@ -20,6 +20,6 @@ public class NewsPublishService {
         memberDomainService.getMember(command.currentUserId());
 
         News news = newsDomainService.publish(command.newsId(), command.currentUserId());
-        return new NewsPublishResult(news.getId(), news.getTitle().value(), news.getPublishedDate(), news.getStatus());
+        return NewsPublishResult.from(news);
     }
 }

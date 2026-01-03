@@ -20,6 +20,6 @@ public class NewsHideService {
         memberDomainService.getMember(command.currentUserId());
 
         News news = newsDomainService.hide(command.newsId(), command.currentUserId());
-        return new NewsHideResult(news.getId(), news.getTitle().value(), news.getStatus());
+        return NewsHideResult.from(news);
     }
 }

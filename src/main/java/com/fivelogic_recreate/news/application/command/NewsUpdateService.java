@@ -28,12 +28,6 @@ public class NewsUpdateService {
 
         News news = newsDomainService.update(command.id(), command.currentUserId(), updateInfo);
 
-        return new NewsUpdateResult(
-                news.getId(),
-                news.getTitle().value(),
-                news.getDescription().value(),
-                news.getTextContent().value(),
-                news.getVideoUrl().value(),
-                news.getStatus());
+        return NewsUpdateResult.from(news);
     }
 }

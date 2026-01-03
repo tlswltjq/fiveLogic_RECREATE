@@ -21,6 +21,6 @@ public class NewsDeleteService {
 
         News news = newsDomainService.delete(command.newsId(), command.currentUserId());
 
-        return new NewsDeleteResult(news.getId(), news.getTitle().value(), news.getStatus());
+        return NewsDeleteResult.from(news);
     }
 }

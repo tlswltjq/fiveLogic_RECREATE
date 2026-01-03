@@ -24,8 +24,6 @@ public class NewsCreateService {
 
         draft.processing();
         News saved = newsDomainService.create(draft);
-        return new NewsCreateResult(saved.getId(), saved.getTitle().value(),
-                saved.getAuthor().getUserId().value(),
-                saved.getStatus());
+        return NewsCreateResult.from(saved);
     }
 }
