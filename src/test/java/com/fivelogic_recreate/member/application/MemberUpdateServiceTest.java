@@ -6,6 +6,7 @@ import com.fivelogic_recreate.member.application.command.dto.MemberUpdateCommand
 import com.fivelogic_recreate.member.application.command.dto.MemberUpdateResult;
 import com.fivelogic_recreate.member.domain.model.Member;
 import com.fivelogic_recreate.member.domain.service.MemberDomainService;
+import com.fivelogic_recreate.member.domain.service.dto.MemberUpdateInfo;
 import com.fivelogic_recreate.member.exception.MemberNotFoundException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -34,7 +35,7 @@ class MemberUpdateServiceTest {
     @Test
     @DisplayName("존재하는 Member의 정보를 업데이트할 수 있다.")
     void shouldUpdateMemberWhenMemberExists() {
-        Member member = memberFixture.withUserId("userId").build();
+        Member member = memberFixture.withUserId("userId").withEmail("updatedMail@email.com").build();
         MemberUpdateCommand updateCommand = new MemberUpdateCommand(
                 "userId",
                 "updatedMail@email.com",
@@ -44,16 +45,7 @@ class MemberUpdateServiceTest {
                 "updated bio",
                 "mentor");
 
-        Member updatedMember = memberFixture
-                .withUserId("userId")
-                .withEmail("updatedMail@email.com")
-                .withFirstname("updated")
-                .withLastname("name")
-                .withNickname("updatednickname")
-                .withBio("updated bio")
-                .build();
-
-        when(memberDomainService.updateMember("userId", any())).thenReturn(updatedMember);
+        when(memberDomainService.updateMember(any(String.class), any(MemberUpdateInfo.class))).thenReturn(member);
 
         MemberUpdateResult result = memberUpdateService.update(updateCommand);
 
