@@ -3,9 +3,7 @@ package com.fivelogic_recreate.news.application.command;
 import com.fivelogic_recreate.news.application.command.dto.NewsHideResult;
 import com.fivelogic_recreate.news.application.command.dto.NewsUnHideCommand;
 import com.fivelogic_recreate.news.domain.News;
-import com.fivelogic_recreate.news.domain.NewsId;
-import com.fivelogic_recreate.news.domain.port.NewsRepositoryPort;
-import com.fivelogic_recreate.news.exception.NewsNotFoundException;
+import com.fivelogic_recreate.news.domain.service.NewsDomainService;
 import com.fivelogic_recreate.news.exception.NewsUnHideNotAllowedException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,14 +13,12 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 @RequiredArgsConstructor
 public class NewsUnHideService {
-    private final NewsRepositoryPort newsRepositoryPort;
+    private final NewsDomainService newsDomainService;
 
     public NewsHideResult unHideNews(NewsUnHideCommand command) {
-        NewsId newsId = new NewsId(command.newsId());
-        News news = newsRepositoryPort.findById(newsId).orElseThrow(NewsNotFoundException::new);
-
+        News news;
         try {
-            news.unhide();
+            news = newsDomainService.unhide(command.newsId(), command.currentUserId());
         } catch (IllegalStateException e) {
             throw new NewsUnHideNotAllowedException();
         }

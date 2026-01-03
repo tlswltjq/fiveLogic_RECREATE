@@ -3,9 +3,8 @@ package com.fivelogic_recreate.news.application.command;
 import com.fivelogic_recreate.news.application.command.dto.NewsUpdateCommand;
 import com.fivelogic_recreate.news.application.command.dto.NewsUpdateResult;
 import com.fivelogic_recreate.news.domain.News;
-import com.fivelogic_recreate.news.domain.NewsId;
-import com.fivelogic_recreate.news.domain.port.NewsRepositoryPort;
-import com.fivelogic_recreate.news.exception.NewsNotFoundException;
+import com.fivelogic_recreate.news.domain.service.NewsDomainService;
+import com.fivelogic_recreate.news.domain.service.dto.NewsUpdateInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,26 +13,16 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 @RequiredArgsConstructor
 public class NewsUpdateService {
-    private final NewsRepositoryPort newsRepositoryPort;
+    private final NewsDomainService newsDomainService;
 
     public NewsUpdateResult updateNews(NewsUpdateCommand command) {
-        News news = newsRepositoryPort.findById(new NewsId(command.id()))
-                .orElseThrow(NewsNotFoundException::new);
+        NewsUpdateInfo updateInfo = new NewsUpdateInfo(
+                command.title(),
+                command.description(),
+                command.textContent(),
+                command.videoUrl());
 
-        news.validateOwner(command.currentUserId());
-
-        if (command.title() != null) {
-            news.changeTitle(command.title());
-        }
-        if (command.description() != null) {
-            news.changeDescription(command.description());
-        }
-        if (command.textContent() != null) {
-            news.changeTextContent(command.textContent());
-        }
-        if (command.videoUrl() != null) {
-            news.changeVideoUrl(command.videoUrl());
-        }
+        News news = newsDomainService.update(command.id(), command.currentUserId(), updateInfo);
 
         return new NewsUpdateResult(
                 news.getId(),

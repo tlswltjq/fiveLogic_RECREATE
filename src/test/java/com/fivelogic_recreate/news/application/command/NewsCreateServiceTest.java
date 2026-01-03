@@ -9,7 +9,7 @@ import com.fivelogic_recreate.news.application.command.dto.NewsCreateCommand;
 import com.fivelogic_recreate.news.application.command.dto.NewsCreateResult;
 import com.fivelogic_recreate.news.domain.News;
 import com.fivelogic_recreate.news.domain.NewsStatus;
-import com.fivelogic_recreate.news.domain.port.NewsRepositoryPort;
+import com.fivelogic_recreate.news.domain.service.NewsDomainService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -27,7 +27,7 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class NewsCreateServiceTest {
     @Mock
-    private NewsRepositoryPort newsRepositoryPort;
+    private NewsDomainService newsDomainService;
 
     @Mock
     private MemberQueryRepositoryPort memberQueryRepositoryPort;
@@ -51,11 +51,11 @@ class NewsCreateServiceTest {
         News draftNews = newsFixture.withStatus(NewsStatus.PROCESSING).withId(1L).withAuthor(author).build();
 
         when(memberQueryRepositoryPort.findByUserId(any(UserId.class))).thenReturn(Optional.of(author));
-        when(newsRepositoryPort.save(any(News.class))).thenReturn(draftNews);
+        when(newsDomainService.create(any(News.class))).thenReturn(draftNews);
 
         NewsCreateResult result = newsCreateService.createNews(command);
 
-        verify(newsRepositoryPort).save(any(News.class));
+        verify(newsDomainService).create(any(News.class));
         assertThat(result).isNotNull();
         assertThat(result.newsId()).isEqualTo(1L);
         assertThat(result.title()).isEqualTo(command.title());

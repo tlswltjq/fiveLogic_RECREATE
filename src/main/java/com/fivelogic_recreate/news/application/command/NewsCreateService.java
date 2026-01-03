@@ -7,7 +7,7 @@ import com.fivelogic_recreate.member.exception.MemberNotFoundException;
 import com.fivelogic_recreate.news.application.command.dto.NewsCreateCommand;
 import com.fivelogic_recreate.news.application.command.dto.NewsCreateResult;
 import com.fivelogic_recreate.news.domain.News;
-import com.fivelogic_recreate.news.domain.port.NewsRepositoryPort;
+import com.fivelogic_recreate.news.domain.service.NewsDomainService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 @RequiredArgsConstructor
 public class NewsCreateService {
-    private final NewsRepositoryPort newsRepositoryPort;
+    private final NewsDomainService newsDomainService;
     private final MemberQueryRepositoryPort memberQueryRepositoryPort;
 
     public NewsCreateResult createNews(NewsCreateCommand command) {
@@ -26,7 +26,7 @@ public class NewsCreateService {
         News draft = News.draft(command.title(), command.description(), command.textContent(), command.videoUrl(), author);
 
         draft.processing();
-        News saved = newsRepositoryPort.save(draft);
+        News saved = newsDomainService.create(draft);
         return new NewsCreateResult(saved.getId(), saved.getTitle().value(),
                 saved.getAuthor().getUserId().value(),
                 saved.getStatus());

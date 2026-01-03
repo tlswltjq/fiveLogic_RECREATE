@@ -101,20 +101,20 @@ public class News {
         this.status = this.status.transitTo(NewsStatus.DELETED);
     }
 
-    public void changeTitle(String newTitle) {
-        this.title = new Title(newTitle);
+    public void changeTitle(Title newTitle) {
+        this.title = newTitle;
     }
 
-    public void changeDescription(String newDescription) {
-        this.description = new Description(newDescription);
+    public void changeDescription(Description newDescription) {
+        this.description = newDescription;
     }
 
-    public void changeTextContent(String newText) {
-        this.textContent = new TextContent(newText);
+    public void changeTextContent(TextContent newText) {
+        this.textContent = newText;
     }
 
-    public void changeVideoUrl(String newUrl) {
-        this.videoUrl = new VideoUrl(newUrl);
+    public void changeVideoUrl(VideoUrl newUrl) {
+        this.videoUrl = newUrl;
     }
 
     @Override

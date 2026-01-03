@@ -4,11 +4,8 @@ import com.fivelogic_recreate.fixture.News.NewsFixture;
 import com.fivelogic_recreate.news.application.command.dto.NewsPublishCommand;
 import com.fivelogic_recreate.news.application.command.dto.NewsPublishResult;
 import com.fivelogic_recreate.news.domain.News;
-import com.fivelogic_recreate.news.domain.NewsId;
 import com.fivelogic_recreate.news.domain.NewsStatus;
-import com.fivelogic_recreate.news.domain.port.NewsRepositoryPort;
-import com.fivelogic_recreate.news.exception.NewsNotFoundException;
-import com.fivelogic_recreate.news.exception.NewsPublishNotAllowedException;
+import com.fivelogic_recreate.news.domain.service.NewsDomainService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,19 +13,16 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Optional;
-
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class NewsPublishServiceTest {
-
     @Mock
-    private NewsRepositoryPort newsRepositoryPort;
+    private NewsDomainService newsDomainService;
 
     @InjectMocks
     private NewsPublishService newsPublishService;
@@ -36,43 +30,20 @@ class NewsPublishServiceTest {
     private final NewsFixture newsFixture = new NewsFixture();
 
     @Test
-    @DisplayName("뉴스를 성공적으로 발행하고, 상태가 PUBLISHED로 변경된다.")
+    @DisplayName("뉴스를 성공적으로 발행 처리한다.")
     void shouldPublishNewsSuccessfully() {
         Long newsId = 1L;
-        NewsPublishCommand command = new NewsPublishCommand(newsId);
-        News news = newsFixture.withId(newsId).withStatus(NewsStatus.READY).build();
+        String currentUserId = "user-1";
+        NewsPublishCommand command = new NewsPublishCommand(newsId, currentUserId);
 
-        when(newsRepositoryPort.findById(any(NewsId.class))).thenReturn(Optional.of(news));
+        News publishedNews = newsFixture.withId(newsId).withStatus(NewsStatus.PUBLISHED).build();
+
+        when(newsDomainService.publish(anyLong(), anyString())).thenReturn(publishedNews);
 
         NewsPublishResult result = newsPublishService.publishNews(command);
 
-        verify(newsRepositoryPort).findById(new NewsId(newsId));
-
-        assertThat(result.newsId()).isEqualTo(newsId);
+        verify(newsDomainService).publish(newsId, currentUserId);
         assertThat(result.status()).isEqualTo(NewsStatus.PUBLISHED);
-    }
-
-    @Test
-    @DisplayName("발행하려는 뉴스가 존재하지 않으면 예외를 발생시킨다.")
-    void shouldThrowNotFoundExceptionWhenPublishing() {
-        Long newsId = 999L;
-        NewsPublishCommand command = new NewsPublishCommand(newsId);
-        when(newsRepositoryPort.findById(any(NewsId.class))).thenReturn(Optional.empty());
-
-        assertThatThrownBy(() -> newsPublishService.publishNews(command))
-                .isInstanceOf(NewsNotFoundException.class);
-    }
-
-    @Test
-    @DisplayName("뉴스 상태 전이가 유효하지 않을 때 발행 예외를 발생시킨다.")
-    void shouldThrowNotAllowedExceptionWhenStateTransitionFailsOnPublish() {
-        Long newsId = 1L;
-        NewsPublishCommand command = new NewsPublishCommand(newsId);
-        News news = newsFixture.withId(newsId).withStatus(NewsStatus.DRAFT).build();
-
-        when(newsRepositoryPort.findById(any(NewsId.class))).thenReturn(Optional.of(news));
-
-        assertThatThrownBy(() -> newsPublishService.publishNews(command))
-                .isInstanceOf(NewsPublishNotAllowedException.class);
+        assertThat(result.publishedDate()).isNotNull();
     }
 }

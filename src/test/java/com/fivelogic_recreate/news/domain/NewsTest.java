@@ -169,7 +169,7 @@ class NewsTest {
         News news = newsFixture.build();
         String newTitle = "new title!";
 
-        news.changeTitle(newTitle);
+        news.changeTitle(new Title(newTitle));
 
         assertThat(news.getTitle().value()).isEqualTo(newTitle);
     }
@@ -180,7 +180,7 @@ class NewsTest {
         News news = newsFixture.build();
         String newDescription = "new description!";
 
-        news.changeDescription(newDescription);
+        news.changeDescription(new Description(newDescription));
 
         assertThat(news.getDescription().value()).isEqualTo(newDescription);
     }
@@ -191,7 +191,7 @@ class NewsTest {
         News news = newsFixture.build();
         String newContent = "new content!";
 
-        news.changeTextContent(newContent);
+        news.changeTextContent(new TextContent(newContent));
 
         assertThat(news.getTextContent().value()).isEqualTo(newContent);
     }
@@ -202,7 +202,7 @@ class NewsTest {
         News news = newsFixture.build();
         String newVideoLink = "new video link!";
 
-        news.changeVideoUrl(newVideoLink);
+        news.changeVideoUrl(new VideoUrl(newVideoLink));
 
         assertThat(news.getVideoUrl().value()).isEqualTo(newVideoLink);
     }

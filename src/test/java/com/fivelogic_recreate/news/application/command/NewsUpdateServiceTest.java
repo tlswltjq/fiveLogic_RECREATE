@@ -6,8 +6,7 @@ import com.fivelogic_recreate.member.domain.model.Member;
 import com.fivelogic_recreate.news.application.command.dto.NewsUpdateCommand;
 import com.fivelogic_recreate.news.application.command.dto.NewsUpdateResult;
 import com.fivelogic_recreate.news.domain.News;
-import com.fivelogic_recreate.news.domain.NewsId;
-import com.fivelogic_recreate.news.domain.port.NewsRepositoryPort;
+import com.fivelogic_recreate.news.domain.service.NewsDomainService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,17 +14,14 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Optional;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class NewsUpdateServiceTest {
-
     @Mock
-    private NewsRepositoryPort newsRepositoryPort;
+    private NewsDomainService newsDomainService;
 
     @InjectMocks
     private NewsUpdateService newsUpdateService;
@@ -35,10 +31,15 @@ class NewsUpdateServiceTest {
     @Test
     @DisplayName("뉴스를 성공적으로 수정한다.")
     void shouldUpdateNewsSuccessfully() {
-        // given
         Long newsId = 1L;
         Member author = new MemberFixture().withUserId("author-1").build();
-        News existingNews = newsFixture.withId(newsId).withAuthor(author).build();
+        News updatedNews = newsFixture.withId(newsId).withAuthor(author)
+                .withTitle("Updated Title")
+                .withDescription("Updated Description")
+                .withTextContent("Updated Content")
+                .withVideoUrl("updated-video-url.com")
+                .build();
+
         NewsUpdateCommand command = new NewsUpdateCommand(
                 newsId,
                 "Updated Title",
@@ -47,12 +48,10 @@ class NewsUpdateServiceTest {
                 "updated-video-url.com",
                 "author-1");
 
-        when(newsRepositoryPort.findById(any(NewsId.class))).thenReturn(Optional.of(existingNews));
+        when(newsDomainService.update(any(), any(), any())).thenReturn(updatedNews);
 
-        // when
         NewsUpdateResult result = newsUpdateService.updateNews(command);
 
-        // then
         assertThat(result.title()).isEqualTo("Updated Title");
         assertThat(result.description()).isEqualTo("Updated Description");
         assertThat(result.textContent()).isEqualTo("Updated Content");
@@ -62,14 +61,11 @@ class NewsUpdateServiceTest {
     @Test
     @DisplayName("일부 필드만 수정할 경우 해당 필드만 변경된다.")
     void shouldUpdatePartialFields() {
-        // given
         Long newsId = 1L;
-        // Title only update
         Member author = new MemberFixture().withUserId("author-1").build();
-        News existingNews = newsFixture.withId(newsId)
-                .withTitle("Original Title")
+        News partiallyUpdatedNews = newsFixture.withId(newsId).withAuthor(author)
+                .withTitle("Updated Title")
                 .withDescription("Original Description")
-                .withAuthor(author)
                 .build();
 
         NewsUpdateCommand command = new NewsUpdateCommand(
@@ -80,12 +76,10 @@ class NewsUpdateServiceTest {
                 null,
                 "author-1");
 
-        when(newsRepositoryPort.findById(any(NewsId.class))).thenReturn(Optional.of(existingNews));
+        when(newsDomainService.update(any(), any(), any())).thenReturn(partiallyUpdatedNews);
 
-        // when
         NewsUpdateResult result = newsUpdateService.updateNews(command);
 
-        // then
         assertThat(result.title()).isEqualTo("Updated Title");
         assertThat(result.description()).isEqualTo("Original Description"); // Should remain unchanged
     }

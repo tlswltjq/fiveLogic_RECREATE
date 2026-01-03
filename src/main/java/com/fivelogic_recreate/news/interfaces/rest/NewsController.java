@@ -28,7 +28,6 @@ public class NewsController {
     private final NewsUnHideService newsUnHideService;
     private final NewsDeleteService newsDeleteService;
 
-
     @PostMapping
     public ApiResponse<CreateNewsResponse> createNews(@Valid @RequestBody CreateNewsRequest request) {
         NewsCreateResult result = newsCreateService.createNews(request.toCommand());
@@ -57,19 +56,19 @@ public class NewsController {
 
     @PostMapping("/{newsId}/publish")
     public ApiResponse<Void> publishNews(@PathVariable Long newsId, @RequestBody PublishNewsRequest request) {
-        newsPublishService.publishNews(request.toCommand(newsId));
+        newsPublishService.publishNews(request.toCommand(newsId, "test-user-id"));
         return ApiResponse.success(200, "뉴스 발행 완료", null);
     }
 
     @PostMapping("/{newsId}/hide")
     public ApiResponse<Void> hideNews(@PathVariable Long newsId, @RequestBody HideNewsRequest request) {
-        newsHideService.hideNews(request.toCommand(newsId));
+        newsHideService.hideNews(request.toCommand(newsId, "test-user-id"));
         return ApiResponse.success(200, "뉴스 숨김 완료", null);
     }
 
     @PostMapping("/{newsId}/unhide")
     public ApiResponse<Void> unhideNews(@PathVariable Long newsId, @RequestBody UnhideNewsRequest request) {
-        newsUnHideService.unHideNews(request.toCommand(newsId));
+        newsUnHideService.unHideNews(request.toCommand(newsId, "test-user-id"));
         return ApiResponse.success(200, "뉴스 숨김 해제 완료", null);
     }
 

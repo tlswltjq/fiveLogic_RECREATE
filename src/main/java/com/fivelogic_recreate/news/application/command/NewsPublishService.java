@@ -3,9 +3,7 @@ package com.fivelogic_recreate.news.application.command;
 import com.fivelogic_recreate.news.application.command.dto.NewsPublishCommand;
 import com.fivelogic_recreate.news.application.command.dto.NewsPublishResult;
 import com.fivelogic_recreate.news.domain.News;
-import com.fivelogic_recreate.news.domain.NewsId;
-import com.fivelogic_recreate.news.domain.port.NewsRepositoryPort;
-import com.fivelogic_recreate.news.exception.NewsNotFoundException;
+import com.fivelogic_recreate.news.domain.service.NewsDomainService;
 import com.fivelogic_recreate.news.exception.NewsPublishNotAllowedException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,14 +13,12 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 @RequiredArgsConstructor
 public class NewsPublishService {
-    private final NewsRepositoryPort newsRepositoryPort;
+    private final NewsDomainService newsDomainService;
 
     public NewsPublishResult publishNews(NewsPublishCommand command) {
-        NewsId newsId = new NewsId(command.newsId());
-        News news = newsRepositoryPort.findById(newsId).orElseThrow(NewsNotFoundException::new);
-
+        News news;
         try {
-            news.publish();
+            news = newsDomainService.publish(command.newsId(), command.currentUserId());
         } catch (IllegalStateException e) {
             throw new NewsPublishNotAllowedException();
         }

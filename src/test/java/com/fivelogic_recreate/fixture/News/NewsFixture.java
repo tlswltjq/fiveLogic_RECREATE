@@ -55,6 +55,11 @@ public class NewsFixture {
         return this;
     }
 
+    public NewsFixture withTextContent(String content) {
+        this.content = content;
+        return this;
+    }
+
     public News build() {
         return News.reconsitute(
                 id,
