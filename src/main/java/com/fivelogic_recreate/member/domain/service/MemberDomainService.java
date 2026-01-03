@@ -60,6 +60,10 @@ public class MemberDomainService {
         return member;
     }
 
+    public Member getMember(String userId) {
+        return getMemberById(userId);
+    }
+
     private Member getMemberById(String userId) {
         return repository.findByUserId(new UserId(userId))
                 .orElseThrow(MemberNotFoundException::new);

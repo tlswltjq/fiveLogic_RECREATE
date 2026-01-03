@@ -3,6 +3,7 @@ package com.fivelogic_recreate.news.application.command;
 import com.fivelogic_recreate.fixture.News.NewsFixture;
 import com.fivelogic_recreate.fixture.member.MemberFixture;
 import com.fivelogic_recreate.member.domain.model.Member;
+import com.fivelogic_recreate.member.domain.service.MemberDomainService;
 import com.fivelogic_recreate.news.application.command.dto.NewsUpdateCommand;
 import com.fivelogic_recreate.news.application.command.dto.NewsUpdateResult;
 import com.fivelogic_recreate.news.domain.News;
@@ -22,6 +23,8 @@ import static org.mockito.Mockito.when;
 class NewsUpdateServiceTest {
     @Mock
     private NewsDomainService newsDomainService;
+    @Mock
+    private MemberDomainService memberDomainService;
 
     @InjectMocks
     private NewsUpdateService newsUpdateService;
@@ -48,6 +51,7 @@ class NewsUpdateServiceTest {
                 "updated-video-url.com",
                 "author-1");
 
+        when(memberDomainService.getMember(any())).thenReturn(author);
         when(newsDomainService.update(any(), any(), any())).thenReturn(updatedNews);
 
         NewsUpdateResult result = newsUpdateService.updateNews(command);
@@ -76,11 +80,12 @@ class NewsUpdateServiceTest {
                 null,
                 "author-1");
 
+        when(memberDomainService.getMember(any())).thenReturn(author);
         when(newsDomainService.update(any(), any(), any())).thenReturn(partiallyUpdatedNews);
 
         NewsUpdateResult result = newsUpdateService.updateNews(command);
 
         assertThat(result.title()).isEqualTo("Updated Title");
-        assertThat(result.description()).isEqualTo("Original Description"); // Should remain unchanged
+        assertThat(result.description()).isEqualTo("Original Description");
     }
 }

@@ -1,6 +1,7 @@
 package com.fivelogic_recreate.news.application.command;
 
 import com.fivelogic_recreate.fixture.News.NewsFixture;
+import com.fivelogic_recreate.member.domain.service.MemberDomainService;
 import com.fivelogic_recreate.news.application.command.dto.NewsHideResult;
 import com.fivelogic_recreate.news.application.command.dto.NewsUnHideCommand;
 import com.fivelogic_recreate.news.domain.News;
@@ -14,8 +15,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -23,6 +23,8 @@ import static org.mockito.Mockito.when;
 class NewsUnHideServiceTest {
     @Mock
     private NewsDomainService newsDomainService;
+    @Mock
+    private MemberDomainService memberDomainService;
 
     @InjectMocks
     private NewsUnHideService newsUnHideService;
@@ -38,6 +40,7 @@ class NewsUnHideServiceTest {
 
         News unHiddenNews = newsFixture.withId(newsId).withStatus(NewsStatus.PUBLISHED).build();
 
+        when(memberDomainService.getMember(any())).thenReturn(null);
         when(newsDomainService.unhide(anyLong(), anyString())).thenReturn(unHiddenNews);
 
         NewsHideResult result = newsUnHideService.unHideNews(command);

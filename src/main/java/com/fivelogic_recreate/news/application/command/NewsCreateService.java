@@ -1,9 +1,7 @@
 package com.fivelogic_recreate.news.application.command;
 
 import com.fivelogic_recreate.member.domain.model.Member;
-import com.fivelogic_recreate.member.domain.model.UserId;
-import com.fivelogic_recreate.member.domain.port.MemberQueryRepositoryPort;
-import com.fivelogic_recreate.member.exception.MemberNotFoundException;
+import com.fivelogic_recreate.member.domain.service.MemberDomainService;
 import com.fivelogic_recreate.news.application.command.dto.NewsCreateCommand;
 import com.fivelogic_recreate.news.application.command.dto.NewsCreateResult;
 import com.fivelogic_recreate.news.domain.News;
@@ -17,11 +15,10 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class NewsCreateService {
     private final NewsDomainService newsDomainService;
-    private final MemberQueryRepositoryPort memberQueryRepositoryPort;
+    private final MemberDomainService memberDomainService;
 
     public NewsCreateResult createNews(NewsCreateCommand command) {
-        Member author = memberQueryRepositoryPort.findByUserId(new UserId(command.authorId()))
-                .orElseThrow(MemberNotFoundException::new);
+        Member author = memberDomainService.getMember(command.authorId());
 
         News draft = News.draft(command.title(), command.description(), command.textContent(), command.videoUrl(), author);
 

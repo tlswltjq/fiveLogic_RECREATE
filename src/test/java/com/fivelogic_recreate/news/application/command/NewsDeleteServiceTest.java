@@ -1,6 +1,7 @@
 package com.fivelogic_recreate.news.application.command;
 
 import com.fivelogic_recreate.fixture.News.NewsFixture;
+import com.fivelogic_recreate.member.domain.service.MemberDomainService;
 import com.fivelogic_recreate.news.application.command.dto.NewsDeleteCommand;
 import com.fivelogic_recreate.news.application.command.dto.NewsDeleteResult;
 import com.fivelogic_recreate.news.domain.News;
@@ -14,8 +15,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -23,6 +23,8 @@ import static org.mockito.Mockito.when;
 class NewsDeleteServiceTest {
     @Mock
     private NewsDomainService newsDomainService;
+    @Mock
+    private MemberDomainService memberDomainService;
 
     @InjectMocks
     private NewsDeleteService newsDeleteService;
@@ -38,6 +40,7 @@ class NewsDeleteServiceTest {
 
         News deletedNews = newsFixture.withId(newsId).withStatus(NewsStatus.DELETED).build();
 
+        when(memberDomainService.getMember(any())).thenReturn(null);
         when(newsDomainService.delete(anyLong(), anyString())).thenReturn(deletedNews);
 
         NewsDeleteResult result = newsDeleteService.deleteNews(command);

@@ -3,7 +3,7 @@ package com.fivelogic_recreate.news.domain.service;
 import com.fivelogic_recreate.news.domain.*;
 import com.fivelogic_recreate.news.domain.port.NewsRepositoryPort;
 import com.fivelogic_recreate.news.domain.service.dto.NewsUpdateInfo;
-import com.fivelogic_recreate.news.exception.NewsNotFoundException;
+import com.fivelogic_recreate.news.exception.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -39,28 +39,44 @@ public class NewsDomainService {
     public News delete(Long newsId, String currentUserId) {
         News news = getNewsById(newsId);
         news.validateOwner(currentUserId);
-        news.delete();
+        try {
+            news.delete();
+        } catch (IllegalStateException e) {
+            throw new NewsDeleteNotAllowedException();
+        }
         return news;
     }
 
     public News publish(Long newsId, String currentUserId) {
         News news = getNewsById(newsId);
         news.validateOwner(currentUserId);
-        news.publish();
+        try {
+            news.publish();
+        } catch (IllegalStateException e) {
+            throw new NewsPublishNotAllowedException();
+        }
         return news;
     }
 
     public News hide(Long newsId, String currentUserId) {
         News news = getNewsById(newsId);
         news.validateOwner(currentUserId);
-        news.hide();
+        try {
+            news.hide();
+        } catch (IllegalStateException e) {
+            throw new NewsHideNotAllowedException();
+        }
         return news;
     }
 
     public News unhide(Long newsId, String currentUserId) {
         News news = getNewsById(newsId);
         news.validateOwner(currentUserId);
-        news.unhide();
+        try {
+            news.unhide();
+        } catch (IllegalStateException e) {
+            throw new NewsUnHideNotAllowedException();
+        }
         return news;
     }
 
