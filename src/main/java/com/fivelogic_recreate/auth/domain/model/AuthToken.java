@@ -1,4 +1,4 @@
-package com.fivelogic_recreate.auth.domain;
+package com.fivelogic_recreate.auth.domain.model;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

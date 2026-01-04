@@ -1,7 +1,7 @@
-package com.fivelogic_recreate.auth.domain;
+package com.fivelogic_recreate.auth.domain.model;
 
-public record AccessToken(String value) {
-    public AccessToken {
+public record RefreshToken(String value) {
+    public RefreshToken {
         if(value == null) {
             throw new IllegalArgumentException("Value cannot be null");
         }
