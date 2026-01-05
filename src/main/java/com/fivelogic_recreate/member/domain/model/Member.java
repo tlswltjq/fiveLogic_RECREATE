@@ -62,12 +62,6 @@ public class Member {
         this.bio = bio;
     }
 
-    public static Member reconstitute(Long id, UserId userId, UserPassword password, Name name,
-            Nickname nickname, MemberType memberType, Boolean isActivated,
-            Email email, Bio bio) {
-        return new Member(id, userId, password, name, nickname, memberType, isActivated, email, bio);
-    }
-
     public static Member join(String userId, String password, String email, String firstName, String lastName,
             String nickname, String bio) {
         return join(userId, password, email, firstName, lastName, nickname, MemberType.MENTEE, bio);

@@ -58,12 +58,6 @@ public class News {
         this.status = status;
     }
 
-    public static News reconsitute(Long id, Title title, Description description, TextContent textContent,
-            VideoUrl videoUrl, Member author,
-            LocalDateTime publishedDate, NewsStatus status) {
-        return new News(id, title, description, textContent, videoUrl, author, publishedDate, status);
-    }
-
     public static News draft(String title, String description, String content, String videoUrl, Member author) {
         return new News(
                 null,

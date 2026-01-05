@@ -6,39 +6,12 @@ import com.fivelogic_recreate.member.domain.model.Member;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDateTime;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class NewsTest {
     private NewsFixture newsFixture = new NewsFixture();
     private MemberFixture memberFixture = new MemberFixture();
-
-    @Test
-    @DisplayName("News객체가 주어진 정보를 바탕으로 복원된다.")
-    void shouldReturnNews() {
-        Long id = 1L;
-        Title title = new Title("title");
-        Description description = new Description("description");
-        TextContent textContent = new TextContent("content");
-        VideoUrl videoUrl = new VideoUrl("video.com");
-        Member author = memberFixture.build();
-        LocalDateTime publishedDate = LocalDateTime.now();
-        NewsStatus status = NewsStatus.DRAFT;
-
-        News news = News.reconsitute(id, title, description, textContent, videoUrl, author, publishedDate, status);
-
-        assertThat(news).isNotNull();
-        assertThat(news.getId()).isEqualTo(id);
-        assertThat(news.getTitle()).isEqualTo(title);
-        assertThat(news.getDescription()).isEqualTo(description);
-        assertThat(news.getTextContent().value()).isEqualTo("content");
-        assertThat(news.getVideoUrl().value()).isEqualTo("video.com");
-        assertThat(news.getAuthor().getUserId().value()).isEqualTo(author.getUserId().value());
-        assertThat(news.getPublishedDate()).isEqualTo(publishedDate);
-        assertThat(news.getStatus()).isEqualTo(status);
-    }
 
     @Test
     @DisplayName("초안을 작성할 수 있다.")

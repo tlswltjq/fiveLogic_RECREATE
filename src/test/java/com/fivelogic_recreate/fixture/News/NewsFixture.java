@@ -5,6 +5,8 @@ import com.fivelogic_recreate.news.domain.*;
 
 import java.time.LocalDateTime;
 
+import static org.springframework.test.util.ReflectionTestUtils.setField;
+
 public class NewsFixture {
     private Long id = 1L;
     private String title = "Default News Title";
@@ -61,14 +63,10 @@ public class NewsFixture {
     }
 
     public News build() {
-        return News.reconsitute(
-                id,
-                new Title(title),
-                new Description(description),
-                new TextContent(content),
-                new VideoUrl(videoUrl),
-                author,
-                publishedDate,
-                status);
+        News news = News.draft(title, description, content, videoUrl, author);
+        setField(news, "id", id);
+        setField(news, "publishedDate", publishedDate);
+        setField(news, "status", status);
+        return news;
     }
 }

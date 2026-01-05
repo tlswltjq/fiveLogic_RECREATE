@@ -2,6 +2,8 @@ package com.fivelogic_recreate.fixture.member;
 
 import com.fivelogic_recreate.member.domain.model.*;
 
+import static org.springframework.test.util.ReflectionTestUtils.setField;
+
 public class MemberFixture {
     private Long memberId = 1L;
     private String userId = "user1";
@@ -59,15 +61,16 @@ public class MemberFixture {
     }
 
     public Member build() {
-        return Member.reconstitute(
-                memberId,
-                new UserId(userId),
-                new UserPassword(password),
-                new Name(firstname, lastname),
-                new Nickname(nickname),
+        Member member = Member.join(
+                userId,
+                password,
+                email,
+                firstname,
+                lastname,
+                nickname,
                 memberType,
-                true,
-                new Email(email),
-                new Bio(bio));
+                bio);
+        setField(member, "id", memberId);
+        return member;
     }
 }
