@@ -13,7 +13,9 @@ public record UserPassword(String value) {
         }
     }
 
-    public boolean match(UserPassword rawPassword) {
-        return this.equals(rawPassword);
+    public void match(UserPassword rawPassword) {
+        if (!this.equals(rawPassword)) {
+            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+        }
     }
 }

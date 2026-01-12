@@ -109,8 +109,8 @@ public class Member {
         this.name = newName;
     }
 
-    public boolean checkPassword(UserPassword rawPassword) {
-        return this.password.match(rawPassword);
+    public void checkPassword(UserPassword rawPassword) {
+        this.password.match(rawPassword);
     }
 
     @Override

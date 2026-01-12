@@ -17,8 +17,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -104,7 +103,8 @@ class MemberDomainServiceTest {
 
         Member updatedMember = memberDomainService.updatePassword("user1", "newPass");
 
-        assertThat(updatedMember.checkPassword(new UserPassword("newPass"))).isTrue();
+        assertThatCode(() -> updatedMember.checkPassword(new UserPassword("newPass")))
+                .doesNotThrowAnyException();
     }
 
     @Test
@@ -147,5 +147,33 @@ class MemberDomainServiceTest {
 
         assertThatThrownBy(() -> memberDomainService.updateMember("user1", info))
                 .isInstanceOf(EmailDuplicationException.class);
+    }
+
+    @Test
+    @DisplayName("회원 확인 성공")
+    void shouldValidateMemberSuccessfully() {
+        String userId = "user1";
+        String password = "password";
+        Member member = memberFixture.withUserId(userId).withPassword(password).build();
+
+        when(memberRepositoryPort.findByUserId(any(UserId.class))).thenReturn(Optional.of(member));
+
+        Member checkedMember = memberDomainService.validateMember(userId, password);
+
+        assertThat(checkedMember).isNotNull();
+        assertThat(checkedMember.getUserId().value()).isEqualTo(userId);
+    }
+
+    @Test
+    @DisplayName("비밀번호 불일치 시 예외 발생")
+    void shouldThrowExceptionWhenPasswordMismatch() {
+        String userId = "user1";
+        String password = "password";
+        Member member = memberFixture.withUserId(userId).withPassword(password).build();
+
+        when(memberRepositoryPort.findByUserId(any(UserId.class))).thenReturn(Optional.of(member));
+
+        assertThatThrownBy(() -> memberDomainService.validateMember(userId, "wrongPassword"))
+                .isInstanceOf(IllegalArgumentException.class);
     }
 }

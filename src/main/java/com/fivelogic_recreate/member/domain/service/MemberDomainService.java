@@ -64,6 +64,12 @@ public class MemberDomainService {
         return getMemberById(userId);
     }
 
+    public Member validateMember(String userId, String rawPassword) {
+        Member member = getMemberById(userId);
+        member.checkPassword(new UserPassword(rawPassword));
+        return member;
+    }
+
     private Member getMemberById(String userId) {
         return repository.findByUserId(new UserId(userId))
                 .orElseThrow(MemberNotFoundException::new);

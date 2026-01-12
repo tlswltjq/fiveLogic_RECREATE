@@ -36,21 +36,20 @@ class MemberPasswordUpdateServiceTest {
     @Test
     @DisplayName("성공적으로 업데이트할 수 있다.")
     void shouldUpdateMemberPasswordSuccessfully() {
-        Member member = memberFixture.build();
-        String newPassword = "newpassword";
-        if (member.checkPassword(new UserPassword(newPassword))) {
-            newPassword = "anotherPassword";
-        }
+        Member member = memberFixture.withPassword("password").build();
+        String password = "password";
+        member.checkPassword(new UserPassword(password));
+        password = "anotherPassword";
 
         when(memberDomainService.updatePassword(eq(member.getUserId().value()), any()))
                 .thenReturn(member);
 
-        MemberPasswordUpdateCommand command = new MemberPasswordUpdateCommand(member.getUserId().value(), newPassword);
+        MemberPasswordUpdateCommand command = new MemberPasswordUpdateCommand(member.getUserId().value(), password);
 
         MemberPasswordUpdateResult result = memberPasswordUpdateService.updatePassword(command);
 
         assertThat(result.userId()).isEqualTo(member.getUserId().value());
-        verify(memberDomainService).updatePassword(eq(member.getUserId().value()), eq(newPassword));
+        verify(memberDomainService).updatePassword(eq(member.getUserId().value()), eq(password));
     }
 
     @Test
