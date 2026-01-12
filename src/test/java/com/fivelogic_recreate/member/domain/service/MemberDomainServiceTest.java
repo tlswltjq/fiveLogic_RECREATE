@@ -151,14 +151,14 @@ class MemberDomainServiceTest {
 
     @Test
     @DisplayName("회원 확인 성공")
-    void shouldValidateMemberSuccessfully() {
+    void shouldVerifyMemberSuccessfully() {
         String userId = "user1";
         String password = "password";
         Member member = memberFixture.withUserId(userId).withPassword(password).build();
 
         when(memberRepositoryPort.findByUserId(any(UserId.class))).thenReturn(Optional.of(member));
 
-        Member checkedMember = memberDomainService.validateMember(userId, password);
+        Member checkedMember = memberDomainService.verifyMember(userId, password);
 
         assertThat(checkedMember).isNotNull();
         assertThat(checkedMember.getUserId().value()).isEqualTo(userId);
@@ -173,7 +173,7 @@ class MemberDomainServiceTest {
 
         when(memberRepositoryPort.findByUserId(any(UserId.class))).thenReturn(Optional.of(member));
 
-        assertThatThrownBy(() -> memberDomainService.validateMember(userId, "wrongPassword"))
+        assertThatThrownBy(() -> memberDomainService.verifyMember(userId, "wrongPassword"))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 }

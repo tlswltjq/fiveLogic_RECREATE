@@ -64,7 +64,7 @@ public class MemberDomainService {
         return getMemberById(userId);
     }
 
-    public Member validateMember(String userId, String rawPassword) {
+    public Member verifyMember(String userId, String rawPassword) {
         Member member = getMemberById(userId);
         member.checkPassword(new UserPassword(rawPassword));
         return member;
