@@ -12,6 +12,7 @@ import java.util.regex.Pattern;
 
 @Component
 @RequiredArgsConstructor
+//NOTE 맴버 객체에 대한 정책 클래스처럼 느껴져서 나중에 이름을 교체하면 좋겠다.
 public class MemberPolicyVerifier {
     private static final Pattern PASSWORD_PATTERN = Pattern
             .compile("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[$@$!%*#?&])[A-Za-z\\d$@$!%*#?&]{8,}$");
