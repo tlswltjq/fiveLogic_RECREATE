@@ -1,5 +1,7 @@
 package com.fivelogic_recreate.member.application;
 
+import com.fivelogic_recreate.member.application.command.dto.InfoUpdateCommand;
+import com.fivelogic_recreate.member.application.command.dto.SignUpCommand;
 import com.fivelogic_recreate.member.application.query.MemberQueryService;
 import com.fivelogic_recreate.member.exception.EmailDuplicationException;
 import com.fivelogic_recreate.member.exception.UserIdDuplicationException;
@@ -11,7 +13,8 @@ import java.util.regex.Pattern;
 @Component
 @RequiredArgsConstructor
 public class MemberPolicyVerifier {
-    private static final Pattern PASSWORD_PATTERN = Pattern.compile("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[$@$!%*#?&])[A-Za-z\\d$@$!%*#?&]{8,}$");
+    private static final Pattern PASSWORD_PATTERN = Pattern
+            .compile("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[$@$!%*#?&])[A-Za-z\\d$@$!%*#?&]{8,}$");
     private static final String[] BANNED_NICKNAMES = {"admin", "administrator", "운영자", "관리자"};
     private final MemberQueryService memberQueryService;
 
@@ -21,13 +24,13 @@ public class MemberPolicyVerifier {
         verifyEmailDuplication(email);
     }
 
-    public void validatePasswordPolicy(String password) {
+    private void validatePasswordPolicy(String password) {
         if (password == null || !PASSWORD_PATTERN.matcher(password).matches()) {
             throw new IllegalArgumentException("비밀번호는 영문, 숫자, 특수문자를 포함하여 8자 이상이어야 합니다.");
         }
     }
 
-    public void validateNicknamePolicy(String nickname) {
+    private void validateNicknamePolicy(String nickname) {
         for (String banned : BANNED_NICKNAMES) {
             if (nickname.contains(banned)) {
                 throw new IllegalArgumentException("사용할 수 없는 닉네임이 포함되어 있습니다.");
@@ -35,15 +38,41 @@ public class MemberPolicyVerifier {
         }
     }
 
-    public void verifyUserIdDuplication(String userId) {
+    private void verifyUserIdDuplication(String userId) {
         if (memberQueryService.existsByUserId(userId)) {
             throw new UserIdDuplicationException();
         }
     }
 
-    public void verifyEmailDuplication(String email) {
+    private void verifyEmailDuplication(String email) {
         if (memberQueryService.existsByEmail(email)) {
             throw new EmailDuplicationException();
         }
+    }
+
+    private void validateUserIdFormat(String userId) {
+        if (userId == null || userId.length() < 5 || userId.length() > 20) {
+            throw new IllegalArgumentException("사용자 ID는 5자 이상 20자 이하이어야 합니다.");
+        }
+    }
+
+    private void validateBioPolicy(String bio) {
+        if (bio != null && (bio.isBlank() || bio.length() > 500)) {
+            throw new IllegalArgumentException("소개는 500자를 넘거나 공백일 수 없습니다.");
+        }
+    }
+
+    public void checkInfoUpdatePolicy(InfoUpdateCommand command) {
+        validateNicknamePolicy(command.nickname());
+        validateBioPolicy(command.bio());
+    }
+
+    public void checkSignUpPolicy(SignUpCommand command) {
+        validateUserIdFormat(command.userId());
+        verifyUserIdDuplication(command.userId());
+        verifyEmailDuplication(command.email());
+        validatePasswordPolicy(command.password());
+        validateNicknamePolicy(command.nickname());
+        validateBioPolicy(command.bio());
     }
 }

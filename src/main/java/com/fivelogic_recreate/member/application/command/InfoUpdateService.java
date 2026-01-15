@@ -18,8 +18,8 @@ public class InfoUpdateService {
     private final MemberReader memberReader;
     private final MemberPolicyVerifier policyVerifier;
 
-    public InfoUpdateResult update(InfoUpdateCommand command){
-        policyVerifier.validateNicknamePolicy(command.nickname());
+    public InfoUpdateResult update(InfoUpdateCommand command) {
+        policyVerifier.checkInfoUpdatePolicy(command);
 
         Member member = memberReader.getMember(command.userId());
 
