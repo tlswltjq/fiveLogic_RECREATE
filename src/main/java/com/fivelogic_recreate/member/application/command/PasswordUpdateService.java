@@ -1,0 +1,28 @@
+package com.fivelogic_recreate.member.application.command;
+
+import com.fivelogic_recreate.member.application.MemberPolicyVerifier;
+import com.fivelogic_recreate.member.application.MemberReader;
+import com.fivelogic_recreate.member.application.command.dto.PasswordUpdateCommand;
+import com.fivelogic_recreate.member.application.command.dto.PasswordUpdateResult;
+import com.fivelogic_recreate.member.domain.model.Member;
+import com.fivelogic_recreate.member.domain.model.UserPassword;
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+@Service
+@Transactional
+@RequiredArgsConstructor
+public class PasswordUpdateService {
+    private final MemberReader memberReader;
+    private final MemberPolicyVerifier policyVerifier;
+
+    public PasswordUpdateResult update(PasswordUpdateCommand command){
+        policyVerifier.checkPasswordUpdatePolicy(command);
+
+        Member member = memberReader.getMember(command.userId());
+        member.updatePassword(new UserPassword(command.password()));
+
+        return PasswordUpdateResult.from(member);
+    }
+}

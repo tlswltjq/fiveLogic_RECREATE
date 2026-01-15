@@ -1,6 +1,7 @@
 package com.fivelogic_recreate.member.application;
 
 import com.fivelogic_recreate.member.application.command.dto.InfoUpdateCommand;
+import com.fivelogic_recreate.member.application.command.dto.PasswordUpdateCommand;
 import com.fivelogic_recreate.member.application.command.dto.SignUpCommand;
 import com.fivelogic_recreate.member.application.query.MemberQueryService;
 import com.fivelogic_recreate.member.exception.EmailDuplicationException;
@@ -18,12 +19,6 @@ public class MemberPolicyVerifier {
             .compile("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[$@$!%*#?&])[A-Za-z\\d$@$!%*#?&]{8,}$");
     private static final String[] BANNED_NICKNAMES = {"admin", "administrator", "운영자", "관리자"};
     private final MemberQueryService memberQueryService;
-
-    public void validateSignUpPolicy(String email, String password, String nickname) {
-        validatePasswordPolicy(password);
-        validateNicknamePolicy(nickname);
-        verifyEmailDuplication(email);
-    }
 
     private void validatePasswordPolicy(String password) {
         if (password == null || !PASSWORD_PATTERN.matcher(password).matches()) {
@@ -75,5 +70,9 @@ public class MemberPolicyVerifier {
         validatePasswordPolicy(command.password());
         validateNicknamePolicy(command.nickname());
         validateBioPolicy(command.bio());
+    }
+
+    public void checkPasswordUpdatePolicy(PasswordUpdateCommand command) {
+        validatePasswordPolicy(command.password());
     }
 }
