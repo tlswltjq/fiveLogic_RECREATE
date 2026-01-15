@@ -1,5 +1,6 @@
 package com.fivelogic_recreate.member.application;
 
+import com.fivelogic_recreate.member.application.command.dto.EmailUpdateCommand;
 import com.fivelogic_recreate.member.application.command.dto.InfoUpdateCommand;
 import com.fivelogic_recreate.member.application.command.dto.PasswordUpdateCommand;
 import com.fivelogic_recreate.member.application.command.dto.SignUpCommand;
@@ -74,5 +75,9 @@ public class MemberPolicyVerifier {
 
     public void checkPasswordUpdatePolicy(PasswordUpdateCommand command) {
         validatePasswordPolicy(command.password());
+    }
+
+    public void checkEmailUpdatePolicy(EmailUpdateCommand command) {
+        verifyEmailDuplication(command.email());
     }
 }
