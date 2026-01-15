@@ -1,6 +1,7 @@
 package com.fivelogic_recreate.member.application.query;
 
 import com.fivelogic_recreate.member.application.query.dto.MemberQueryResponse;
+import com.fivelogic_recreate.member.domain.model.Email;
 import com.fivelogic_recreate.member.domain.model.Member;
 import com.fivelogic_recreate.member.domain.model.UserId;
 import com.fivelogic_recreate.member.domain.port.MemberQueryRepositoryPort;
@@ -40,5 +41,13 @@ public class MemberQueryService {
                 member.getBio().value(),
                 member.getIsActivated()
         );
+    }
+
+    public boolean existsByUserId(String userId) {
+        return repository.existsByUserId(new UserId(userId));
+    }
+
+    public boolean existsByEmail(String email) {
+        return repository.existsByEmail(new Email(email));
     }
 }

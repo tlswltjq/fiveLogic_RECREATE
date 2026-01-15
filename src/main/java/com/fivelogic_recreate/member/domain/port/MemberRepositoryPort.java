@@ -18,7 +18,7 @@ public interface MemberRepositoryPort {
 
     Member save(Member member);
 
-    boolean existsByUserId(UserId userId);
+//    boolean existsByUserId(UserId userId);
 
-    boolean existsByEmail(Email email);
+//    boolean existsByEmail(Email email);
 }
