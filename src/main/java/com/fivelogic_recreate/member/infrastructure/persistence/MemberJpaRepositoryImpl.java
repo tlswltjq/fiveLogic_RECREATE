@@ -1,10 +1,7 @@
 package com.fivelogic_recreate.member.infrastructure.persistence;
 
-import com.fivelogic_recreate.member.domain.model.Email;
-import com.fivelogic_recreate.member.domain.model.Member;
-import com.fivelogic_recreate.member.domain.model.MemberId;
-import com.fivelogic_recreate.member.domain.model.Nickname;
-import com.fivelogic_recreate.member.domain.model.UserId;
+import com.fivelogic_recreate.member.application.query.dto.MyProfile;
+import com.fivelogic_recreate.member.domain.model.*;
 import com.fivelogic_recreate.member.domain.port.MemberQueryRepositoryPort;
 import com.fivelogic_recreate.member.domain.port.MemberRepositoryPort;
 import lombok.RequiredArgsConstructor;
@@ -51,5 +48,10 @@ public class MemberJpaRepositoryImpl implements MemberQueryRepositoryPort, Membe
     @Override
     public List<Member> findAll() {
         return repository.findAll();
+    }
+
+    @Override
+    public Optional<MyProfile> getMemberProfile(UserId userId) {
+        return repository.findProfileByUserId(userId.value());
     }
 }
