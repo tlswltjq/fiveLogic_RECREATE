@@ -1,4 +1,4 @@
-package com.fivelogic_recreate.member.application.command;
+package com.fivelogic_recreate.member.application.query;
 
 import com.fivelogic_recreate.member.application.MemberReader;
 import com.fivelogic_recreate.member.application.command.dto.GetMyProfileResult;
