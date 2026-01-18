@@ -5,6 +5,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class BioTest {
 
@@ -18,11 +19,18 @@ class BioTest {
     }
 
     @Test
-    @DisplayName("null 로 Bio 를 생성할 수 있다.")
-    void bioCreationWithNullTest() {
-        Bio bio = new Bio(null);
+    @DisplayName("빈 문자열 로 Bio 를 생성할 수 있다.")
+    void bioCreationWithBlankTest() {
+        Bio bio = new Bio("");
         assertThat(bio).isNotNull();
-        assertThat(bio.value()).isNull();
+        assertThat(bio.value()).isBlank();
+    }
+
+    @Test
+    @DisplayName("null 로 Bio 를 생성할 수 없다.")
+    void bioCreationWithNullTest() {
+        assertThatThrownBy(() -> new Bio(null))
+                .isInstanceOf(IllegalArgumentException.class);
     }
 
 }
