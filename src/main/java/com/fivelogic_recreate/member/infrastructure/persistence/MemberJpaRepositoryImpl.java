@@ -1,5 +1,6 @@
 package com.fivelogic_recreate.member.infrastructure.persistence;
 
+import com.fivelogic_recreate.member.application.query.dto.MemberDetail;
 import com.fivelogic_recreate.member.application.query.dto.MyProfile;
 import com.fivelogic_recreate.member.domain.model.*;
 import com.fivelogic_recreate.member.domain.port.MemberQueryRepositoryPort;
@@ -48,6 +49,11 @@ public class MemberJpaRepositoryImpl implements MemberQueryRepositoryPort, Membe
     @Override
     public List<Member> findAll() {
         return repository.findAll();
+    }
+
+    @Override
+    public Optional<MemberDetail> getMemberDetail(UserId userId) {
+        return repository.findUserDetailByUserId(userId.value());
     }
 
     @Override

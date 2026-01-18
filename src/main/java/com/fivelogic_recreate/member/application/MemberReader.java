@@ -1,5 +1,6 @@
 package com.fivelogic_recreate.member.application;
 
+import com.fivelogic_recreate.member.application.query.dto.MemberDetail;
 import com.fivelogic_recreate.member.application.query.dto.MyProfile;
 import com.fivelogic_recreate.member.domain.model.Member;
 import com.fivelogic_recreate.member.domain.model.UserId;
@@ -17,6 +18,11 @@ public class MemberReader {
 
     public Member getMember(String userId) {
         return repository.findByUserId(new UserId(userId))
+                .orElseThrow(MemberNotFoundException::new);
+    }
+
+    public MemberDetail getDetail(String userId) {
+        return queryRepository.getMemberDetail(new UserId(userId))
                 .orElseThrow(MemberNotFoundException::new);
     }
 
