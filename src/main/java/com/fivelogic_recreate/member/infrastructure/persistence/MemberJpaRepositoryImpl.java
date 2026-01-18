@@ -57,7 +57,17 @@ public class MemberJpaRepositoryImpl implements MemberQueryRepositoryPort, Membe
     }
 
     @Override
+    public List<MemberDetail> getMemberDetailsByType(MemberType memberType) {
+        return repository.findUserDetailsByType(memberType.name());
+    }
+
+    @Override
     public Optional<MyProfile> getMemberProfile(UserId userId) {
         return repository.findProfileByUserId(userId.value());
+    }
+
+    @Override
+    public List<MemberDetail> getMemberDetailsExceptAdmin() {
+        return repository.findUserDetailsExceptAdmin();
     }
 }

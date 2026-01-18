@@ -5,6 +5,7 @@ import com.fivelogic_recreate.member.application.command.dto.InfoUpdateCommand;
 import com.fivelogic_recreate.member.application.command.dto.PasswordUpdateCommand;
 import com.fivelogic_recreate.member.application.command.dto.SignUpCommand;
 import com.fivelogic_recreate.member.application.query.MemberQueryService;
+import com.fivelogic_recreate.member.application.query.dto.GetMemberDetailsByTypeCommand;
 import com.fivelogic_recreate.member.exception.EmailDuplicationException;
 import com.fivelogic_recreate.member.exception.UserIdDuplicationException;
 import lombok.RequiredArgsConstructor;
@@ -79,5 +80,16 @@ public class MemberPolicyVerifier {
 
     public void checkEmailUpdatePolicy(EmailUpdateCommand command) {
         verifyEmailDuplication(command.email());
+    }
+
+    public void checkRetrieveDetailsPolicy(GetMemberDetailsByTypeCommand command) {
+        String targetType = command.targetType();
+        if (targetType == null ||
+                (!targetType.equals("MENTOR") &&
+                        !targetType.equals("MENTEE") &&
+                        !targetType.equals("ADMIN") &&
+                        !targetType.equals("GENERAL"))) {
+            throw new IllegalArgumentException("유효하지 않은 검색 조건입니다: " + targetType);
+        }
     }
 }
