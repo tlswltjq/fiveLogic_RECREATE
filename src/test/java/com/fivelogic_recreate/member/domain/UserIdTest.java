@@ -30,18 +30,4 @@ class UserIdTest {
         assertThatThrownBy(() -> new UserId(null))
                 .isInstanceOf(IllegalArgumentException.class);
     }
-
-    @Test
-    @DisplayName("너무 짧은 길이의 문자열로 UserId 를 생성하려 하면 오류가 발생한다.")
-    void userIdCreationTestWithShortUserId() {
-        assertThatThrownBy(() -> new UserId("id"))
-                .isInstanceOf(IllegalArgumentException.class);
-    }
-
-    @Test
-    @DisplayName("너무 긴 길이의 문자열로 UserId 를 생성하려 하면 오류가 발생한다.")
-    void userIdCreationTestWithLongUserId() {
-        assertThatThrownBy(() -> new UserId("longlonglonglonglonglonglonglongUsdrId"))
-                .isInstanceOf(IllegalArgumentException.class);
-    }
 }

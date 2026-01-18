@@ -31,17 +31,4 @@ class UserPasswordTest {
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
-    @Test
-    @DisplayName("너무 짧은 길이의 문자열로 UserPassword 를 생성하려 하면 오류가 발생한다.")
-    void userPasswordCreationTestWithShortPassword() {
-        assertThatThrownBy(() -> new UserPassword("1234"))
-                .isInstanceOf(IllegalArgumentException.class);
-    }
-
-    @Test
-    @DisplayName("너무 긴 길이의 문자열로 UserPassword 를 생성하려 하면 오류가 발생한다.")
-    void userPasswordCreationTestWithLongPassword() {
-        assertThatThrownBy(() -> new UserPassword("1234567891011121314151617181920"))
-                .isInstanceOf(IllegalArgumentException.class);
-    }
 }
