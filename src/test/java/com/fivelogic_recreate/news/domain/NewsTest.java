@@ -21,14 +21,14 @@ class NewsTest {
         String description = "description";
         String content = "content";
         String video = "videoUrl";
-        News draft = News.draft(title, description, content, video, author);
+        News draft = News.draft(title, description, content, video, author.getUserId());
 
         assertThat(draft).isNotNull();
         assertThat(draft.getTitle().value()).isEqualTo(title);
         assertThat(draft.getDescription().value()).isEqualTo(description);
         assertThat(draft.getTextContent().value()).isEqualTo(content);
         assertThat(draft.getVideoUrl().value()).isEqualTo(video);
-        assertThat(draft.getAuthor().getUserId().value()).isEqualTo(author.getUserId().value());
+        assertThat(draft.getWriterId().value()).isEqualTo(author.getUserId().value());
         assertThat(draft.getStatus()).isEqualTo(NewsStatus.DRAFT);
     }
 

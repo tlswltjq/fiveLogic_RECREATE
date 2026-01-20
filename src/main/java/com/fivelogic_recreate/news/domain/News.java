@@ -1,6 +1,6 @@
 package com.fivelogic_recreate.news.domain;
 
-import com.fivelogic_recreate.member.domain.model.Member;
+import com.fivelogic_recreate.member.domain.model.UserId;
 import com.fivelogic_recreate.news.exception.NewsAccessDeniedException;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -36,9 +36,9 @@ public class News {
     @AttributeOverride(name = "value", column = @Column(name = "videoUrl", nullable = false))
     private VideoUrl videoUrl;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id", nullable = false)
-    private Member author;
+    @Embedded
+    @AttributeOverride(name = "value", column = @Column(name = "writer_user_id", nullable = false))
+    private UserId writerId;
 
     private LocalDateTime publishedDate;
 
@@ -47,25 +47,25 @@ public class News {
     // 조회수는 통계 도메인으로 분리해보자
 
     private News(Long id, Title title, Description description, TextContent textContent, VideoUrl videoUrl,
-            Member author, LocalDateTime publishedDate, NewsStatus status) {
+            UserId writerId, LocalDateTime publishedDate, NewsStatus status) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.textContent = textContent;
         this.videoUrl = videoUrl;
-        this.author = author;
+        this.writerId = writerId;
         this.publishedDate = publishedDate;
         this.status = status;
     }
 
-    public static News draft(String title, String description, String content, String videoUrl, Member author) {
+    public static News draft(String title, String description, String content, String videoUrl, UserId writerId) {
         return new News(
                 null,
                 new Title(title),
                 new Description(description),
                 new TextContent(content),
                 new VideoUrl(videoUrl),
-                author,
+                writerId,
                 null,
                 NewsStatus.DRAFT);
     }
@@ -125,7 +125,7 @@ public class News {
     }
 
     public void validateOwner(String requesterId) {
-        if (!this.author.isSameUser(requesterId)) {
+        if (!this.writerId.value().equals(requesterId)) {
             throw new NewsAccessDeniedException();
         }
     }

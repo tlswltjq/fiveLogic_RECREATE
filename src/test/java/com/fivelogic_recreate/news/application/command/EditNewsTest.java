@@ -48,7 +48,7 @@ class EditNewsTest {
                 authorId);
 
         Member author = Member.join(authorId, "password", "email@test.com", "First", "Last", "Nick", "Bio");
-        News news = News.draft("title", "desc", "content", "url", author);
+        News news = News.draft("title", "desc", "content", "url", author.getUserId());
 
         // Reflection to set ID if needed, but here we just mock return
         // Since News.equals uses ID, finding by ID relies on ID.

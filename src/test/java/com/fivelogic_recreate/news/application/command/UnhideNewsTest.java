@@ -43,7 +43,7 @@ class UnhideNewsTest {
         NewsUnHideCommand command = new NewsUnHideCommand(newsId, authorId);
 
         Member author = Member.join(authorId, "password", "email@test.com", "First", "Last", "Nick", "Bio");
-        News news = News.draft("title", "desc", "content", "url", author);
+        News news = News.draft("title", "desc", "content", "url", author.getUserId());
         news.processing();
         news.ready();
         news.publish();

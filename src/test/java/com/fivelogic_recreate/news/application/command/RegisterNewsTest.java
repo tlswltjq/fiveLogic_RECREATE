@@ -1,7 +1,5 @@
 package com.fivelogic_recreate.news.application.command;
 
-import com.fivelogic_recreate.member.application.MemberReader;
-import com.fivelogic_recreate.member.domain.model.Member;
 import com.fivelogic_recreate.news.application.NewsStore;
 import com.fivelogic_recreate.news.application.command.dto.NewsCreateCommand;
 import com.fivelogic_recreate.news.application.command.dto.NewsCreateResult;
@@ -29,9 +27,6 @@ class RegisterNewsTest {
     private NewsStore newsStore;
 
     @Mock
-    private MemberReader memberReader;
-
-    @Mock
     private NewsServicePolicyValidator validator;
 
     @Test
@@ -45,15 +40,15 @@ class RegisterNewsTest {
                 "videoUrl",
                 "authorId");
 
-        Member author = Member.join("authorId", "password", "email@test.com", "First", "Last", "Nick", "Bio");
-        given(memberReader.getMember(command.authorId())).willReturn(author);
+        // given(memberReader.getMember(command.authorId())).willReturn(author); //
+        // Removed
         given(newsStore.store(any(News.class))).willAnswer(invocation -> invocation.getArgument(0));
 
         // when
         NewsCreateResult result = registerNews.createNews(command);
 
         // then
-        verify(memberReader).getMember(command.authorId());
+        // verify(memberReader).getMember(command.authorId()); // Removed
         verify(newsStore).store(any(News.class));
 
         assertThat(result).isNotNull();

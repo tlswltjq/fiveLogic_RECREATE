@@ -7,9 +7,9 @@ public record NewsCreateResult(
         Long newsId,
         String title,
         String authorId,
-        NewsStatus status
-) {
+        NewsStatus status) {
     public static NewsCreateResult from(News news) {
-        return new NewsCreateResult(news.getId(), news.getTitle().value(), news.getAuthor().getUserId().value(), news.getStatus());
+        return new NewsCreateResult(news.getId(), news.getTitle().value(), news.getWriterId().value(),
+                news.getStatus());
     }
 }
