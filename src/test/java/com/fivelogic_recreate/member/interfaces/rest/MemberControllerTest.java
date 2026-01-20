@@ -24,7 +24,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.Collections;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -43,21 +42,21 @@ class MemberControllerTest {
         private ObjectMapper objectMapper;
 
         @MockBean
-        private SignUpService signUpService;
+        private SignUp signUp;
         @MockBean
         private GetMemberDetailService getMemberDetailService;
         @MockBean
         private GetMemberDetailsByConditionService getMemberDetailsByConditionService;
         @MockBean
-        private EmailUpdateService emailUpdateService;
+        private UpdateEmail updateEmail;
         @MockBean
-        private InfoUpdateService infoUpdateService;
+        private UpdateInfo updateInfo;
         @MockBean
-        private WithdrawService withdrawService;
+        private Withdraw withdraw;
         @MockBean
         private MyInfoService myInfoService;
         @MockBean
-        private PasswordUpdateService passwordUpdateService;
+        private UpdatePassword updatePassword;
 
         @Test
         @DisplayName("회원가입 요청(POST /api/members)이 성공해야 한다")
@@ -68,7 +67,7 @@ class MemberControllerTest {
                 SignUpResult result = new SignUpResult("testuser", "John Doe", "johnny", "GENERAL", true,
                                 "test@example.com", "Hello");
 
-                given(signUpService.register(any(SignUpCommand.class))).willReturn(result);
+                given(signUp.register(any(SignUpCommand.class))).willReturn(result);
 
                 mockMvc.perform(post("/api/members")
                                 .contentType(MediaType.APPLICATION_JSON)
@@ -117,7 +116,7 @@ class MemberControllerTest {
                 InfoUpdateRequest request = new InfoUpdateRequest("newNick", "newBio");
                 InfoUpdateResult result = new InfoUpdateResult("testuser", "newNick", "newBio");
 
-                given(infoUpdateService.update(any(InfoUpdateCommand.class))).willReturn(result);
+                given(updateInfo.update(any(InfoUpdateCommand.class))).willReturn(result);
 
                 mockMvc.perform(put("/api/members/testuser")
                                 .contentType(MediaType.APPLICATION_JSON)
@@ -133,7 +132,7 @@ class MemberControllerTest {
                 ChangePasswordRequest request = new ChangePasswordRequest("oldPw", "newPw");
                 PasswordUpdateResult result = new PasswordUpdateResult(1L, "testuser");
 
-                given(passwordUpdateService.update(any(PasswordUpdateCommand.class))).willReturn(result);
+                given(updatePassword.update(any(PasswordUpdateCommand.class))).willReturn(result);
 
                 mockMvc.perform(put("/api/members/testuser/password")
                                 .contentType(MediaType.APPLICATION_JSON)
@@ -149,7 +148,7 @@ class MemberControllerTest {
                 ChangeEmailRequest request = new ChangeEmailRequest("new@example.com");
                 EmailUpdateResult result = new EmailUpdateResult("testuser", "new@example.com");
 
-                given(emailUpdateService.update(any(EmailUpdateCommand.class))).willReturn(result);
+                given(updateEmail.update(any(EmailUpdateCommand.class))).willReturn(result);
 
                 mockMvc.perform(put("/api/members/testuser/email")
                                 .contentType(MediaType.APPLICATION_JSON)
@@ -163,7 +162,7 @@ class MemberControllerTest {
         @DisplayName("회원 탈퇴(DELETE /api/members/{userId})가 성공해야 한다")
         void withdraw_success() throws Exception {
                 WithdrawResult result = new WithdrawResult("testuser", "reason");
-                given(withdrawService.withdraw(any(WithdrawCommand.class))).willReturn(result);
+                given(withdraw.withdraw(any(WithdrawCommand.class))).willReturn(result);
 
                 mockMvc.perform(delete("/api/members/testuser"))
                                 .andExpect(status().isOk())

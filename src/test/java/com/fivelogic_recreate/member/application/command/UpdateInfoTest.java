@@ -2,10 +2,11 @@ package com.fivelogic_recreate.member.application.command;
 
 import com.fivelogic_recreate.member.application.MemberServicePolicyValidator;
 import com.fivelogic_recreate.member.application.MemberReader;
-import com.fivelogic_recreate.member.application.command.dto.PasswordUpdateCommand;
-import com.fivelogic_recreate.member.application.command.dto.PasswordUpdateResult;
+import com.fivelogic_recreate.member.application.command.dto.InfoUpdateCommand;
+import com.fivelogic_recreate.member.application.command.dto.InfoUpdateResult;
 import com.fivelogic_recreate.member.domain.model.Member;
-import com.fivelogic_recreate.member.domain.model.UserPassword;
+import com.fivelogic_recreate.member.domain.model.Bio;
+import com.fivelogic_recreate.member.domain.model.Nickname;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,10 +21,10 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-class PasswordUpdateServiceTest {
+class UpdateInfoTest {
 
     @InjectMocks
-    private PasswordUpdateService passwordUpdateService;
+    private UpdateInfo updateInfo;
 
     @Mock
     private MemberReader memberReader;
@@ -36,29 +37,37 @@ class PasswordUpdateServiceTest {
 
     @Mock
     private com.fivelogic_recreate.member.domain.model.UserId userId;
+    @Mock
+    private Nickname nickname;
+    @Mock
+    private Bio bio;
 
     @Test
-    @DisplayName("비밀번호 수정이 성공적으로 완료되어야 한다")
+    @DisplayName("회원 정보(닉네임, 바이오) 수정이 성공적으로 완료되어야 한다")
     void update_success() {
         // given
-        PasswordUpdateCommand command = new PasswordUpdateCommand("testuser", "oldPassword", "newPassword");
+        InfoUpdateCommand command = new InfoUpdateCommand("testuser", "newNickname", "newBio");
 
         given(memberReader.getMember(anyString())).willReturn(member);
         given(member.getUserId()).willReturn(userId);
         given(userId.value()).willReturn("testuser");
-        given(member.getId()).willReturn(1L);
+        given(member.getNickname()).willReturn(nickname);
+        given(member.getBio()).willReturn(bio);
+        given(nickname.value()).willReturn("newNickname");
+        given(bio.value()).willReturn("newBio");
 
         // when
-        PasswordUpdateResult result = passwordUpdateService.update(command);
+        InfoUpdateResult result = updateInfo.update(command);
 
         // then
-        verify(policyVerifier).checkPasswordUpdatePolicy(command);
+        verify(policyVerifier).checkInfoUpdatePolicy(command);
         verify(memberReader).getMember(command.userId());
-        verify(member).checkPassword(any(UserPassword.class));
-        verify(member).updatePassword(any(UserPassword.class));
+        verify(member).updateNickname(any(Nickname.class));
+        verify(member).updateBio(any(Bio.class));
 
         assertThat(result).isNotNull();
         assertThat(result.userId()).isEqualTo(command.userId());
-        assertThat(result.id()).isEqualTo(1L);
+        assertThat(result.nickname()).isEqualTo("newNickname");
+        assertThat(result.bio()).isEqualTo("newBio");
     }
 }

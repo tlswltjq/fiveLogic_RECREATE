@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class InfoUpdateService {
+public class UpdateInfo {
     private final MemberReader memberReader;
     private final MemberServicePolicyValidator policyVerifier;
 

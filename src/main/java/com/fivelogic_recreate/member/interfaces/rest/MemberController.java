@@ -22,20 +22,20 @@ import java.util.List;
 @RequestMapping("/api/members")
 @RequiredArgsConstructor
 public class MemberController {
-    private final SignUpService signUpService;
+    private final SignUp signUp;
     private final GetMemberDetailService getMemberDetailService;
     private final GetMemberDetailsByConditionService getMemberDetailsByConditionService;
-    private final EmailUpdateService emailUpdateService;
-    private final InfoUpdateService infoUpdateService;
-    private final WithdrawService withdrawService;
+    private final UpdateEmail updateEmail;
+    private final UpdateInfo updateInfo;
+    private final Withdraw withdraw;
     private final MyInfoService myInfoService;
-    private final PasswordUpdateService passwordUpdateService;
+    private final UpdatePassword updatePassword;
 
     @PostMapping
     public ApiResponse<JoinResponse> join(@Valid @RequestBody JoinRequest request) {
         SignUpCommand signUpRequest = new SignUpCommand(request.userId(), request.password(), request.email(),
                 request.firstname(), request.lastname(), request.nickname(), request.bio());
-        SignUpResult result = signUpService.register(signUpRequest);
+        SignUpResult result = signUp.register(signUpRequest);
         JoinResponse response = new JoinResponse(result.userId(), result.name(), result.email());
 
         return ApiResponse.success(201, "사용자 생성 완료", response);
@@ -67,7 +67,7 @@ public class MemberController {
     @PutMapping("/{userId}")
     public ApiResponse<InfoUpdateResponse> updateInfo(@PathVariable String userId,
                                                       @Valid @RequestBody InfoUpdateRequest request) {
-        InfoUpdateResult infoUpdateResult = infoUpdateService
+        InfoUpdateResult infoUpdateResult = updateInfo
                 .update(new InfoUpdateCommand(userId, request.nickname(), request.bio()));
         InfoUpdateResponse response = new InfoUpdateResponse(userId, infoUpdateResult.nickname(),
                 infoUpdateResult.bio());
@@ -77,7 +77,7 @@ public class MemberController {
 
     @DeleteMapping("/{userId}")
     public ApiResponse<WithdrawResponse> withdraw(@PathVariable String userId) {
-        WithdrawResult result = withdrawService.withdraw(new WithdrawCommand(userId, "회원 탈퇴 요청"));
+        WithdrawResult result = withdraw.withdraw(new WithdrawCommand(userId, "회원 탈퇴 요청"));
         WithdrawResponse response = new WithdrawResponse(result.userId());
 
         return ApiResponse.success(200, response.userId() + " 삭제완료", response);
@@ -93,7 +93,7 @@ public class MemberController {
     @PutMapping("/{userId}/password")
     public ApiResponse<PasswordUpdateResponse> changePassword(@PathVariable String userId,
                                                               @Valid @RequestBody ChangePasswordRequest request) {
-        PasswordUpdateResult result = passwordUpdateService
+        PasswordUpdateResult result = updatePassword
                 .update(new PasswordUpdateCommand(userId, request.currentPassword(), request.newPassword()));
         PasswordUpdateResponse response = new PasswordUpdateResponse(result.userId());
         return ApiResponse.success(200, "비밀번호 변경 완료", response);
@@ -102,7 +102,7 @@ public class MemberController {
     @PutMapping("/{userId}/email")
     public ApiResponse<EmailUpdateResponse> changeEmail(@PathVariable String userId,
                                                         @Valid @RequestBody ChangeEmailRequest request) {
-        EmailUpdateResult result = emailUpdateService.update(new EmailUpdateCommand(userId, request.newEmail()));
+        EmailUpdateResult result = updateEmail.update(new EmailUpdateCommand(userId, request.newEmail()));
         EmailUpdateResponse response = new EmailUpdateResponse(result.userId(), result.email());
         return ApiResponse.success(200, "이메일 변경 완료", response);
     }

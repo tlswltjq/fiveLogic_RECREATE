@@ -17,10 +17,10 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-class SignUpServiceTest {
+class SignUpTest {
 
     @InjectMocks
-    private SignUpService signUpService;
+    private SignUp signUp;
 
     @Mock
     private MemberStore memberStore;
@@ -42,7 +42,7 @@ class SignUpServiceTest {
                 "Hello World");
 
         // when
-        SignUpResult result = signUpService.register(command);
+        SignUpResult result = signUp.register(command);
 
         // then
         verify(policyVerifier).checkSignUpPolicy(command);

@@ -2,10 +2,9 @@ package com.fivelogic_recreate.member.application.command;
 
 import com.fivelogic_recreate.member.application.MemberServicePolicyValidator;
 import com.fivelogic_recreate.member.application.MemberReader;
-import com.fivelogic_recreate.member.application.command.dto.EmailUpdateCommand;
-import com.fivelogic_recreate.member.application.command.dto.EmailUpdateResult;
+import com.fivelogic_recreate.member.application.command.dto.WithdrawCommand;
+import com.fivelogic_recreate.member.application.command.dto.WithdrawResult;
 import com.fivelogic_recreate.member.domain.model.Member;
-import com.fivelogic_recreate.member.domain.model.Email;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,16 +13,15 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-class EmailUpdateServiceTest {
+class WithdrawTest {
 
     @InjectMocks
-    private EmailUpdateService emailUpdateService;
+    private Withdraw withdraw;
 
     @Mock
     private MemberReader memberReader;
@@ -37,31 +35,26 @@ class EmailUpdateServiceTest {
     @Mock
     private com.fivelogic_recreate.member.domain.model.UserId userId;
 
-    @Mock
-    private com.fivelogic_recreate.member.domain.model.Email email;
-
     @Test
-    @DisplayName("이메일 수정이 성공적으로 완료되어야 한다")
-    void update_success() {
+    @DisplayName("회원 탈퇴가 성공적으로 완료되어야 한다")
+    void withdraw_success() {
         // given
-        EmailUpdateCommand command = new EmailUpdateCommand("testuser", "newemail@example.com");
+        WithdrawCommand command = new WithdrawCommand("testuser", "reason");
 
         given(memberReader.getMember(anyString())).willReturn(member);
         given(member.getUserId()).willReturn(userId);
-        given(member.getEmail()).willReturn(email);
         given(userId.value()).willReturn("testuser");
-        given(email.value()).willReturn("newemail@example.com");
 
         // when
-        EmailUpdateResult result = emailUpdateService.update(command);
+        WithdrawResult result = withdraw.withdraw(command);
 
         // then
-        verify(policyVerifier).checkEmailUpdatePolicy(command);
+        verify(policyVerifier).checkWithdrawPolicy(command);
         verify(memberReader).getMember(command.userId());
-        verify(member).updateEmail(any(Email.class));
+        verify(member).delete();
 
         assertThat(result).isNotNull();
         assertThat(result.userId()).isEqualTo(command.userId());
-        assertThat(result.email()).isEqualTo(command.email());
+        assertThat(result.reasonWhy()).isEqualTo(command.reasonWhy());
     }
 }

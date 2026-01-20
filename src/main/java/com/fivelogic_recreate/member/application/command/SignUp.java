@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class SignUpService {
+public class SignUp {
     private final MemberStore memberStore;
     private final MemberServicePolicyValidator policyVerifier;
 
