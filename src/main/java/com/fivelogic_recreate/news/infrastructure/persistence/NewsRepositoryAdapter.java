@@ -17,7 +17,7 @@ import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
-public class NewsJpaRepositoryImpl implements NewsRepositoryPort, NewsQueryRepositoryPort {
+public class NewsRepositoryAdapter implements NewsRepositoryPort, NewsQueryRepositoryPort {
     private final NewsJpaRepository newsRepository;
 
     @Override
