@@ -16,6 +16,11 @@ public enum ErrorCode {
     EMAIL_DUPLICATION("M003", "이미 사용중인 Email 입니다", HttpStatus.CONFLICT),
     PASSWORD_MISMATCH("M004", "비밀번호가 일치하지 않습니다.", HttpStatus.BAD_REQUEST),
     SAME_PASSWORD("M005", "새 비밀번호는 기존 비밀번호와 다르게 설정해야 합니다.", HttpStatus.BAD_REQUEST),
+    PASSWORD_POLICY_VIOLATION("M006", "비밀번호는 영문, 숫자, 특수문자를 포함하여 8자 이상이어야 합니다.", HttpStatus.BAD_REQUEST),
+    NICKNAME_POLICY_VIOLATION("M007", "사용할 수 없는 닉네임이 포함되어 있습니다.", HttpStatus.BAD_REQUEST),
+    USER_ID_FORMAT_INVALID("M008", "사용자 ID는 5자 이상 20자 이하이어야 합니다.", HttpStatus.BAD_REQUEST),
+    BIO_POLICY_VIOLATION("M009", "소개는 500자를 넘거나 공백일 수 없습니다.", HttpStatus.BAD_REQUEST),
+    INVALID_SEARCH_CONDITION("M010", "유효하지 않은 검색 조건입니다.", HttpStatus.BAD_REQUEST),
 
     // News
     NEWS_NOT_FOUND("N001", "뉴스를 찾을 수 없습니다.", HttpStatus.NOT_FOUND),

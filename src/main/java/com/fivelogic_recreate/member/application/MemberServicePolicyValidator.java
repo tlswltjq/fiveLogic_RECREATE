@@ -5,11 +5,9 @@ import com.fivelogic_recreate.member.application.query.dto.GetMemberDetailsByTyp
 import com.fivelogic_recreate.member.domain.model.Email;
 import com.fivelogic_recreate.member.domain.model.UserId;
 import com.fivelogic_recreate.member.domain.port.MemberQueryRepositoryPort;
-import com.fivelogic_recreate.member.exception.EmailDuplicationException;
-import com.fivelogic_recreate.member.exception.UserIdDuplicationException;
+import com.fivelogic_recreate.member.exception.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-
 import java.util.regex.Pattern;
 
 @Component
@@ -17,19 +15,19 @@ import java.util.regex.Pattern;
 public class MemberServicePolicyValidator {
     private static final Pattern PASSWORD_PATTERN = Pattern
             .compile("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[$@$!%*#?&])[A-Za-z\\d$@$!%*#?&]{8,}$");
-    private static final String[] BANNED_NICKNAMES = {"admin", "administrator", "운영자", "관리자"};
+    private static final String[] BANNED_NICKNAMES = { "admin", "administrator", "운영자", "관리자" };
     private final MemberQueryRepositoryPort queryRepository;
 
     private void validatePasswordPolicy(String password) {
         if (password == null || !PASSWORD_PATTERN.matcher(password).matches()) {
-            throw new IllegalArgumentException("비밀번호는 영문, 숫자, 특수문자를 포함하여 8자 이상이어야 합니다.");
+            throw new PasswordPolicyViolationException();
         }
     }
 
     private void validateNicknamePolicy(String nickname) {
         for (String banned : BANNED_NICKNAMES) {
             if (nickname.contains(banned)) {
-                throw new IllegalArgumentException("사용할 수 없는 닉네임이 포함되어 있습니다.");
+                throw new NicknamePolicyViolationException();
             }
         }
     }
@@ -48,13 +46,13 @@ public class MemberServicePolicyValidator {
 
     private void validateUserIdFormat(String userId) {
         if (userId == null || userId.length() < 5 || userId.length() > 20) {
-            throw new IllegalArgumentException("사용자 ID는 5자 이상 20자 이하이어야 합니다.");
+            throw new UserIdFormatException();
         }
     }
 
     private void validateBioPolicy(String bio) {
         if (bio != null && (bio.isBlank() || bio.length() > 500)) {
-            throw new IllegalArgumentException("소개는 500자를 넘거나 공백일 수 없습니다.");
+            throw new BioPolicyViolationException();
         }
     }
 
@@ -87,7 +85,7 @@ public class MemberServicePolicyValidator {
                         !targetType.equals("MENTEE") &&
                         !targetType.equals("ADMIN") &&
                         !targetType.equals("GENERAL"))) {
-            throw new IllegalArgumentException("유효하지 않은 검색 조건입니다: " + targetType);
+            throw new InvalidSearchConditionException();
         }
     }
 
