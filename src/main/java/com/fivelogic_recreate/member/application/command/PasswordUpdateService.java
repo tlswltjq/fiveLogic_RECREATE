@@ -1,6 +1,6 @@
 package com.fivelogic_recreate.member.application.command;
 
-import com.fivelogic_recreate.member.application.MemberPolicyVerifier;
+import com.fivelogic_recreate.member.application.MemberServicePolicyValidator;
 import com.fivelogic_recreate.member.application.MemberReader;
 import com.fivelogic_recreate.member.application.command.dto.PasswordUpdateCommand;
 import com.fivelogic_recreate.member.application.command.dto.PasswordUpdateResult;
@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class PasswordUpdateService {
     private final MemberReader memberReader;
-    private final MemberPolicyVerifier policyVerifier;
+    private final MemberServicePolicyValidator policyVerifier;
 
     public PasswordUpdateResult update(PasswordUpdateCommand command) {
         policyVerifier.checkPasswordUpdatePolicy(command);

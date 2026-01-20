@@ -1,6 +1,6 @@
 package com.fivelogic_recreate.member.application.command;
 
-import com.fivelogic_recreate.member.application.MemberPolicyVerifier;
+import com.fivelogic_recreate.member.application.MemberServicePolicyValidator;
 import com.fivelogic_recreate.member.application.MemberReader;
 import com.fivelogic_recreate.member.application.command.dto.EmailUpdateCommand;
 import com.fivelogic_recreate.member.application.command.dto.EmailUpdateResult;
@@ -15,9 +15,9 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class EmailUpdateService {
     private final MemberReader memberReader;
-    private final MemberPolicyVerifier policyVerifier;
+    private final MemberServicePolicyValidator policyVerifier;
 
-    public EmailUpdateResult update(EmailUpdateCommand command){
+    public EmailUpdateResult update(EmailUpdateCommand command) {
         policyVerifier.checkEmailUpdatePolicy(command);
 
         Member member = memberReader.getMember(command.userId());

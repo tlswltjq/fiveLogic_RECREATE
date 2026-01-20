@@ -1,9 +1,6 @@
 package com.fivelogic_recreate.member.application;
 
-import com.fivelogic_recreate.member.application.command.dto.EmailUpdateCommand;
-import com.fivelogic_recreate.member.application.command.dto.InfoUpdateCommand;
-import com.fivelogic_recreate.member.application.command.dto.PasswordUpdateCommand;
-import com.fivelogic_recreate.member.application.command.dto.SignUpCommand;
+import com.fivelogic_recreate.member.application.command.dto.*;
 import com.fivelogic_recreate.member.application.query.dto.GetMemberDetailsByTypeCommand;
 import com.fivelogic_recreate.member.domain.model.Email;
 import com.fivelogic_recreate.member.domain.model.UserId;
@@ -17,8 +14,7 @@ import java.util.regex.Pattern;
 
 @Component
 @RequiredArgsConstructor
-//NOTE 맴버 객체에 대한 정책 클래스처럼 느껴져서 나중에 이름을 교체하면 좋겠다.
-public class MemberPolicyVerifier {
+public class MemberServicePolicyValidator {
     private static final Pattern PASSWORD_PATTERN = Pattern
             .compile("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[$@$!%*#?&])[A-Za-z\\d$@$!%*#?&]{8,}$");
     private static final String[] BANNED_NICKNAMES = {"admin", "administrator", "운영자", "관리자"};
@@ -93,5 +89,8 @@ public class MemberPolicyVerifier {
                         !targetType.equals("GENERAL"))) {
             throw new IllegalArgumentException("유효하지 않은 검색 조건입니다: " + targetType);
         }
+    }
+
+    public void checkWithdrawPolicy(WithdrawCommand command) {
     }
 }

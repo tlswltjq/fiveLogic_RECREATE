@@ -1,6 +1,6 @@
 package com.fivelogic_recreate.member.application.command;
 
-import com.fivelogic_recreate.member.application.MemberPolicyVerifier;
+import com.fivelogic_recreate.member.application.MemberServicePolicyValidator;
 import com.fivelogic_recreate.member.application.MemberStore;
 import com.fivelogic_recreate.member.application.command.dto.SignUpCommand;
 import com.fivelogic_recreate.member.application.command.dto.SignUpResult;
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class SignUpService {
     private final MemberStore memberStore;
-    private final MemberPolicyVerifier policyVerifier;
+    private final MemberServicePolicyValidator policyVerifier;
 
     public SignUpResult register(SignUpCommand command) {
 

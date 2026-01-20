@@ -1,6 +1,6 @@
 package com.fivelogic_recreate.member.application.command;
 
-import com.fivelogic_recreate.member.application.MemberPolicyVerifier;
+import com.fivelogic_recreate.member.application.MemberServicePolicyValidator;
 import com.fivelogic_recreate.member.application.MemberReader;
 import com.fivelogic_recreate.member.application.command.dto.InfoUpdateCommand;
 import com.fivelogic_recreate.member.application.command.dto.InfoUpdateResult;
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class InfoUpdateService {
     private final MemberReader memberReader;
-    private final MemberPolicyVerifier policyVerifier;
+    private final MemberServicePolicyValidator policyVerifier;
 
     public InfoUpdateResult update(InfoUpdateCommand command) {
         policyVerifier.checkInfoUpdatePolicy(command);

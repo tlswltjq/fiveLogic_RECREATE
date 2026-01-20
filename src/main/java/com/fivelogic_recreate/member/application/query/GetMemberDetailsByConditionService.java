@@ -1,10 +1,9 @@
 package com.fivelogic_recreate.member.application.query;
 
-import com.fivelogic_recreate.member.application.MemberPolicyVerifier;
 import com.fivelogic_recreate.member.application.MemberReader;
+import com.fivelogic_recreate.member.application.MemberServicePolicyValidator;
 import com.fivelogic_recreate.member.application.query.dto.GetAllMemberDetailsByConditionResult;
 import com.fivelogic_recreate.member.application.query.dto.GetMemberDetailsByTypeCommand;
-import com.fivelogic_recreate.member.application.query.dto.GetMemberDetailsResult;
 import com.fivelogic_recreate.member.application.query.dto.MemberDetail;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,7 +16,7 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class GetMemberDetailsByConditionService {
     private final MemberReader memberReader;
-    private final MemberPolicyVerifier policyVerifier;
+    private final MemberServicePolicyValidator policyVerifier;
 
     public GetAllMemberDetailsByConditionResult byMemberType(GetMemberDetailsByTypeCommand command) {
         policyVerifier.checkRetrieveDetailsPolicy(command);
