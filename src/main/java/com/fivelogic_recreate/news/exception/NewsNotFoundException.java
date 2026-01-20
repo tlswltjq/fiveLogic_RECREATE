@@ -1,10 +1,7 @@
 package com.fivelogic_recreate.news.exception;
 
-import com.fivelogic_recreate.common.error.BusinessException;
-import com.fivelogic_recreate.common.error.ErrorCode;
-
-public class NewsNotFoundException  extends BusinessException {
+public class NewsNotFoundException extends RuntimeException {
     public NewsNotFoundException() {
-        super(ErrorCode.NEWS_NOT_FOUND);
+        super("News not found");
     }
 }

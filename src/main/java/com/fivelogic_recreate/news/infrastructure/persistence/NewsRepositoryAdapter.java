@@ -12,65 +12,61 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
-
 import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
 public class NewsRepositoryAdapter implements NewsRepositoryPort, NewsQueryRepositoryPort {
-    private final NewsJpaRepository newsRepository;
-
-    @Override
-    public Optional<NewsQueryResponse> findQueryById(Long id) {
-        return newsRepository.findQueryById(id);
-    }
-
-    @Override
-    public Page<NewsQueryResponse> findByTitle(String title, Pageable pageable) {
-        return newsRepository.findQueryByTitle(title, pageable);
-    }
-
-    @Override
-    public Page<NewsQueryResponse> findByContent(String textContent, Pageable pageable) {
-        return newsRepository.findQueryByContentContaining(textContent, pageable);
-    }
-
-    @Override
-    public Page<NewsQueryResponse> findByAuthorId(String authorId, Pageable pageable) {
-        return newsRepository.findQueryByAuthor_UserId(authorId, pageable);
-    }
-
-    @Override
-    public Page<NewsQueryResponse> findByNewsStatus(String status, Pageable pageable) {
-        NewsStatus newsStatus = NewsStatus.from(status);
-        return newsRepository.findQueryByStatus(newsStatus, pageable);
-    }
-
-    @Override
-    public Page<NewsQueryResponse> findByPublishedDateAfter(LocalDateTime publishedDate, Pageable pageable) {
-        return newsRepository
-                .findQueryByPublishedDateAfter(publishedDate, pageable);
-    }
-
-    @Override
-    public Page<NewsQueryResponse> findByPublishedDateBefore(LocalDateTime publishedDate, Pageable pageable) {
-        return newsRepository
-                .findQueryByPublishedDateBefore(publishedDate, pageable);
-    }
-
-    @Override
-    public Page<NewsQueryResponse> findByPublishedDateBetween(LocalDateTime startDate, LocalDateTime endDate, Pageable pageable) {
-        return newsRepository
-                .findQueryByPublishedDateBetween(startDate, endDate, pageable);
-    }
+    private final NewsJpaRepository repository;
 
     @Override
     public News save(News news) {
-        return newsRepository.save(news);
+        return repository.save(news);
     }
 
     @Override
     public Optional<News> findById(NewsId id) {
-        return newsRepository.findById(id.value());
+        return repository.findById(id.value());
+    }
+
+    @Override
+    public Optional<NewsQueryResponse> findQueryById(Long id) {
+        return repository.findQueryById(id);
+    }
+
+    @Override
+    public Page<NewsQueryResponse> findByTitle(String title, Pageable pageable) {
+        return repository.findQueryByTitle(title, pageable);
+    }
+
+    @Override
+    public Page<NewsQueryResponse> findByContent(String textContent, Pageable pageable) {
+        return repository.findQueryByContentContaining(textContent, pageable);
+    }
+
+    @Override
+    public Page<NewsQueryResponse> findByAuthorId(String authorId, Pageable pageable) {
+        return repository.findQueryByAuthor_UserId(authorId, pageable);
+    }
+
+    @Override
+    public Page<NewsQueryResponse> findByNewsStatus(String newsStatus, Pageable pageable) {
+        return repository.findQueryByStatus(NewsStatus.valueOf(newsStatus), pageable);
+    }
+
+    @Override
+    public Page<NewsQueryResponse> findByPublishedDateAfter(LocalDateTime publishedDate, Pageable pageable) {
+        return repository.findQueryByPublishedDateAfter(publishedDate, pageable);
+    }
+
+    @Override
+    public Page<NewsQueryResponse> findByPublishedDateBefore(LocalDateTime publishedDate, Pageable pageable) {
+        return repository.findQueryByPublishedDateBefore(publishedDate, pageable);
+    }
+
+    @Override
+    public Page<NewsQueryResponse> findByPublishedDateBetween(LocalDateTime startDate, LocalDateTime endDate,
+            Pageable pageable) {
+        return repository.findQueryByPublishedDateBetween(startDate, endDate, pageable);
     }
 }
