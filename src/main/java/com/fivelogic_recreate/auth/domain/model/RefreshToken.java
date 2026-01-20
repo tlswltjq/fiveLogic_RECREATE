@@ -13,10 +13,13 @@ public class RefreshToken {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Embedded
+    @AttributeOverride(name = "value", column = @Column(name = "user_id"))
     private AuthUserId userId;
     @Embedded
+    @AttributeOverride(name = "value", column = @Column(name = "device_id"))
     private DeviceId deviceId;
     @Embedded
+    @AttributeOverride(name = "value", column = @Column(name = "expiration"))
     private Expiration expiration;
     @Enumerated(EnumType.STRING)
     private Status status;
