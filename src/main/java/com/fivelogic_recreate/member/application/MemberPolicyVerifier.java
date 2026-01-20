@@ -75,7 +75,7 @@ public class MemberPolicyVerifier {
     }
 
     public void checkPasswordUpdatePolicy(PasswordUpdateCommand command) {
-        validatePasswordPolicy(command.password());
+        validatePasswordPolicy(command.newPassword());
     }
 
     public void checkEmailUpdatePolicy(EmailUpdateCommand command) {

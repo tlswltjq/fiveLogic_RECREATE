@@ -17,11 +17,12 @@ public class PasswordUpdateService {
     private final MemberReader memberReader;
     private final MemberPolicyVerifier policyVerifier;
 
-    public PasswordUpdateResult update(PasswordUpdateCommand command){
+    public PasswordUpdateResult update(PasswordUpdateCommand command) {
         policyVerifier.checkPasswordUpdatePolicy(command);
 
         Member member = memberReader.getMember(command.userId());
-        member.updatePassword(new UserPassword(command.password()));
+        member.checkPassword(new UserPassword(command.currentPassword()));
+        member.updatePassword(new UserPassword(command.newPassword()));
 
         return PasswordUpdateResult.from(member);
     }
