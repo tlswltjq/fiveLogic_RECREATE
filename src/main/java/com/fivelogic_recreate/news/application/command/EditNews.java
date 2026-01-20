@@ -1,5 +1,7 @@
 package com.fivelogic_recreate.news.application.command;
 
+import com.fivelogic_recreate.news.application.NewsServicePolicyValidator;
+
 import com.fivelogic_recreate.news.application.NewsReader;
 import com.fivelogic_recreate.news.application.NewsStore;
 import com.fivelogic_recreate.news.application.command.dto.NewsUpdateCommand;
@@ -12,11 +14,13 @@ import lombok.RequiredArgsConstructor;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class NewsUpdateService {
+public class EditNews {
     private final NewsReader newsReader;
     private final NewsStore newsStore;
+    private final NewsServicePolicyValidator validator;
 
     public NewsUpdateResult updateNews(NewsUpdateCommand command) {
+        validator.checkEditPolicy(command);
         News news = newsReader.getNews(command.id());
         news.validateOwner(command.currentUserId());
 

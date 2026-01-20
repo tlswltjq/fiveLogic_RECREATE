@@ -2,7 +2,6 @@ package com.fivelogic_recreate.news.application.query;
 
 import com.fivelogic_recreate.news.application.query.dto.NewsQueryResponse;
 import com.fivelogic_recreate.news.domain.port.NewsQueryRepositoryPort;
-import com.fivelogic_recreate.news.exception.NewsNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,13 +13,8 @@ import java.time.LocalDateTime;
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class NewsQueryService {
+public class GetNewsList {
     private final NewsQueryRepositoryPort newsQueryRepository;
-
-    public NewsQueryResponse findById(Long id) {
-        return newsQueryRepository.findQueryById(id)
-                .orElseThrow(NewsNotFoundException::new);
-    }
 
     public Page<NewsQueryResponse> findByTitle(String title, Pageable pageable) {
         return newsQueryRepository.findByTitle(title, pageable);
@@ -38,25 +32,16 @@ public class NewsQueryService {
         return newsQueryRepository.findByNewsStatus(newsStatus, pageable);
     }
 
-    public Page<NewsQueryResponse> findByPublishedDateAfter(
-            LocalDateTime publishedDate,
-            Pageable pageable) {
-        return newsQueryRepository
-                .findByPublishedDateAfter(publishedDate, pageable);
+    public Page<NewsQueryResponse> findByPublishedDateAfter(LocalDateTime publishedDate, Pageable pageable) {
+        return newsQueryRepository.findByPublishedDateAfter(publishedDate, pageable);
     }
 
-    public Page<NewsQueryResponse> findByPublishedDateBefore(
-            LocalDateTime publishedDate,
-            Pageable pageable) {
-        return newsQueryRepository
-                .findByPublishedDateBefore(publishedDate, pageable);
+    public Page<NewsQueryResponse> findByPublishedDateBefore(LocalDateTime publishedDate, Pageable pageable) {
+        return newsQueryRepository.findByPublishedDateBefore(publishedDate, pageable);
     }
 
-    public Page<NewsQueryResponse> findByPublishedDateBetween(
-            LocalDateTime startDate,
-            LocalDateTime endDate,
+    public Page<NewsQueryResponse> findByPublishedDateBetween(LocalDateTime startDate, LocalDateTime endDate,
             Pageable pageable) {
-        return newsQueryRepository
-                .findByPublishedDateBetween(startDate, endDate, pageable);
+        return newsQueryRepository.findByPublishedDateBetween(startDate, endDate, pageable);
     }
 }

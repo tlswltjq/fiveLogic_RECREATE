@@ -1,5 +1,7 @@
 package com.fivelogic_recreate.news.application.command;
 
+import com.fivelogic_recreate.news.application.NewsServicePolicyValidator;
+
 import com.fivelogic_recreate.member.application.MemberReader;
 import com.fivelogic_recreate.member.domain.model.Member;
 import com.fivelogic_recreate.news.application.NewsStore;
@@ -13,11 +15,13 @@ import org.springframework.stereotype.Service;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class NewsCreateService {
+public class RegisterNews {
     private final NewsStore newsStore;
     private final MemberReader memberReader;
+    private final NewsServicePolicyValidator validator;
 
     public NewsCreateResult createNews(NewsCreateCommand command) {
+        validator.checkRegisterPolicy(command);
         Member author = memberReader.getMember(command.authorId());
 
         News draft = News.draft(command.title(), command.description(), command.textContent(), command.videoUrl(),

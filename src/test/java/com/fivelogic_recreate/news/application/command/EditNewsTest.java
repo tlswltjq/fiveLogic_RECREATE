@@ -3,10 +3,10 @@ package com.fivelogic_recreate.news.application.command;
 import com.fivelogic_recreate.member.domain.model.Member;
 import com.fivelogic_recreate.news.application.NewsReader;
 import com.fivelogic_recreate.news.application.NewsStore;
-import com.fivelogic_recreate.news.application.command.dto.NewsPublishCommand;
-import com.fivelogic_recreate.news.application.command.dto.NewsPublishResult;
+import com.fivelogic_recreate.news.application.command.dto.NewsUpdateCommand;
+import com.fivelogic_recreate.news.application.command.dto.NewsUpdateResult;
 import com.fivelogic_recreate.news.domain.News;
-import com.fivelogic_recreate.news.domain.NewsStatus;
+import com.fivelogic_recreate.news.application.NewsServicePolicyValidator;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,10 +19,10 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-class NewsPublishServiceTest {
+class EditNewsTest {
 
     @InjectMocks
-    private NewsPublishService newsPublishService;
+    private EditNews editNews;
 
     @Mock
     private NewsReader newsReader;
@@ -30,27 +30,38 @@ class NewsPublishServiceTest {
     @Mock
     private NewsStore newsStore;
 
+    @Mock
+    private NewsServicePolicyValidator validator;
+
     @Test
-    @DisplayName("뉴스가 성공적으로 발행되어야 한다")
-    void publishNews_success() {
+    @DisplayName("뉴스가 성공적으로 수정되어야 한다")
+    void updateNews_success() throws Exception {
         // given
         Long newsId = 1L;
         String authorId = "authorId";
-        NewsPublishCommand command = new NewsPublishCommand(newsId, authorId);
+        NewsUpdateCommand command = new NewsUpdateCommand(
+                newsId,
+                "newTitle",
+                "newDescription",
+                "newContent",
+                "newVideoUrl",
+                authorId);
 
         Member author = Member.join(authorId, "password", "email@test.com", "First", "Last", "Nick", "Bio");
         News news = News.draft("title", "desc", "content", "url", author);
-        news.processing();
-        news.ready();
+
+        // Reflection to set ID if needed, but here we just mock return
+        // Since News.equals uses ID, finding by ID relies on ID.
+        // But NewsReader returns the object.
 
         given(newsReader.getNews(newsId)).willReturn(news);
 
         // when
-        NewsPublishResult result = newsPublishService.publishNews(command);
+        NewsUpdateResult result = editNews.updateNews(command);
 
         // then
         verify(newsStore).store(news);
-        assertThat(news.getStatus()).isEqualTo(NewsStatus.PUBLISHED);
-        assertThat(news.getPublishedDate()).isNotNull();
+        assertThat(result.title()).isEqualTo("newTitle");
+        assertThat(result.description()).isEqualTo("newDescription");
     }
 }

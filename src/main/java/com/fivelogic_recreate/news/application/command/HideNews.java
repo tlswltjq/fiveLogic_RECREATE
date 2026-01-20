@@ -1,11 +1,13 @@
 package com.fivelogic_recreate.news.application.command;
 
+import com.fivelogic_recreate.news.application.NewsServicePolicyValidator;
+
 import com.fivelogic_recreate.news.application.NewsReader;
 import com.fivelogic_recreate.news.application.NewsStore;
-import com.fivelogic_recreate.news.application.command.dto.NewsPublishCommand;
-import com.fivelogic_recreate.news.application.command.dto.NewsPublishResult;
+import com.fivelogic_recreate.news.application.command.dto.NewsHideCommand;
+import com.fivelogic_recreate.news.application.command.dto.NewsHideResult;
 import com.fivelogic_recreate.news.domain.News;
-import com.fivelogic_recreate.news.exception.NewsPublishNotAllowedException;
+import com.fivelogic_recreate.news.exception.NewsHideNotAllowedException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,22 +15,24 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class NewsPublishService {
+public class HideNews {
     private final NewsReader newsReader;
     private final NewsStore newsStore;
+    private final NewsServicePolicyValidator validator;
 
-    public NewsPublishResult publishNews(NewsPublishCommand command) {
+    public NewsHideResult hideNews(NewsHideCommand command) {
+        validator.checkHidePolicy(command);
         News news = newsReader.getNews(command.newsId());
         news.validateOwner(command.currentUserId());
 
         try {
-            news.publish();
+            news.hide();
         } catch (IllegalStateException e) {
-            throw new NewsPublishNotAllowedException();
+            throw new NewsHideNotAllowedException();
         }
 
         newsStore.store(news);
 
-        return NewsPublishResult.from(news);
+        return NewsHideResult.from(news);
     }
 }
