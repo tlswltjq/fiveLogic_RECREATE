@@ -6,24 +6,14 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
-public record CreateMemberRequest(
-        @NotBlank
-        @Size(min = 5, max = 20)
-        String userId,
-        @NotBlank
-        String password,
-        @NotBlank
-        @Email
-        String email,
-        @NotBlank
-        String firstname,
-        @NotBlank
-        String lastname,
-        @NotBlank
-        String nickname,
-        @NotNull
-        String bio
-) {
+public record JoinRequest(
+        @NotBlank @Size(min = 5, max = 20) String userId,
+        @NotBlank String password,
+        @NotBlank @Email String email,
+        @NotBlank String firstname,
+        @NotBlank String lastname,
+        @NotBlank String nickname,
+        @NotNull String bio) {
     public MemberCreateCommand toCommand() {
         return new MemberCreateCommand(userId, password, email, firstname, lastname, nickname, bio);
     }
