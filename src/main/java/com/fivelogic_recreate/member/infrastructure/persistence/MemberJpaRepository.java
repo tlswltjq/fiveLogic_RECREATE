@@ -19,13 +19,13 @@ public interface MemberJpaRepository extends JpaRepository<Member, Long> {
 
     boolean existsByEmail(String value);
 
-    @Query("SELECT m.id, m.userId.value, m.nickname.value, CAST(m.memberType as string), CONCAT(m.name.firstName, ' ', m.name.lastName), m.email.value, m.bio.value FROM Member m WHERE m.userId.value = :userId")
+    @Query("SELECT m.id, m.userId.value, m.nickname.value, CAST(m.memberType as string), CONCAT(m.name.firstName, ' ', m.name.lastName), m.email.value, m.bio.value, m.isActivated FROM Member m WHERE m.userId.value = :userId")
     Optional<MemberDetail> findUserDetailByUserId(@Param("userId") String userId);
 
-    @Query("SELECT m.id, m.userId.value, m.nickname.value, CAST(m.memberType as string), CONCAT(m.name.firstName, ' ', m.name.lastName), m.email.value, m.bio.value FROM Member m WHERE m.memberType != 'ADMIN'")
+    @Query("SELECT m.id, m.userId.value, m.nickname.value, CAST(m.memberType as string), CONCAT(m.name.firstName, ' ', m.name.lastName), m.email.value, m.bio.value, m.isActivated FROM Member m WHERE m.memberType != 'ADMIN'")
     List<MemberDetail> findUserDetailsExceptAdmin();
 
-    @Query("SELECT m.id, m.userId.value, m.nickname.value, CAST(m.memberType as string), CONCAT(m.name.firstName, ' ', m.name.lastName), m.email.value, m.bio.value FROM Member m WHERE m.memberType = :memberType")
+    @Query("SELECT m.id, m.userId.value, m.nickname.value, CAST(m.memberType as string), CONCAT(m.name.firstName, ' ', m.name.lastName), m.email.value, m.bio.value, m.isActivated FROM Member m WHERE m.memberType = :memberType")
     List<MemberDetail> findUserDetailsByType(@Param("memberType") String memberType);
 
     @Query("SELECT m.nickname.value, m.email.value, m.bio.value FROM Member m WHERE m.userId.value = :userId")

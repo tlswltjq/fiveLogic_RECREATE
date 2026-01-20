@@ -18,7 +18,9 @@ public interface MemberRepositoryPort {
 
     Member save(Member member);
 
-//    boolean existsByUserId(UserId userId);
+    @Deprecated
+    boolean existsByUserId(UserId userId);
 
-//    boolean existsByEmail(Email email);
+    @Deprecated
+    boolean existsByEmail(Email email);
 }

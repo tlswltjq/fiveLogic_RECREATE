@@ -1,14 +1,13 @@
 package com.fivelogic_recreate.member.interfaces.rest.dto;
 
-import com.fivelogic_recreate.member.application.query.dto.MemberQueryResponse;
-
 public record GetMemberResponse(
+        Long memberId,
         String userId,
-        String email,
+        String nickname,
         String memberType,
+        String name,
+        String email,
+        String bio,
         boolean isActive
 ) {
-    public GetMemberResponse (MemberQueryResponse memberInfo){
-        this(memberInfo.userId(), memberInfo.email(), memberInfo.memberType(), memberInfo.isActive());
-    }
 }

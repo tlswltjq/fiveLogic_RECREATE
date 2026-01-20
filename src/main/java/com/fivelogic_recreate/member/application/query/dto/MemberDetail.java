@@ -7,6 +7,7 @@ public record MemberDetail(
         String memberType,
         String name,
         String email,
-        String bio
+        String bio,
+        boolean isActive
 ) {
 }

@@ -10,22 +10,7 @@ public record UpdateMemberRequest(
         @Email
         String email,
         @NotBlank
-        String firstname,
-        @NotBlank
-        String lastname,
-        @NotBlank
         String nickname,
         @NotNull
-        String bio,
-        @NotBlank
-        String memberType
-) {
-    public MemberUpdateCommand toCommand(String userId) {
-        return new MemberUpdateCommand(userId, email,
-                firstname,
-                lastname,
-                nickname,
-                bio,
-                memberType);
-    }
-}
+        String bio
+) {}
