@@ -4,8 +4,10 @@ import com.fivelogic_recreate.member.application.command.dto.EmailUpdateCommand;
 import com.fivelogic_recreate.member.application.command.dto.InfoUpdateCommand;
 import com.fivelogic_recreate.member.application.command.dto.PasswordUpdateCommand;
 import com.fivelogic_recreate.member.application.command.dto.SignUpCommand;
-import com.fivelogic_recreate.member.application.query.MemberQueryService;
 import com.fivelogic_recreate.member.application.query.dto.GetMemberDetailsByTypeCommand;
+import com.fivelogic_recreate.member.domain.model.Email;
+import com.fivelogic_recreate.member.domain.model.UserId;
+import com.fivelogic_recreate.member.domain.port.MemberQueryRepositoryPort;
 import com.fivelogic_recreate.member.exception.EmailDuplicationException;
 import com.fivelogic_recreate.member.exception.UserIdDuplicationException;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +22,7 @@ public class MemberPolicyVerifier {
     private static final Pattern PASSWORD_PATTERN = Pattern
             .compile("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[$@$!%*#?&])[A-Za-z\\d$@$!%*#?&]{8,}$");
     private static final String[] BANNED_NICKNAMES = {"admin", "administrator", "운영자", "관리자"};
-    private final MemberQueryService memberQueryService;
+    private final MemberQueryRepositoryPort queryRepository;
 
     private void validatePasswordPolicy(String password) {
         if (password == null || !PASSWORD_PATTERN.matcher(password).matches()) {
@@ -37,13 +39,13 @@ public class MemberPolicyVerifier {
     }
 
     private void verifyUserIdDuplication(String userId) {
-        if (memberQueryService.existsByUserId(userId)) {
+        if (queryRepository.existsByUserId(new UserId(userId))) {
             throw new UserIdDuplicationException();
         }
     }
 
     private void verifyEmailDuplication(String email) {
-        if (memberQueryService.existsByEmail(email)) {
+        if (queryRepository.existsByEmail(new Email(email))) {
             throw new EmailDuplicationException();
         }
     }
