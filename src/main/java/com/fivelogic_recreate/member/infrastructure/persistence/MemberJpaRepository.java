@@ -2,7 +2,10 @@ package com.fivelogic_recreate.member.infrastructure.persistence;
 
 import com.fivelogic_recreate.member.application.query.dto.MemberDetail;
 import com.fivelogic_recreate.member.application.query.dto.MyProfile;
+import com.fivelogic_recreate.member.domain.model.Email;
 import com.fivelogic_recreate.member.domain.model.Member;
+import com.fivelogic_recreate.member.domain.model.UserId;
+import com.fivelogic_recreate.member.domain.model.Nickname;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -11,13 +14,13 @@ import java.util.List;
 import java.util.Optional;
 
 public interface MemberJpaRepository extends JpaRepository<Member, Long> {
-    Optional<Member> findByUserId(String userId);
+    Optional<Member> findByUserId(UserId userId);
 
-    Optional<Member> findByNickname(String nickname);
+    Optional<Member> findByNickname(Nickname nickname);
 
-    boolean existsByUserId(String userId);
+    boolean existsByUserId(UserId userId);
 
-    boolean existsByEmail(String value);
+    boolean existsByEmail(Email email);
 
     @Query("SELECT m.id, m.userId.value, m.nickname.value, CAST(m.memberType as string), CONCAT(m.name.firstName, ' ', m.name.lastName), m.email.value, m.bio.value, m.isActivated FROM Member m WHERE m.userId.value = :userId")
     Optional<MemberDetail> findUserDetailByUserId(@Param("userId") String userId);
