@@ -1,7 +1,5 @@
-package com.fivelogic_recreate.news.interfaces.rest;
+package com.fivelogic_recreate.common.error;
 
-import com.fivelogic_recreate.common.error.BusinessException;
-import com.fivelogic_recreate.common.error.ErrorCode;
 import com.fivelogic_recreate.common.rest.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -12,7 +10,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @Slf4j
 @RestControllerAdvice
-public class NewsControllerAdvice {
+public class GlobalExceptionHandler {
+
     @ExceptionHandler(BusinessException.class)
     protected ResponseEntity<ErrorResponse> handleBusinessException(BusinessException e) {
         log.error("handleBusinessException", e);

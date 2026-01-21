@@ -1,8 +1,6 @@
 package com.fivelogic_recreate.auth.application.dto;
 
-public record LoginResult(
-        String userId,
+public record AuthTokens(
         String accessToken,
-        String refreshToken
-) {
+        String refreshToken) {
 }

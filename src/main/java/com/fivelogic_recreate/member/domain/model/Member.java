@@ -113,6 +113,10 @@ public class Member {
         this.password.match(rawPassword);
     }
 
+    public boolean isActivate(){
+        return this.isActivated;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass())

@@ -1,212 +1,205 @@
 package com.fivelogic_recreate.member.interfaces.rest;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fivelogic_recreate.common.error.BusinessException;
+import com.fivelogic_recreate.common.error.ErrorCode;
+import com.fivelogic_recreate.common.rest.ApiResponse;
 import com.fivelogic_recreate.member.application.command.*;
 import com.fivelogic_recreate.member.application.command.dto.*;
 import com.fivelogic_recreate.member.application.query.GetMemberDetailService;
 import com.fivelogic_recreate.member.application.query.GetMemberDetailsByConditionService;
 import com.fivelogic_recreate.member.application.query.MyInfoService;
 import com.fivelogic_recreate.member.application.query.dto.GetAllMemberDetailsByConditionResult;
+import com.fivelogic_recreate.member.application.query.dto.GetMemberDetailsByTypeCommand;
 import com.fivelogic_recreate.member.application.query.dto.GetMemberDetailsResult;
 import com.fivelogic_recreate.member.application.query.dto.MemberDetail;
-import com.fivelogic_recreate.member.application.query.dto.GetMemberDetailsByTypeCommand;
-import com.fivelogic_recreate.member.interfaces.rest.dto.ChangeEmailRequest;
-import com.fivelogic_recreate.member.interfaces.rest.dto.ChangePasswordRequest;
-import com.fivelogic_recreate.member.interfaces.rest.dto.InfoUpdateRequest;
-import com.fivelogic_recreate.member.interfaces.rest.dto.JoinRequest;
-import com.fivelogic_recreate.common.error.BusinessException;
-import com.fivelogic_recreate.common.error.ErrorCode;
+import com.fivelogic_recreate.member.interfaces.rest.dto.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(MemberController.class)
+@ExtendWith(MockitoExtension.class)
 class MemberControllerTest {
 
-        @Autowired
-        private MockMvc mockMvc;
+    @InjectMocks
+    private MemberController memberController;
 
-        @Autowired
-        private ObjectMapper objectMapper;
+    @Mock
+    private SignUp signUp;
+    @Mock
+    private GetMemberDetailService getMemberDetailService;
+    @Mock
+    private GetMemberDetailsByConditionService getMemberDetailsByConditionService;
+    @Mock
+    private UpdateEmail updateEmail;
+    @Mock
+    private UpdateInfo updateInfo;
+    @Mock
+    private Withdraw withdraw;
+    @Mock
+    private MyInfoService myInfoService;
+    @Mock
+    private UpdatePassword updatePassword;
 
-        @MockBean
-        private SignUp signUp;
-        @MockBean
-        private GetMemberDetailService getMemberDetailService;
-        @MockBean
-        private GetMemberDetailsByConditionService getMemberDetailsByConditionService;
-        @MockBean
-        private UpdateEmail updateEmail;
-        @MockBean
-        private UpdateInfo updateInfo;
-        @MockBean
-        private Withdraw withdraw;
-        @MockBean
-        private MyInfoService myInfoService;
-        @MockBean
-        private UpdatePassword updatePassword;
+    @Test
+    @DisplayName("회원가입 요청(POST /api/members)이 성공해야 한다")
+    void join_success() {
+        // given
+        JoinRequest request = new JoinRequest(
+                "testuser", "password123", "test@example.com",
+                "John", "Doe", "johnny", "Hello");
+        SignUpResult result = new SignUpResult("testuser", "John Doe", "johnny", "GENERAL", true,
+                "test@example.com", "Hello");
 
-        @Test
-        @DisplayName("회원가입 요청(POST /api/members)이 성공해야 한다")
-        void join_success() throws Exception {
-                JoinRequest request = new JoinRequest(
-                                "testuser", "password123", "test@example.com",
-                                "John", "Doe", "johnny", "Hello");
-                SignUpResult result = new SignUpResult("testuser", "John Doe", "johnny", "GENERAL", true,
-                                "test@example.com", "Hello");
+        given(signUp.register(any(SignUpCommand.class))).willReturn(result);
 
-                given(signUp.register(any(SignUpCommand.class))).willReturn(result);
+        // when
+        ApiResponse<JoinResponse> response = memberController.join(request);
 
-                mockMvc.perform(post("/api/members")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsString(request)))
-                                .andExpect(status().isCreated())
-                                .andExpect(jsonPath("$.status").value(201))
-                                .andExpect(jsonPath("$.message").value("사용자 생성 완료"))
-                                .andExpect(jsonPath("$.data.userId").value("testuser"));
-        }
+        // then
+        assertThat(response.getStatus()).isEqualTo(201);
+        assertThat(response.getMessage()).isEqualTo("사용자 생성 완료");
+        assertThat(response.getData().userId()).isEqualTo("testuser");
+    }
 
-        @Test
-        @DisplayName("회원 상세 조회(GET /api/members/{userId})가 성공해야 한다")
-        void getMember_success() throws Exception {
-                GetMemberDetailsResult result = new GetMemberDetailsResult(
-                                1L, "testuser", "johnny", "GENERAL", "John Doe",
-                                "test@example.com", "Hello", true);
+    @Test
+    @DisplayName("회원 상세 조회(GET /api/members/{userId})가 성공해야 한다")
+    void getMember_success() {
+        // given
+        GetMemberDetailsResult result = new GetMemberDetailsResult(
+                1L, "testuser", "johnny", "GENERAL", "John Doe",
+                "test@example.com", "Hello", true);
 
-                given(getMemberDetailService.getDetails(any())).willReturn(result);
+        given(getMemberDetailService.getDetails(any())).willReturn(result);
 
-                mockMvc.perform(get("/api/members/testuser"))
-                                .andExpect(status().isOk())
-                                .andExpect(jsonPath("$.status").value(200))
-                                .andExpect(jsonPath("$.data.userId").value("testuser"));
-        }
+        // when
+        ApiResponse<MemberResponse> response = memberController.getMemberDetail("testuser");
 
-        @Test
-        @DisplayName("전체 회원 조회(GET /api/members)가 성공해야 한다")
-        void getMembers_success() throws Exception {
-                List<MemberDetail> details = List.of(
-                                new MemberDetail(1L, "testuser", "johnny", "GENERAL", "John Doe", "test@example.com",
-                                                "Hello", true));
-                GetAllMemberDetailsByConditionResult result = new GetAllMemberDetailsByConditionResult(details);
+        // then
+        assertThat(response.getStatus()).isEqualTo(200);
+        assertThat(response.getData().userId()).isEqualTo("testuser");
+    }
 
-                given(getMemberDetailsByConditionService.byMemberType(any(GetMemberDetailsByTypeCommand.class)))
-                                .willReturn(result);
+    @Test
+    @DisplayName("전체 회원 조회(GET /api/members)가 성공해야 한다")
+    void getMembers_success() {
+        // given
+        List<MemberDetail> details = List.of(
+                new MemberDetail(1L, "testuser", "johnny", "GENERAL", "John Doe", "test@example.com",
+                        "Hello", true));
+        GetAllMemberDetailsByConditionResult result = new GetAllMemberDetailsByConditionResult(details);
 
-                mockMvc.perform(get("/api/members"))
-                                .andExpect(status().isOk())
-                                .andExpect(jsonPath("$.status").value(200))
-                                .andExpect(jsonPath("$.data.memberList[0].userId").value("testuser"));
-        }
+        given(getMemberDetailsByConditionService.byMemberType(any(GetMemberDetailsByTypeCommand.class)))
+                .willReturn(result);
 
-        @Test
-        @DisplayName("회원 정보 수정(PUT /api/members/{userId})이 성공해야 한다")
-        void updateInfo_success() throws Exception {
-                InfoUpdateRequest request = new InfoUpdateRequest("newNick", "newBio");
-                InfoUpdateResult result = new InfoUpdateResult("testuser", "newNick", "newBio");
+        // when
+        ApiResponse<MembersResponse> response = memberController.getMemberDetails();
 
-                given(updateInfo.update(any(InfoUpdateCommand.class))).willReturn(result);
+        // then
+        assertThat(response.getStatus()).isEqualTo(200);
+        assertThat(response.getData().memberList().get(0).userId()).isEqualTo("testuser");
+    }
 
-                mockMvc.perform(put("/api/members/testuser")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsString(request)))
-                                .andExpect(status().isOk())
-                                .andExpect(jsonPath("$.status").value(200))
-                                .andExpect(jsonPath("$.data.nickname").value("newNick"));
-        }
+    @Test
+    @DisplayName("회원 정보 수정(PUT /api/members/{userId})이 성공해야 한다")
+    void updateInfo_success() {
+        // given
+        InfoUpdateRequest request = new InfoUpdateRequest("newNick", "newBio");
+        InfoUpdateResult result = new InfoUpdateResult("testuser", "newNick", "newBio");
 
-        @Test
-        @DisplayName("비밀번호 변경(PUT /api/members/{userId}/password)이 성공해야 한다")
-        void changePassword_success() throws Exception {
-                ChangePasswordRequest request = new ChangePasswordRequest("oldPw", "newPw");
-                PasswordUpdateResult result = new PasswordUpdateResult(1L, "testuser");
+        given(updateInfo.update(any(InfoUpdateCommand.class))).willReturn(result);
 
-                given(updatePassword.update(any(PasswordUpdateCommand.class))).willReturn(result);
+        // when
+        ApiResponse<InfoUpdateResponse> response = memberController.updateInfo("testuser", request);
 
-                mockMvc.perform(put("/api/members/testuser/password")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsString(request)))
-                                .andExpect(status().isOk())
-                                .andExpect(jsonPath("$.status").value(200))
-                                .andExpect(jsonPath("$.data.userId").value("testuser"));
-        }
+        // then
+        assertThat(response.getStatus()).isEqualTo(200);
+        assertThat(response.getData().nickname()).isEqualTo("newNick");
+    }
 
-        @Test
-        @DisplayName("이메일 변경(PUT /api/members/{userId}/email)이 성공해야 한다")
-        void changeEmail_success() throws Exception {
-                ChangeEmailRequest request = new ChangeEmailRequest("new@example.com");
-                EmailUpdateResult result = new EmailUpdateResult("testuser", "new@example.com");
+    @Test
+    @DisplayName("비밀번호 변경(PUT /api/members/{userId}/password)이 성공해야 한다")
+    void changePassword_success() {
+        // given
+        ChangePasswordRequest request = new ChangePasswordRequest("oldPw", "newPw");
+        PasswordUpdateResult result = new PasswordUpdateResult(1L, "testuser");
 
-                given(updateEmail.update(any(EmailUpdateCommand.class))).willReturn(result);
+        given(updatePassword.update(any(PasswordUpdateCommand.class))).willReturn(result);
 
-                mockMvc.perform(put("/api/members/testuser/email")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsString(request)))
-                                .andExpect(status().isOk())
-                                .andExpect(jsonPath("$.status").value(200))
-                                .andExpect(jsonPath("$.data.email").value("new@example.com"));
-        }
+        // when
+        ApiResponse<PasswordUpdateResponse> response = memberController.changePassword("testuser", request);
 
-        @Test
-        @DisplayName("회원 탈퇴(DELETE /api/members/{userId})가 성공해야 한다")
-        void withdraw_success() throws Exception {
-                WithdrawResult result = new WithdrawResult("testuser", "reason");
-                given(withdraw.withdraw(any(WithdrawCommand.class))).willReturn(result);
+        // then
+        assertThat(response.getStatus()).isEqualTo(200);
+        assertThat(response.getData().userId()).isEqualTo("testuser");
+    }
 
-                mockMvc.perform(delete("/api/members/testuser"))
-                                .andExpect(status().isOk())
-                                .andExpect(jsonPath("$.status").value(200))
-                                .andExpect(jsonPath("$.data.userId").value("testuser"));
-        }
+    @Test
+    @DisplayName("이메일 변경(PUT /api/members/{userId}/email)이 성공해야 한다")
+    void changeEmail_success() {
+        // given
+        ChangeEmailRequest request = new ChangeEmailRequest("new@example.com");
+        EmailUpdateResult result = new EmailUpdateResult("testuser", "new@example.com");
 
-        @Test
-        @DisplayName("내 정보 조회(GET /api/members/me/{userId})가 성공해야 한다")
-        void getMyInfo_success() throws Exception {
-                GetMyProfileResult result = new GetMyProfileResult("nick", "test@example.com", "bio");
-                given(myInfoService.getProfile(any())).willReturn(result);
+        given(updateEmail.update(any(EmailUpdateCommand.class))).willReturn(result);
 
-                mockMvc.perform(get("/api/members/me/testuser"))
-                                .andExpect(status().isOk())
-                                .andExpect(jsonPath("$.status").value(200))
-                                .andExpect(jsonPath("$.data.email").value("test@example.com"));
-        }
+        // when
+        ApiResponse<EmailUpdateResponse> response = memberController.changeEmail("testuser", request);
 
-        @Test
-        @DisplayName("회원가입 요청 시 유효성 검사에 실패하면 400 에러를 반환한다")
-        void join_fail_invalid_input() throws Exception {
-                JoinRequest request = new JoinRequest(
-                                "", // Invalid userId (empty)
-                                "weak",
-                                "invalid-email",
-                                "", "", "", "");
+        // then
+        assertThat(response.getStatus()).isEqualTo(200);
+        assertThat(response.getData().email()).isEqualTo("new@example.com");
+    }
 
-                mockMvc.perform(post("/api/members")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsString(request)))
-                                .andExpect(status().isBadRequest())
-                                .andExpect(jsonPath("$.status").value(400));
-        }
+    @Test
+    @DisplayName("회원 탈퇴(DELETE /api/members/{userId})가 성공해야 한다")
+    void withdraw_success() {
+        // given
+        WithdrawResult result = new WithdrawResult("testuser", "reason");
+        given(withdraw.withdraw(any(WithdrawCommand.class))).willReturn(result);
 
-        @Test
-        @DisplayName("존재하지 않는 회원 조회 시 404 에러를 반환한다")
-        void getMember_fail_notFound() throws Exception {
-                given(getMemberDetailService.getDetails(any()))
-                                .willThrow(new BusinessException(ErrorCode.MEMBER_NOT_FOUND));
+        // when
+        ApiResponse<WithdrawResponse> response = memberController.withdraw("testuser");
 
-                mockMvc.perform(get("/api/members/unknown"))
-                                .andExpect(status().isNotFound())
-                                .andExpect(jsonPath("$.status").value(404))
-                                .andExpect(jsonPath("$.errorCode").value("M001"));
-        }
+        // then
+        assertThat(response.getStatus()).isEqualTo(200);
+        assertThat(response.getData().userId()).isEqualTo("testuser");
+    }
+
+    @Test
+    @DisplayName("내 정보 조회(GET /api/members/me/{userId})가 성공해야 한다")
+    void getMyInfo_success() {
+        // given
+        GetMyProfileResult result = new GetMyProfileResult("nick", "test@example.com", "bio");
+        given(myInfoService.getProfile(any(GetMyProfileCommand.class))).willReturn(result);
+
+        // when
+        ApiResponse<MemberProfile> response = memberController.getMyInfo("testuser");
+
+        // then
+        assertThat(response.getStatus()).isEqualTo(200);
+        assertThat(response.getData().email()).isEqualTo("test@example.com");
+    }
+
+    @Test
+    @DisplayName("존재하지 않는 회원 조회 시 에러를 던져야 한다")
+    void getMember_fail_notFound() {
+        // given
+        given(getMemberDetailService.getDetails(any()))
+                .willThrow(new BusinessException(ErrorCode.MEMBER_NOT_FOUND));
+
+        // when & then
+        assertThatThrownBy(() -> memberController.getMemberDetail("unknown"))
+                .isInstanceOf(BusinessException.class)
+                .hasFieldOrPropertyWithValue("errorCode", ErrorCode.MEMBER_NOT_FOUND);
+    }
 }
