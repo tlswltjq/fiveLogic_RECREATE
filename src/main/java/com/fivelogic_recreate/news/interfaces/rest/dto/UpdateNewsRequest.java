@@ -1,6 +1,5 @@
 package com.fivelogic_recreate.news.interfaces.rest.dto;
 
-import com.fivelogic_recreate.news.application.command.dto.NewsUpdateCommand;
 import jakarta.validation.constraints.NotBlank;
 
 public record UpdateNewsRequest(
@@ -13,7 +12,4 @@ public record UpdateNewsRequest(
         @NotBlank(message = "비디오 URL은 필수입니다.")
         String videoUrl
 ) {
-    public NewsUpdateCommand toCommand(Long id, String userId) {
-        return new NewsUpdateCommand(id, title, description, textContent, videoUrl, userId);
-    }
 }

@@ -22,8 +22,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.time.LocalDateTime;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
@@ -96,12 +94,11 @@ class NewsControllerTest {
     @DisplayName("뉴스 발행 요청(POST /api/news/{newsId}/publish)이 성공해야 한다")
     void publishNews_success() {
         // given
-        PublishNewsRequest request = new PublishNewsRequest();
         UserDetails user = mock(UserDetails.class);
         given(user.getUsername()).willReturn("testuser");
 
         // when
-        ApiResponse<Void> response = newsController.publishNews(1L, user, request);
+        ApiResponse<Void> response = newsController.publishNews(1L, user);
 
         // then
         assertThat(response.getStatus()).isEqualTo(200);
@@ -112,12 +109,11 @@ class NewsControllerTest {
     @DisplayName("뉴스 숨김 요청(POST /api/news/{newsId}/hide)이 성공해야 한다")
     void hideNews_success() {
         // given
-        HideNewsRequest request = new HideNewsRequest();
         UserDetails user = mock(UserDetails.class);
         given(user.getUsername()).willReturn("testuser");
 
         // when
-        ApiResponse<Void> response = newsController.hideNews(1L, user, request);
+        ApiResponse<Void> response = newsController.hideNews(1L, user);
 
         // then
         assertThat(response.getStatus()).isEqualTo(200);
@@ -128,12 +124,11 @@ class NewsControllerTest {
     @DisplayName("뉴스 숨김 해제 요청(POST /api/news/{newsId}/unhide)이 성공해야 한다")
     void unhideNews_success() {
         // given
-        UnhideNewsRequest request = new UnhideNewsRequest();
         UserDetails user = mock(UserDetails.class);
         given(user.getUsername()).willReturn("testuser");
 
         // when
-        ApiResponse<Void> response = newsController.unhideNews(1L, user, request);
+        ApiResponse<Void> response = newsController.unhideNews(1L, user);
 
         // then
         assertThat(response.getStatus()).isEqualTo(200);
