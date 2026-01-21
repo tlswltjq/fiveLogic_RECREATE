@@ -19,18 +19,12 @@ public class Logout {
 
     @Transactional
     public LogoutResult execute(String refreshTokenStr) {
-        // 1. Validate JWT (Signature & Expiration)
         try {
             jwtTokenProvider.validateToken(refreshTokenStr);
         } catch (Exception e) {
-            // If expired or invalid, we can still try to revoke if we can parse it?
-            // Usually if it's expired, we might already consider it done.
-            // But if we want to ensure it's revoked in DB, we need to parse.
-            // Let's assume strict validation first.
             throw new InvalidTokenException();
         }
 
-        // 2. Extract JTI
         Claims claims = jwtTokenProvider.getClaims(refreshTokenStr);
         Object jti = claims.get("jti");
         if (jti == null) {
@@ -39,17 +33,15 @@ public class Logout {
         Long tokenId = Long.valueOf(jti.toString());
         String userId = claims.getSubject();
 
-        // 3. Find Entity & Revoke
         RefreshToken refreshToken = refreshTokenRepository.findById(tokenId)
                 .orElseThrow(RefreshTokenNotFoundException::new);
 
-        // Verify user match (Security best practice)
         if (!refreshToken.getUserId().value().equals(userId)) {
             throw new InvalidTokenException();
         }
 
         refreshToken.revoke();
-        refreshTokenRepository.save(refreshToken); // Persist status change
+        refreshTokenRepository.save(refreshToken);
 
         return new LogoutResult(true);
     }

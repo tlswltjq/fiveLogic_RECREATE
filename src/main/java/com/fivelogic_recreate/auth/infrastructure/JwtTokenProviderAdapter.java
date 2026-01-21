@@ -51,7 +51,7 @@ public class JwtTokenProviderAdapter implements TokenProvider {
 
     private String createRefreshTokenJwt(String userId, Long tokenId) {
         Map<String, Object> claims = new HashMap<>();
-        claims.put("jti", tokenId); // Token ID를 JTI claim에 저장
+        claims.put("jti", tokenId);
         return jwtTokenProvider.createToken(userId, claims, REFRESH_TOKEN_VALIDITY_MS);
     }
 }

@@ -17,8 +17,7 @@ public class JwtTokenProvider {
     private final Key key;
 
     public JwtTokenProvider(
-            @Value("${jwt.secret:default_secret_key_must_be_at_least_256_bits_long_for_hs256_security_purposes}") String secretKey
-    ) {
+            @Value("${jwt.secret:default_secret_key_must_be_at_least_256_bits_long_for_hs256_security_purposes}") String secretKey) {
         this.key = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
     }
 
@@ -27,8 +26,8 @@ public class JwtTokenProvider {
         Date validity = new Date(now.getTime() + validityInMilliseconds);
 
         return Jwts.builder()
-                .setSubject(subject)
                 .setClaims(claims)
+                .setSubject(subject)
                 .setIssuedAt(now)
                 .setExpiration(validity)
                 .signWith(key, SignatureAlgorithm.HS256)

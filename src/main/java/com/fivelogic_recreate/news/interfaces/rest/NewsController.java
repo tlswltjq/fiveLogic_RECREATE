@@ -13,6 +13,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -32,8 +34,9 @@ public class NewsController {
     private final GetNewsList getNewsList;
 
     @PostMapping
-    public ApiResponse<CreateNewsResponse> createNews(@Valid @RequestBody CreateNewsRequest request) {
-        NewsCreateResult result = registerNews.createNews(request.toCommand());
+    public ApiResponse<CreateNewsResponse> createNews(@AuthenticationPrincipal UserDetails user,
+            @Valid @RequestBody CreateNewsRequest request) {
+        NewsCreateResult result = registerNews.createNews(request.toCommand(user.getUsername()));
         return ApiResponse.success(201, "뉴스 생성 완료", new CreateNewsResponse(result));
     }
 
@@ -51,34 +54,40 @@ public class NewsController {
 
     @PutMapping("/{newsId}")
     public ApiResponse<UpdateNewsResponse> updateNews(@PathVariable Long newsId,
+            @AuthenticationPrincipal UserDetails user,
             @Valid @RequestBody UpdateNewsRequest request) {
-        // TODO: Auth 도입 후 변경 필요
-        NewsUpdateResult result = editNews.updateNews(request.toCommand(newsId, "test-user-id"));
+        NewsUpdateResult result = editNews.updateNews(request.toCommand(newsId, user.getUsername()));
         return ApiResponse.success(200, "뉴스 수정 완료", new UpdateNewsResponse(result));
     }
 
     @PostMapping("/{newsId}/publish")
-    public ApiResponse<Void> publishNews(@PathVariable Long newsId, @RequestBody PublishNewsRequest request) {
-        publishNews.publishNews(request.toCommand(newsId, "test-user-id"));
+    public ApiResponse<Void> publishNews(@PathVariable Long newsId,
+            @AuthenticationPrincipal UserDetails user,
+            @RequestBody PublishNewsRequest request) {
+        publishNews.publishNews(request.toCommand(newsId, user.getUsername()));
         return ApiResponse.success(200, "뉴스 발행 완료", null);
     }
 
     @PostMapping("/{newsId}/hide")
-    public ApiResponse<Void> hideNews(@PathVariable Long newsId, @RequestBody HideNewsRequest request) {
-        hideNews.hideNews(request.toCommand(newsId, "test-user-id"));
+    public ApiResponse<Void> hideNews(@PathVariable Long newsId,
+            @AuthenticationPrincipal UserDetails user,
+            @RequestBody HideNewsRequest request) {
+        hideNews.hideNews(request.toCommand(newsId, user.getUsername()));
         return ApiResponse.success(200, "뉴스 숨김 완료", null);
     }
 
     @PostMapping("/{newsId}/unhide")
-    public ApiResponse<Void> unhideNews(@PathVariable Long newsId, @RequestBody UnhideNewsRequest request) {
-        unhideNews.unHideNews(request.toCommand(newsId, "test-user-id"));
+    public ApiResponse<Void> unhideNews(@PathVariable Long newsId,
+            @AuthenticationPrincipal UserDetails user,
+            @RequestBody UnhideNewsRequest request) {
+        unhideNews.unHideNews(request.toCommand(newsId, user.getUsername()));
         return ApiResponse.success(200, "뉴스 숨김 해제 완료", null);
     }
 
     @DeleteMapping("/{newsId}")
-    public ApiResponse<Void> deleteNews(@PathVariable Long newsId) {
-        // TODO: Auth 도입 후 변경 필요
-        removeNews.deleteNews(new NewsDeleteCommand(newsId, "test-user-id"));
+    public ApiResponse<Void> deleteNews(@PathVariable Long newsId,
+            @AuthenticationPrincipal UserDetails user) {
+        removeNews.deleteNews(new NewsDeleteCommand(newsId, user.getUsername()));
         return ApiResponse.success(200, "뉴스 삭제 완료", null);
     }
 }

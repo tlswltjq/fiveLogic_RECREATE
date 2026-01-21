@@ -4,9 +4,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fivelogic_recreate.auth.application.Login;
 import com.fivelogic_recreate.auth.application.Logout;
 import com.fivelogic_recreate.auth.application.Reissue;
+import com.fivelogic_recreate.auth.application.dto.LoginCommand;
 import com.fivelogic_recreate.auth.application.dto.LoginResult;
 import com.fivelogic_recreate.auth.application.dto.LogoutResult;
 import com.fivelogic_recreate.auth.application.dto.ReissueCommand;
+import com.fivelogic_recreate.auth.interfaces.rest.dto.LoginRequest;
 import com.fivelogic_recreate.auth.interfaces.rest.dto.LogoutRequest;
 import com.fivelogic_recreate.auth.interfaces.rest.dto.ReissueRequest;
 import org.junit.jupiter.api.DisplayName;
@@ -45,13 +47,24 @@ class AuthControllerTest {
     @MockBean
     private Logout logout;
 
-    // We excluded SecurityConfig, so we might need to disable security or mock it
-    // manually?
-    // @WebMvcTest by default includes Spring Security auto-configuration.
-    // If we exclude our custom SecurityConfig, the default might kick in (login
-    // form etc).
-    // Usually it's better to Include config and Mock dependencies, OR use
-    // @AutoConfigureMockMvc(addFilters = false)
+    @Test
+    @DisplayName("로그인 성공")
+    void login_success() throws Exception {
+        // given
+        LoginRequest request = new LoginRequest("user1", "password123");
+        LoginResult result = new LoginResult("user1", "access_token", "refresh_token");
+
+        given(login.execute(any(LoginCommand.class))).willReturn(result);
+
+        // when & then
+        mockMvc.perform(post("/api/auth/login")
+                .with(csrf())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.accessToken").value("access_token"))
+                .andExpect(jsonPath("$.data.refreshToken").value("refresh_token"));
+    }
 
     @Test
     @DisplayName("토큰 재발급 성공")

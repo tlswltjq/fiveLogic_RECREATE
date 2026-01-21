@@ -23,12 +23,12 @@ public class MemberRepositoryAdapter implements MemberQueryRepositoryPort, Membe
 
     @Override
     public Optional<Member> findByUserId(UserId userId) {
-        return repository.findByUserId(userId.value());
+        return repository.findByUserId(userId);
     }
 
     @Override
     public Optional<Member> findByNickname(Nickname nickname) {
-        return repository.findByNickname(nickname.value());
+        return repository.findByNickname(nickname);
     }
 
     @Override
@@ -38,12 +38,12 @@ public class MemberRepositoryAdapter implements MemberQueryRepositoryPort, Membe
 
     @Override
     public boolean existsByUserId(UserId userId) {
-        return repository.existsByUserId((userId.value()));
+        return repository.existsByUserId(userId);
     }
 
     @Override
     public boolean existsByEmail(Email email) {
-        return repository.existsByEmail(email.value());
+        return repository.existsByEmail(email);
     }
 
     @Override

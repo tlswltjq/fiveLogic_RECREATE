@@ -52,25 +52,25 @@ class MemberRepositoryAdapterTest {
     void shouldReturnMemberDomainObjectWhenFindingByExistingUserId() {
         Member member = memberFixture.build();
         UserId userId = member.getUserId();
-        when(repository.findByUserId(userId.value())).thenReturn(Optional.of(member));
+        when(repository.findByUserId(userId)).thenReturn(Optional.of(member));
 
         Optional<Member> result = adapter.findByUserId(userId);
 
         assertThat(result).isPresent();
         assertThat(result.get().getUserId()).isEqualTo(userId);
-        verify(repository).findByUserId(userId.value());
+        verify(repository).findByUserId(userId);
     }
 
     @Test
     @DisplayName("존재하지 않는 UserId로 조회 시 Optional.empty를 반환한다.")
     void shouldReturnEmptyOptionalWhenFindingByNonExistingUserId() {
         UserId userId = new UserId("notExistUser");
-        when(repository.findByUserId(userId.value())).thenReturn(Optional.empty());
+        when(repository.findByUserId(userId)).thenReturn(Optional.empty());
 
         Optional<Member> result = adapter.findByUserId(userId);
 
         assertThat(result).isEmpty();
-        verify(repository).findByUserId(userId.value());
+        verify(repository).findByUserId(userId);
     }
 
     @Test
@@ -78,25 +78,25 @@ class MemberRepositoryAdapterTest {
     void shouldReturnMemberDomainObjectWhenFindingByExistingNickname() {
         Member member = memberFixture.build();
         Nickname nickname = member.getNickname();
-        when(repository.findByNickname(nickname.value())).thenReturn(Optional.of(member));
+        when(repository.findByNickname(nickname)).thenReturn(Optional.of(member));
 
         Optional<Member> result = adapter.findByNickname(nickname);
 
         assertThat(result).isPresent();
         assertThat(result.get().getNickname()).isEqualTo(nickname);
-        verify(repository).findByNickname(nickname.value());
+        verify(repository).findByNickname(nickname);
     }
 
     @Test
     @DisplayName("존재하지 않는 Nickname으로 조회 시 Optional.empty를 반환한다.")
     void shouldReturnEmptyOptionalWhenFindingByNonExistingNickname() {
         Nickname nickname = new Nickname("non_existing_nickname");
-        when(repository.findByNickname(nickname.value())).thenReturn(Optional.empty());
+        when(repository.findByNickname(nickname)).thenReturn(Optional.empty());
 
         Optional<Member> result = adapter.findByNickname(nickname);
 
         assertThat(result).isEmpty();
-        verify(repository).findByNickname(nickname.value());
+        verify(repository).findByNickname(nickname);
     }
 
     @Test
@@ -117,24 +117,24 @@ class MemberRepositoryAdapterTest {
     @DisplayName("존재하는 UserId의 존재 여부 확인 시 true를 반환한다.")
     void shouldReturnTrueWhenCheckingExistenceOfExistingUserId() {
         UserId userId = new UserId("existUser");
-        when(repository.existsByUserId(userId.value())).thenReturn(true);
+        when(repository.existsByUserId(userId)).thenReturn(true);
 
         boolean result = adapter.existsByUserId(userId);
 
         assertThat(result).isTrue();
-        verify(repository).existsByUserId(userId.value());
+        verify(repository).existsByUserId(userId);
     }
 
     @Test
     @DisplayName("존재하지 않는 UserId의 존재 여부 확인 시 false를 반환한다.")
     void shouldReturnFalseWhenCheckingExistenceOfNonExistingUserId() {
         UserId userId = new UserId("notExistUser");
-        when(repository.existsByUserId(userId.value())).thenReturn(false);
+        when(repository.existsByUserId(userId)).thenReturn(false);
 
         boolean result = adapter.existsByUserId(userId);
 
         assertThat(result).isFalse();
-        verify(repository).existsByUserId(userId.value());
+        verify(repository).existsByUserId(userId);
     }
 
     @Test

@@ -20,12 +20,14 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import org.springframework.security.core.userdetails.UserDetails;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
 
 @ExtendWith(MockitoExtension.class)
 class MemberControllerTest {
@@ -115,11 +117,13 @@ class MemberControllerTest {
         // given
         InfoUpdateRequest request = new InfoUpdateRequest("newNick", "newBio");
         InfoUpdateResult result = new InfoUpdateResult("testuser", "newNick", "newBio");
+        UserDetails user = mock(UserDetails.class);
+        given(user.getUsername()).willReturn("testuser");
 
         given(updateInfo.update(any(InfoUpdateCommand.class))).willReturn(result);
 
         // when
-        ApiResponse<InfoUpdateResponse> response = memberController.updateInfo("testuser", request);
+        ApiResponse<InfoUpdateResponse> response = memberController.updateInfo("testuser", user, request);
 
         // then
         assertThat(response.getStatus()).isEqualTo(200);
@@ -132,11 +136,13 @@ class MemberControllerTest {
         // given
         ChangePasswordRequest request = new ChangePasswordRequest("oldPw", "newPw");
         PasswordUpdateResult result = new PasswordUpdateResult(1L, "testuser");
+        UserDetails user = mock(UserDetails.class);
+        given(user.getUsername()).willReturn("testuser");
 
         given(updatePassword.update(any(PasswordUpdateCommand.class))).willReturn(result);
 
         // when
-        ApiResponse<PasswordUpdateResponse> response = memberController.changePassword("testuser", request);
+        ApiResponse<PasswordUpdateResponse> response = memberController.changePassword("testuser", user, request);
 
         // then
         assertThat(response.getStatus()).isEqualTo(200);
@@ -149,11 +155,13 @@ class MemberControllerTest {
         // given
         ChangeEmailRequest request = new ChangeEmailRequest("new@example.com");
         EmailUpdateResult result = new EmailUpdateResult("testuser", "new@example.com");
+        UserDetails user = mock(UserDetails.class);
+        given(user.getUsername()).willReturn("testuser");
 
         given(updateEmail.update(any(EmailUpdateCommand.class))).willReturn(result);
 
         // when
-        ApiResponse<EmailUpdateResponse> response = memberController.changeEmail("testuser", request);
+        ApiResponse<EmailUpdateResponse> response = memberController.changeEmail("testuser", user, request);
 
         // then
         assertThat(response.getStatus()).isEqualTo(200);
@@ -165,10 +173,12 @@ class MemberControllerTest {
     void withdraw_success() {
         // given
         WithdrawResult result = new WithdrawResult("testuser", "reason");
+        UserDetails user = mock(UserDetails.class);
+        given(user.getUsername()).willReturn("testuser");
         given(withdraw.withdraw(any(WithdrawCommand.class))).willReturn(result);
 
         // when
-        ApiResponse<WithdrawResponse> response = memberController.withdraw("testuser");
+        ApiResponse<WithdrawResponse> response = memberController.withdraw("testuser", user);
 
         // then
         assertThat(response.getStatus()).isEqualTo(200);
@@ -176,14 +186,16 @@ class MemberControllerTest {
     }
 
     @Test
-    @DisplayName("내 정보 조회(GET /api/members/me/{userId})가 성공해야 한다")
+    @DisplayName("내 정보 조회(GET /api/members/me)가 성공해야 한다")
     void getMyInfo_success() {
         // given
         GetMyProfileResult result = new GetMyProfileResult("nick", "test@example.com", "bio");
+        UserDetails user = mock(UserDetails.class);
+        given(user.getUsername()).willReturn("testuser");
         given(myInfoService.getProfile(any(GetMyProfileCommand.class))).willReturn(result);
 
         // when
-        ApiResponse<MemberProfile> response = memberController.getMyInfo("testuser");
+        ApiResponse<MemberProfile> response = memberController.getMyInfo(user);
 
         // then
         assertThat(response.getStatus()).isEqualTo(200);
