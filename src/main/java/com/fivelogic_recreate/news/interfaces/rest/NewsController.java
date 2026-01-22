@@ -23,6 +23,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
@@ -63,7 +65,8 @@ public class NewsController {
     }
 
     @GetMapping
-    public ApiResponse<GetNewsListResponse> getNewsList(Pageable pageable) {
+    public ApiResponse<GetNewsListResponse> getNewsList(
+            @PageableDefault(sort = "publishedDate", direction = Sort.Direction.DESC) Pageable pageable) {
         Page<NewsQueryResponse> result = getNewsList.findByPublishedDateBefore(LocalDateTime.now(), pageable);
         return ApiResponse.success(200, "뉴스 목록 조회 완료", GetNewsListResponse.from(result));
     }
